@@ -1,39 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      id: 1,
-      nome: 'Aluno Exemplo',
-      email: 'aluno@exemplo.com',
-      role: 'ALUNO',
-    },
-    {
-      id: 2,
-      nome: 'Professor Exemplo',
-      email: 'professor@exemplo.com',
-      role: 'PROFESSOR',
-    },
-  ];
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.users;
+  async findAll() {
+    return this.prisma.client.orm.public.User.all();
   }
 
-  findOne(id: number) {
-    return this.users.find((user) => user.id === id);
+  async findOne(id: number) {
+    return this.prisma.client.orm.public.User.first({ id });
   }
 
-  create(createUserDto: CreateUserDto) {
-    const newUser = {
-      id: this.users.length + 1,
-      ...createUserDto,
+  async create(createUserDto: CreateUserDto) {
+    return {
+      message: 'Criação de usuário será implementada na próxima etapa',
+      data: createUserDto,
     };
-
-    this.users.push(newUser);
-
-    return newUser;
   }
 }
