@@ -1,0 +1,31 @@
+// use prisma-next
+
+enum RoleName {
+  ALUNO
+  PROFESSOR
+  SOE
+  COORDENACAO
+  DIRECAO
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      RoleName @unique
+  users     User[]
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senhaHash String
+  ativo     Boolean  @default(true)
+
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
