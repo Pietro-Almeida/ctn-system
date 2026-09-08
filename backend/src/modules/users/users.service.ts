@@ -15,9 +15,20 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    return {
-      message: 'Criação de usuário será implementada na próxima etapa',
-      data: createUserDto,
-    };
+    const role = await this.prisma.client.orm.public.Role.first({
+      name: createUserDto.role,
+    });
+
+    if (!role) {
+      throw new Error('Perfil não encontrado');
+    }
+
+    return this.prisma.client.orm.public.User.create({
+      nome: createUserDto.nome,
+      email: createUserDto.email,
+      senhaHash: 'TEMPORARIO',
+      ativo: true,
+      roleId: role.id,
+    });
   }
 }
