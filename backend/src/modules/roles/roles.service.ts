@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-
+﻿import { Injectable } from '@nestjs/common';
+import { DatabaseService } from '../../database/database.module.js';
 @Injectable()
 export class RolesService {
-  findAll() {
-    return [
-      { id: 1, name: 'ALUNO' },
-      { id: 2, name: 'PROFESSOR' },
-      { id: 3, name: 'SOE' },
-      { id: 4, name: 'COORDENACAO' },
-      { id: 5, name: 'DIRECAO' },
-    ];
+  constructor(private readonly db: DatabaseService) {}
+  async findAll() {
+    return (
+      await this.db.query(
+        'SELECT id, name FROM public.role WHERE name = ANY($1::text[]) ORDER BY id',
+        [['ALUNO', 'PROFESSOR', 'DIRECAO']],
+      )
+    ).rows;
   }
 }

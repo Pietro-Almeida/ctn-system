@@ -1,114 +1,125 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+﻿# Backend CTN System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API da primeira fase do CTN System, independente do frontend. Implementa usuários, autenticação, Jornal e Comunidades com PostgreSQL 18 local.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Executar
 
-## Description
+No terminal da pasta `backend`:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ npm install
+```powershell
+npm.cmd ci
+npm.cmd run db:check
+npm.cmd run start:dev
 ```
 
-## Compile and run the project
+Configure `DATABASE_URL` em `.env` conforme `.env.example`. Esse arquivo é ignorado pelo Git. A API usa porta 3000 por padrão; `PORT` altera a porta. Não inicie duas instâncias na mesma porta.
 
-```bash
-# development
-$ npm run start
+Para um banco novo, crie um banco vazio de desenvolvimento, configure a URL e execute:
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```powershell
+npm.cmd run db:init
+npm.cmd run db:seed
+npm.cmd run admin:create
 ```
 
-## Run tests
+O último comando pede os dados do primeiro diretor em terminal interativo, com senha oculta. Ele recusa execução quando já existe um diretor e não altera contas existentes. Diretores adicionais são cadastrados pela API autenticada.
 
-```bash
-# unit tests
-$ npm run test
+## Documentação e testes sem frontend
 
-# e2e tests
-$ npm run test:e2e
+Importe [docs/openapi.json](docs/openapi.json) no Postman ou em outra ferramenta compatível com OpenAPI 3.0. A especificação contém os corpos, parâmetros e permissões de 34 operações. Há exemplos em [docs/requests.http](docs/requests.http).
 
-# test coverage
-$ npm run test:cov
+1. Envie `POST /auth/login` com `email` e `senha`.
+2. Copie o `access_token` recebido.
+3. Nas demais rotas, use o cabeçalho `Authorization: Bearer TOKEN`.
+
+`GET /health` verifica o banco e retorna 200 quando disponível ou 503 se não conseguir consultar. `GET /` mantém a resposta inicial do projeto. Essas duas rotas, login e consumo do código de recuperação são públicas; todas as demais exigem autenticação.
+
+`CORS_ORIGINS` aceita origens separadas por vírgula; padrão: `http://localhost:5173`. Postman e testes HTTP não dependem de CORS.
+
+## Funcionalidades e regras
+
+### Usuários
+
+- `GET /roles`: retorna IDs reais dos perfis disponíveis no banco.
+- `GET /users`, `GET /users/:id`, `POST /users`, `PATCH /users/:id`: somente direção.
+- Cadastro exige nome, e-mail, senha de 12 a 128 caracteres e perfil `ALUNO`, `PROFESSOR` ou `DIRECAO`.
+- E-mails são normalizados para minúsculas; conflitos, inclusive concorrentes, retornam 409.
+- Edição aceita nome, e-mail, perfil e `ativo`. Envie `{"ativo": false}` para desativar e `{"ativo": true}` para reativar.
+- O último diretor ativo não pode ser desativado nem perder o perfil, inclusive em alterações concorrentes.
+- Alterar e-mail/perfil ou desativar revoga sessões e códigos de recuperação da conta.
+- Usuários são desativados, não excluídos, preservando a autoria dos conteúdos. Listagens nunca retornam hashes de senha.
+- Os perfis legados SOE e COORDENACAO foram preservados no banco, mas não estão disponíveis para novos cadastros nesta fase.
+
+### Autenticação e recuperação de senha
+
+- `POST /auth/login`: credenciais inválidas, hash legado ou conta inativa retornam a mesma mensagem de 401.
+- `GET /auth/me`: identidade e perfil atual.
+- `POST /auth/logout`: encerra a sessão atual.
+- `POST /auth/change-password`: recebe `senhaAtual` e `novaSenha`; troca a senha e encerra todas as sessões.
+- `POST /users/:id/password-reset`: somente direção; gera código válido por 15 minutos, retornado uma única vez nesta resposta.
+- `POST /auth/reset-password`: recebe `token` e `novaSenha`; consome o código e encerra todas as sessões do usuário.
+- Recuperação é assistida: a direção confirma a identidade e entrega o código por um canal privado. Não há envio automático de e-mail nem rota pública que revele se um e-mail existe.
+- Gerar novo código invalida o anterior. Código expirado, já consumido ou vinculado a conta inativa não funciona. Consumo concorrente permite somente uma troca.
+- Tokens de sessão possuem 256 bits aleatórios e validade de uma hora, sem renovação automática. Apenas o hash SHA-256 fica no PostgreSQL. Reiniciar o servidor não encerra sessões válidas.
+- Senhas usam scrypt com salt aleatório. Os hashes antigos `TEMPORARIO` são rejeitados e podem ser substituídos pelo fluxo de recuperação.
+- Limite de 10 tentativas por minuto por IP no login e recuperação; troca autenticada de senha usa o ID do usuário. Contadores persistem no banco.
+- Ao publicar, use HTTPS e configure explicitamente proxies confiáveis antes de alterar a identificação de IP.
+
+### Jornal
+
+- Todos os usuários autenticados leem `GET /news` e `GET /news/:id`.
+- Direção e professores criam com `POST /news`: `titulo`, `conteudo`, `categoria`.
+- Categorias: AVISO, EVENTO, INFORMACAO, PROJETO, COMUNICADO, NOTICIA e ATIVIDADE.
+- Autor com perfil de publicação ou direção pode editar (`PATCH`) e excluir (`DELETE`).
+- Conteúdo é texto; o cliente não deve interpretá-lo como HTML.
+
+### Comunidades
+
+- Todos os autenticados listam comunidades e consultam nome, descrição e regras.
+- Direção e professores criam comunidades; o criador participa automaticamente.
+- Qualquer usuário ativo pode entrar com `POST /communities/:id/members/me` e sair com `DELETE` na mesma rota.
+- O criador não pode sair nem ser removido. Participar novamente não duplica o vínculo.
+- Criador e direção editam/excluem a comunidade e removem participantes. Remover um participante não é banimento: comunidades são abertas para nova participação.
+- Conteúdos e lista de participantes são acessíveis aos membros, criador e direção; a lista de participantes não expõe e-mails.
+- Membros publicam em `/communities/:id/posts` e comentam em `/communities/:id/posts/:postId/comments`.
+- Autor que ainda participa, criador e direção podem editar/excluir a publicação ou comentário.
+- IDs de publicações e comentários são verificados contra a comunidade e publicação informadas na URL.
+- Excluir comunidade remove seus vínculos, publicações e comentários atomicamente. Excluir publicação remove seus comentários.
+
+Todas as listas de recursos aceitam `page` (padrão 1) e `limit` (padrão 20, máximo 100), exceto a pequena lista de perfis. Retornam arrays em ordem estável. Campos desconhecidos, nulos indevidos e textos vazios retornam 400.
+
+## Banco e manutenção
+
+O contrato `src/prisma/contract.prisma` define tabelas, relacionamentos e índices. Prisma Next emite os arquivos de contrato e aplica o esquema. As consultas da API usam `pg` com parâmetros e transações através de `DatabaseService`; os diagnósticos também validam o contrato pelo cliente Prisma.
+
+Após alterar o esquema:
+
+```powershell
+npm.cmd run contract:emit
+npm.cmd run db:init -- --dry-run
+npm.cmd run db:init
+npm.cmd run db:check
 ```
 
-## Deployment
+`db:init` aplica mudanças aditivas e recusa mudanças destrutivas. Versione contrato, tipos gerados, snapshots e referências de migração. Use backup e revisão da prévia antes de aplicar alterações em outro ambiente.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Execute `npm.cmd run db:cleanup` periodicamente (por exemplo, diariamente pelo agendador do ambiente) para remover sessões, códigos e contadores expirados. A validade é checada nas consultas mesmo antes da limpeza.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Verificação automatizada
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```powershell
+npm.cmd test
+npm.cmd run test:integration
+npm.cmd run build
+npm.cmd run lint
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+`test:integration` cria um banco temporário com nome aleatório `ctn_test_...`, aplica o contrato, testa HTTP com PostgreSQL real e remove somente esse banco ao terminar. O usuário configurado precisa poder criar bancos de teste. O banco de desenvolvimento não é truncado nem recebe usuários de teste.
 
-## Observability
+Os testes cobrem persistência após reinício, autenticação, expiração, logout, limites, recuperação de uso único, concorrência no cadastro e proteção do último diretor, validação, paginação, Jornal, participação, autoria, moderação e remoção de conteúdo relacionado.
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+`npm run test:e2e` sem o executor de integração roda apenas o teste público básico; os testes que alteram dados são ignorados sem um banco isolado válido.
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+## Limites do escopo
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observer](https://observer.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Esta entrega cobre a primeira fase descrita no README principal. O frontend, envio automático de e-mail, uploads de imagens/anexos e os módulos futuros (estoque, notas, horários, requerimentos e dashboards) não fazem parte desta fase.

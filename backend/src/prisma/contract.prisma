@@ -26,6 +26,93 @@ model User {
   roleId    Int
   role      Role     @relation(fields: [roleId], references: [id])
 
+  sessions Session[]
+  resets PasswordReset[]
+  news News[]
+  communities Community[]
+  memberships Membership[]
+  posts CommunityPost[]
+  comments Comment[]
+
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Session {
+  tokenHash String @id
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  expiresAt TimestamptzString
+  createdAt TimestamptzString @default(now())
+}
+
+model PasswordReset {
+  tokenHash String @id
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  expiresAt TimestamptzString
+  createdAt TimestamptzString @default(now())
+}
+
+model LoginAttempt {
+  key String @id
+  count Int
+  expiresAt TimestamptzString
+}
+
+model News {
+  id Int @id @default(autoincrement())
+  titulo String
+  conteudo String
+  categoria String
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Community {
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  regras String
+  creatorId Int
+  creator User @relation(fields: [creatorId], references: [id])
+  memberships Membership[]
+  posts CommunityPost[]
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Membership {
+  id Int @id @default(autoincrement())
+  communityId Int
+  community Community @relation(fields: [communityId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  createdAt TimestamptzString @default(now())
+  @@unique([communityId, userId])
+}
+
+model CommunityPost {
+  id Int @id @default(autoincrement())
+  conteudo String
+  communityId Int
+  community Community @relation(fields: [communityId], references: [id])
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])
+  comments Comment[]
+  createdAt TimestamptzString @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  conteudo String
+  postId Int
+  post CommunityPost @relation(fields: [postId], references: [id])
+  authorId Int
+  author User @relation(fields: [authorId], references: [id])
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }

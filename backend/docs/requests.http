@@ -1,0 +1,60 @@
+﻿@base = http://localhost:3000
+@token = COLE_O_ACCESS_TOKEN_AQUI
+
+### Saúde
+GET {{base}}/health
+
+### Login: substitua localmente, não versione credenciais reais
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "diretor@example.com",
+  "senha": "SUA_SENHA"
+}
+
+### Identidade
+GET {{base}}/auth/me
+Authorization: Bearer {{token}}
+
+### Listar usuários (direção)
+GET {{base}}/users?page=1&limit=20
+Authorization: Bearer {{token}}
+
+### Publicar no Jornal (direção ou professor)
+POST {{base}}/news
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "titulo": "Feira de ciências",
+  "conteudo": "A feira acontecerá na escola.",
+  "categoria": "EVENTO"
+}
+
+### Criar comunidade
+POST {{base}}/communities
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Clube de ciências",
+  "descricao": "Projetos e atividades",
+  "regras": "Respeite os participantes."
+}
+
+### Participar: substitua 1 pelo ID retornado
+POST {{base}}/communities/1/members/me
+Authorization: Bearer {{token}}
+
+### Publicar na comunidade
+POST {{base}}/communities/1/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"conteudo": "Vamos organizar o próximo projeto?"}
+
+### Encerrar sessão
+POST {{base}}/auth/logout
+Authorization: Bearer {{token}}
+

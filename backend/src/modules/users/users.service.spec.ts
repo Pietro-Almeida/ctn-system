@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
+﻿import { ConflictException, NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service.js';
-
+import { DatabaseService } from '../../database/database.module.js';
+import { Role } from '../roles/role.enum.js';
 describe('UsersService', () => {
-  let service: UsersService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService],
-    }).compile();
-
-    service = module.get<UsersService>(UsersService);
+  const query = vi.fn();
+  const service = new UsersService({ query } as unknown as DatabaseService);
+  beforeEach(() => vi.resetAllMocks());
+  it('returns 404 for missing users', async () => {
+    query.mockResolvedValue({ rows: [] });
+    await expect(service.findOne(1)).rejects.toBeInstanceOf(NotFoundException);
   });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('maps database uniqueness failures including concurrent registrations to 409', async () => {
+    query.mockRejectedValue({ code: '23505' });
+    await expect(
+      service.create({
+        nome: 'Ana',
+        email: 'ana@example.com',
+        senha: 'uma-senha-longa',
+        role: Role.ALUNO,
+      }),
+    ).rejects.toBeInstanceOf(ConflictException);
   });
 });

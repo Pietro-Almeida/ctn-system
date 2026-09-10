@@ -1,18 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RolesService } from './roles.service.js';
-
+﻿import { RolesService } from './roles.service.js';
+import { DatabaseService } from '../../database/database.module.js';
 describe('RolesService', () => {
-  let service: RolesService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [RolesService],
-    }).compile();
-
-    service = module.get<RolesService>(RolesService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('returns database role identifiers rather than fixed identifiers', async () => {
+    const rows = [{ id: 92, name: 'DIRECAO' }];
+    const service = new RolesService({
+      query: vi.fn().mockResolvedValue({ rows }),
+    } as unknown as DatabaseService);
+    expect(await service.findAll()).toEqual(rows);
   });
 });

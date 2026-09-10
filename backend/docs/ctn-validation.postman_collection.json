@@ -1,0 +1,1553 @@
+{
+  "info": {
+    "name": "CTN — Validação sem frontend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Execute a coleção inteira, em ordem, com uma iteração. Configure director_email e director_password no ambiente local. Cria contas fictícias únicas, remove os conteúdos criados e desativa essas contas ao terminar; preserva os usuários existentes. Tokens e IDs são variáveis locais da execução."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 — Preparação e acesso da direção",
+      "item": [
+        {
+          "name": "API e banco disponíveis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/health",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "API e banco disponíveis"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.variables.get(\"director_email\") || !pm.variables.get(\"director_password\")) throw new Error(\"Configure director_email e director_password no ambiente local.\");",
+                  "const runId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);",
+                  "pm.variables.set(\"run_id\", runId);",
+                  "pm.variables.set(\"demo_password\", \"Demo!\" + runId + \"A9x\");",
+                  "pm.variables.set(\"new_password\", \"Nova!\" + runId + \"B8y\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Banco conectado\", function () { if (pm.response.json().database !== \"up\") throw new Error(\"Banco indisponível\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Visitante não lista usuários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Visitante não lista usuários"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor entra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/login",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor entra",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"email\":\"{{director_email}}\",\"senha\":\"{{director_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.variables.set(\"director_token\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor consulta os perfis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/roles",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor consulta os perfis"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor cadastra professora Carla",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor cadastra professora Carla",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"nome\":\"Professora Carla — teste {{run_id}}\",\"email\":\"carla.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\",\"role\":\"PROFESSOR\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"teacher_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor cadastra aluno João",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor cadastra aluno João",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"nome\":\"Aluno João — teste {{run_id}}\",\"email\":\"joao.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\",\"role\":\"ALUNO\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"student_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cadastro repetido retorna conflito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Cadastro repetido retorna conflito",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"nome\":\"João duplicado\",\"email\":\"joao.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\",\"role\":\"ALUNO\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Professora entra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/login",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora entra",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"email\":\"carla.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.variables.set(\"teacher_token\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno entra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/login",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno entra",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"email\":\"joao.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.variables.set(\"student_token\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno não administra usuários",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno não administra usuários"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Professora não cadastra usuários",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora não cadastra usuários",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"nome\":\"Cadastro proibido\",\"email\":\"proibido.{{run_id}}@example.test\",\"senha\":\"{{demo_password}}\",\"role\":\"ALUNO\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 — Jornal da feira de ciências",
+      "item": [
+        {
+          "name": "Professora publica o aviso",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/news",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora publica o aviso",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"titulo\":\"Feira de ciências — teste {{run_id}}\",\"conteudo\":\"A feira acontecerá na sexta-feira. Cada turma apresentará um projeto.\",\"categoria\":\"EVENTO\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"news_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno lê o aviso",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/news/{{news_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno lê o aviso"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno não publica no Jornal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/news",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno não publica no Jornal",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"titulo\":\"Feira de ciências — teste {{run_id}}\",\"conteudo\":\"A feira acontecerá na sexta-feira. Cada turma apresentará um projeto.\",\"categoria\":\"EVENTO\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Professora corrige o aviso",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/news/{{news_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora corrige o aviso",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"conteudo\":\"A feira acontecerá sexta-feira, às 14h. Cada turma apresentará um projeto.\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 — Comunidade do projeto",
+      "item": [
+        {
+          "name": "Professora cria o clube",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/communities",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora cria o clube",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"nome\":\"Clube de ciências — teste {{run_id}}\",\"descricao\":\"Organização dos projetos para a feira.\",\"regras\":\"Respeitar os colegas e citar as fontes.\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"community_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno ainda não lê o conteúdo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/posts",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno ainda não lê o conteúdo"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno participa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/members/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno participa"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Repetir participação não duplica",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/members/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Repetir participação não duplica"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Participantes sem e-mail nem senha",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/members",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Participantes sem e-mail nem senha"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"Somente professora e aluno\", function () { const members = pm.response.json(); if (members.length !== 2) throw new Error(\"Participação duplicada\"); if (members.some(u => \"email\" in u || \"senhaHash\" in u)) throw new Error(\"Dados privados expostos\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno apresenta uma ideia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/posts",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno apresenta uma ideia",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"conteudo\":\"Podemos construir um filtro de água e comparar os resultados.\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"post_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Professora comenta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/posts/{{post_id}}/comments",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Professora comenta",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"conteudo\":\"Boa proposta. Registre o método e as observações.\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"comment_id\", pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno não edita comentário da professora",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/posts/{{post_id}}/comments/{{comment_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno não edita comentário da professora",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"conteudo\":\"Alteração não autorizada\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\", function () { pm.response.to.have.status(403); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aluno consulta a conversa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/posts/{{post_id}}/comments",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Aluno consulta a conversa"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criadora não pode sair do clube",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{teacher_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}/members/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Criadora não pode sair do clube"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 — Recuperação e desativação",
+      "item": [
+        {
+          "name": "Diretor gera código para João",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/users/{{student_id}}/password-reset",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor gera código para João"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) pm.variables.set(\"reset_token\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "João define nova senha",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/reset-password",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "João define nova senha",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"token\":\"{{reset_token}}\",\"novaSenha\":\"{{new_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Código não pode ser reutilizado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/reset-password",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Código não pode ser reutilizado",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"token\":\"{{reset_token}}\",\"novaSenha\":\"{{new_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sessão antiga foi encerrada",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/auth/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Sessão antiga foi encerrada"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "João entra com a nova senha",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/auth/login",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "João entra com a nova senha",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"email\":\"joao.{{run_id}}@example.test\",\"senha\":\"{{new_password}}\"};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) pm.variables.set(\"student_token\", pm.response.json().access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor desativa o aluno de teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users/{{student_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor desativa o aluno de teste",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"ativo\":false};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Conta desativada perde acesso",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{student_token}}"
+              }
+            ],
+            "url": "{{base_url}}/auth/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Conta desativada perde acesso"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 — Limpeza dos exemplos",
+      "item": [
+        {
+          "name": "Diretor remove comunidade de teste e conversa",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor remove comunidade de teste e conversa"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Comunidade removida não existe",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/communities/{{community_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Comunidade removida não existe"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor remove aviso de teste",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/news/{{news_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor remove aviso de teste"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor desativa professora de teste",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/users/{{teacher_id}}",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor desativa professora de teste",
+            "body": {
+              "mode": "raw",
+              "raw": "{{request_body}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const payload = {\"ativo\":false};",
+                  "for (const key of Object.keys(payload)) { if (typeof payload[key] === \"string\") payload[key] = payload[key].replace(/{{([^}]+)}}/g, (_match, name) => { const value = pm.variables.get(name); if (value === undefined) throw new Error(\"Vari?vel ausente: \" + name); return String(value); }); }",
+                  "pm.variables.set(\"request_body\", JSON.stringify(payload));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Diretor encerra apenas esta sessão de teste",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/auth/logout",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Diretor encerra apenas esta sessão de teste"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token encerrado é recusado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{director_token}}"
+              }
+            ],
+            "url": "{{base_url}}/auth/me",
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Token encerrado é recusado"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

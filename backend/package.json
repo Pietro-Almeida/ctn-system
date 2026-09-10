@@ -20,7 +20,13 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
-    "contract:emit": "prisma contract emit"
+    "test:integration": "node scripts/test-integration.mjs",
+    "contract:emit": "prisma contract emit",
+    "db:check": "node scripts/database.mjs check",
+    "db:init": "prisma db init",
+    "db:seed": "node scripts/database.mjs seed",
+    "db:cleanup": "node scripts/database.mjs cleanup",
+    "admin:create": "npm run build && node scripts/create-director.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.1",
