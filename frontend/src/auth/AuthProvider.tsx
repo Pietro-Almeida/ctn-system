@@ -9,6 +9,31 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
+interface LoginResponse {
+  access_token: string
+  token_type: 'Bearer'
+  expires_in: number
+  user: AuthUser
+}
+
+interface ApiError {
+  message?: string | string[]
+}
+
+async function getErrorMessage(response: Response) {
+  try {
+    const body = (await response.json()) as ApiError
+    if (Array.isArray(body.message)) return body.message.join('. ')
+    if (body.message) return body.message
+  } catch {
+    // A resposta pode não possuir um corpo JSON.
+  }
+
+  if (response.status === 401) return 'E-mail ou senha inválidos'
+  if (response.status === 429) return 'Muitas tentativas. Aguarde um minuto'
+  return 'Não foi possível entrar. Tente novamente'
+}
+
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [status, setStatus] = useState<AuthStatus>('loading')
   const [user, setUser] = useState<AuthUser | null>(null)
@@ -31,6 +56,28 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setStatus('authenticated')
     },
     [],
+  )
+
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          senha: password,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(await getErrorMessage(response))
+      }
+
+      const session = (await response.json()) as LoginResponse
+      establishSession(session.access_token, session.user)
+      return session.user
+    },
+    [establishSession],
   )
 
   useEffect(() => {
@@ -67,8 +114,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }, [clearSession, token])
 
   const value = useMemo(
-    () => ({ status, user, token, establishSession, clearSession }),
-    [clearSession, establishSession, status, token, user],
+    () => ({ status, user, token, login, clearSession }),
+    [clearSession, login, status, token, user],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
