@@ -55,7 +55,7 @@ export default function AppRoutes() {
           <Route path="/professor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/professor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
           <Route path="/professor/comunidades/:comunidadeId/editar" element={<TeacherEditCommunityPage />} />
-          <Route path="/professor/perfil" element={page('Meu perfil', 'Dados do professor autenticado.')} />
+          <Route path="/professor/perfil" element={<ProfilePage />} />
         </Route>
       </Route>
 
