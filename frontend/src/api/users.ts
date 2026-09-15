@@ -66,3 +66,31 @@ export async function updateUserStatus(id: number, ativo: boolean, token: string
   if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
   return data
 }
+
+export interface UpdateUserInput {
+  nome?: string
+  email?: string
+  role?: CreateUserRole
+  ativo?: boolean
+}
+
+export async function getUser(id: number, token: string, signal?: AbortSignal) {
+  const response = await fetch(`${API_URL}/users/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal,
+  })
+  const data = await readResponse(response, 'Não foi possível carregar o usuário')
+  if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
+  return data
+}
+
+export async function updateUser(id: number, input: UpdateUserInput, token: string) {
+  const response = await fetch(`${API_URL}/users/${id}`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  const data = await readResponse(response, 'Não foi possível atualizar o usuário')
+  if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
+  return data
+}
