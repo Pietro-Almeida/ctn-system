@@ -6,6 +6,7 @@ import JournalPage from '../pages/journal/JournalPage'
 import NewsDetailPage from '../pages/journal/NewsDetailPage'
 import StudentCommunityDetailPage from '../pages/student/StudentCommunityDetailPage'
 import ProfilePage from '../pages/ProfilePage'
+import DirectorDashboard from '../pages/director/DirectorDashboard'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -50,7 +51,7 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={['DIRECAO']} />}>
         <Route element={<AppLayout />}>
-          <Route path="/diretor/inicio" element={page('Painel da Direção', 'Visão administrativa do CTN System.')} />
+          <Route path="/diretor/inicio" element={<DirectorDashboard />} />
           <Route path="/diretor/jornal" element={<JournalPage />} />
           <Route path="/diretor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/diretor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para a Direção.')} />
