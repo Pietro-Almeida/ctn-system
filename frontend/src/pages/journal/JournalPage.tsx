@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { listNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
@@ -78,7 +78,7 @@ export default function JournalPage() {
   const canPublish = user?.role === 'PROFESSOR' || user?.role === 'DIRECAO'
   const base = user?.role === 'PROFESSOR' ? '/professor' : '/diretor'
 
-  async function loadNews(signal?: AbortSignal) {
+  const loadNews = useCallback(async (signal?: AbortSignal) => {
     if (!token) return
     setLoading(true)
     setErrorMessage('')
@@ -92,13 +92,13 @@ export default function JournalPage() {
     } finally {
       if (!signal?.aborted) setLoading(false)
     }
-  }
+  }, [clearSession, token])
 
   useEffect(() => {
     const controller = new AbortController()
     void loadNews(controller.signal)
     return () => controller.abort()
-  }, [token])
+  }, [loadNews])
 
   const filteredNews = useMemo(
     () => selectedFilter === 'ALL'
