@@ -1,9 +1,17 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AuthContext } from './auth-context'
-import type { AuthStatus, AuthUser } from './auth.types'
+import type { AuthStatus, AuthUser, UserRole } from './auth.types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 const TOKEN_KEY = 'ctn:access-token'
+const TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/
+const KNOWN_ROLES: UserRole[] = [
+  'ALUNO',
+  'PROFESSOR',
+  'DIRECAO',
+  'COORDENACAO',
+  'SOE',
+]
 
 interface AuthProviderProps {
   children: ReactNode
@@ -18,6 +26,32 @@ interface LoginResponse {
 
 interface ApiError {
   message?: string | string[]
+}
+
+function isAuthUser(value: unknown): value is AuthUser {
+  if (!value || typeof value !== 'object') return false
+  const user = value as Partial<AuthUser>
+
+  return (
+    typeof user.id === 'number' &&
+    typeof user.nome === 'string' &&
+    typeof user.email === 'string' &&
+    typeof user.role === 'string' &&
+    KNOWN_ROLES.includes(user.role as UserRole)
+  )
+}
+
+function isLoginResponse(value: unknown): value is LoginResponse {
+  if (!value || typeof value !== 'object') return false
+  const session = value as Partial<LoginResponse>
+
+  return (
+    typeof session.access_token === 'string' &&
+    TOKEN_PATTERN.test(session.access_token) &&
+    session.token_type === 'Bearer' &&
+    typeof session.expires_in === 'number' &&
+    isAuthUser(session.user)
+  )
 }
 
 async function getErrorMessage(response: Response) {
@@ -60,20 +94,32 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const login = useCallback(
     async (email: string, password: string) => {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          senha: password,
-        }),
-      })
+      let response: Response
+
+      try {
+        response = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            senha: password,
+          }),
+        })
+      } catch {
+        throw new Error(
+          'Não foi possível conectar ao servidor. Verifique sua conexão',
+        )
+      }
 
       if (!response.ok) {
         throw new Error(await getErrorMessage(response))
       }
 
-      const session = (await response.json()) as LoginResponse
+      const session: unknown = await response.json()
+      if (!isLoginResponse(session)) {
+        throw new Error('O servidor retornou uma sessão inválida')
+      }
+
       establishSession(session.access_token, session.user)
       return session.user
     },
@@ -100,7 +146,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           return
         }
 
-        const authenticatedUser = (await response.json()) as AuthUser
+        const authenticatedUser: unknown = await response.json()
+        if (!isAuthUser(authenticatedUser)) {
+          clearSession()
+          return
+        }
+
         setUser(authenticatedUser)
         setStatus('authenticated')
       } catch (error) {
