@@ -58,7 +58,7 @@ export default function DirectorCreateUserPage() {
     setSubmitting(true)
     try {
       const created = await createUser({ nome: nome.trim(), email: email.trim(), senha, role }, token)
-      navigate(`/diretor/usuarios/${created.id}/editar`, { replace: true, state: { created: true } })
+      navigate('/diretor/usuarios', { replace: true, state: { createdUserId: created.id } })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Não foi possível cadastrar o usuário'
       if (message === 'Sua sessão expirou') clearSession()
