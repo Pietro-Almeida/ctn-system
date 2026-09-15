@@ -1,0 +1,89 @@
+.journal-page { max-width: 84rem; margin: 0 auto; padding: 2.2rem clamp(1.5rem,4vw,3.5rem) 4rem; }
+.journal-icon { width:1rem;height:1rem;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round; }
+.journal-heading { display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;margin-bottom:1.2rem; }
+.journal-heading h1 { margin:0;color:var(--color-ink);font-size:clamp(2rem,3.2vw,3rem);letter-spacing:-.055em; }
+.journal-heading p { margin:.35rem 0 0;color:var(--color-muted); }
+.journal-create { display:inline-flex;align-items:center;justify-content:center;min-height:2.7rem;padding:0 1rem;border-radius:.55rem;color:#fff;background:var(--color-blue);text-decoration:none;font-size:.78rem;font-weight:800;white-space:nowrap; }
+.journal-create:hover { background:var(--color-blue-dark); }
+.journal-filters { display:flex;gap:.45rem;overflow-x:auto;padding:.25rem 0 1rem;scrollbar-width:none; }
+.journal-filters::-webkit-scrollbar { display:none; }
+.journal-filters button { min-height:2.45rem;padding:0 1rem;border:0;border-radius:.45rem;color:var(--color-graphite);background:#e9edf3;font-size:.72rem;font-weight:700;white-space:nowrap;cursor:pointer; }
+.journal-filters button.active { color:#fff;background:var(--color-blue); }
+.journal-lead { display:grid;grid-template-columns:minmax(0,1.85fr) minmax(18rem,.95fr);gap:.8rem; }
+.journal-carousel { position:relative;min-height:23rem;overflow:hidden;border-radius:.7rem;color:#fff;background:#10141b; }
+.journal-carousel>.journal-art { position:absolute;inset:0; }
+.journal-carousel__overlay { position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,11,16,.96) 0%,rgba(8,11,16,.82) 45%,rgba(8,11,16,.05) 78%); }
+.journal-art { position:relative;min-height:5rem;overflow:hidden;background:linear-gradient(135deg,#0e1219 0 38%,#1769e0 38% 67%,#dfe9f7 67%); }
+.journal-art::before { content:'';position:absolute;width:65%;aspect-ratio:1;right:-15%;top:-40%;border:1px solid rgba(255,255,255,.32);border-radius:50%; }
+.journal-art i,.journal-art b { position:absolute;display:block;transform:rotate(38deg);background:rgba(255,255,255,.18); }
+.journal-art i { width:4rem;height:180%;left:55%;top:-35%; }
+.journal-art b { width:2px;height:150%;left:78%;top:-20%; }
+.journal-art--1 { background:linear-gradient(145deg,#1769e0 0 35%,#e4edf9 35% 55%,#10141b 55%); }
+.journal-art--2 { background:linear-gradient(45deg,#0e1219 0 32%,#1769e0 32% 75%,#c9dcf5 75%); }
+.journal-art--3 { background:linear-gradient(120deg,#dfe9f7 0 28%,#10141b 28% 68%,#1769e0 68%); }
+.journal-carousel__content { position:relative;z-index:2;max-width:37rem;padding:3.1rem 4.2rem; }
+.journal-carousel__content>div { display:flex;align-items:center;gap:.8rem;font-size:.6rem;font-weight:750; }
+.journal-carousel__content>div span { padding:.35rem .55rem;border-radius:.3rem;background:var(--color-blue); }
+.journal-carousel__content time { color:#d5dae2; }
+.journal-carousel h2 { margin:1.1rem 0 .75rem;font-size:clamp(1.8rem,3vw,3rem);line-height:1.06;letter-spacing:-.05em; }
+.journal-carousel p { max-width:31rem;margin:0 0 1.4rem;color:#d2d7df;font-size:.86rem;line-height:1.55; }
+.journal-read-label { display:inline-flex;align-items:center;gap:.4rem;padding:.75rem 1rem;border-radius:.45rem;background:var(--color-blue);font-size:.75rem;font-weight:800; }
+.journal-read-link,.journal-card-link { position:absolute;z-index:3;inset:0; }
+.journal-carousel__arrow { position:absolute;z-index:4;top:50%;width:2.1rem;height:2.1rem;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.25);border-radius:50%;color:#fff;background:rgba(8,11,16,.65);transform:translateY(-50%);cursor:pointer; }
+.journal-carousel__arrow--left { left:.7rem; }.journal-carousel__arrow--right { right:.7rem; }
+.journal-carousel__dots { position:absolute;z-index:4;left:50%;bottom:.8rem;display:flex;gap:.35rem;transform:translateX(-50%); }
+.journal-carousel__dots button { width:.45rem;height:.45rem;padding:0;border:0;border-radius:50%;background:#9ba3ae;cursor:pointer; }
+.journal-carousel__dots button.active { width:1.15rem;border-radius:999px;background:var(--color-blue); }
+.journal-latest,.journal-section { overflow:hidden;border:1px solid var(--color-border);border-radius:.7rem;background:#fff; }
+.journal-block-title { min-height:3.3rem;display:flex;align-items:center;justify-content:space-between;padding:0 1rem;border-bottom:1px solid var(--color-border); }
+.journal-block-title h2 { margin:0;color:var(--color-ink);font-size:1rem; }
+.journal-block-title>span { display:flex;align-items:center;gap:.2rem;color:var(--color-blue);font-size:.65rem;font-weight:750; }
+.journal-latest article { position:relative;display:grid;grid-template-columns:4.2rem 1fr;gap:.65rem;padding:.8rem;border-bottom:1px solid var(--color-border); }
+.journal-latest article:last-child { border:0; }
+.journal-latest article .journal-art { min-height:4.2rem;border-radius:.3rem; }
+.journal-latest span,.journal-section article span { color:var(--color-blue);font-size:.55rem;font-weight:800;text-transform:uppercase; }
+.journal-latest time,.journal-section article time { margin-left:.45rem;color:var(--color-muted);font-size:.54rem; }
+.journal-latest h3,.journal-section h3 { margin:.28rem 0 0;color:var(--color-ink);font-size:.8rem;line-height:1.25; }
+.journal-sections { display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:.8rem; }
+.journal-section { position:relative; }
+.journal-section .journal-block-title { border-top:4px solid var(--color-blue); }
+.journal-section article { position:relative;display:grid;grid-template-columns:auto 1fr;gap:.65rem;padding:.8rem;border-bottom:1px solid var(--color-border); }
+.journal-section article:last-of-type { border:0; }
+.journal-section__main { grid-template-columns:6.5rem 1fr!important; }
+.journal-section__main .journal-art { min-height:5.6rem;border-radius:.35rem; }
+.journal-section p { margin:.25rem 0 0;color:var(--color-muted);font-size:.64rem;line-height:1.4; }
+.journal-empty-section { min-height:7rem;display:grid;place-items:center;padding:1rem;text-align:center; }
+.journal-feedback,.journal-empty { min-height:calc(100svh - 4.75rem);display:grid;place-content:center;justify-items:center;gap:.8rem;padding:2rem;text-align:center; }
+.journal-feedback>span { width:2rem;height:2rem;border:3px solid var(--color-border);border-top-color:var(--color-blue);border-radius:50%;animation:journal-spin .7s linear infinite; }
+.journal-feedback h1,.journal-empty h2 { margin:0;color:var(--color-ink); }
+.journal-feedback p,.journal-empty p { margin:0;color:var(--color-muted); }
+.journal-feedback button { display:flex;align-items:center;gap:.4rem;padding:.7rem 1rem;border:0;border-radius:.5rem;color:#fff;background:var(--color-blue);font-weight:750;cursor:pointer; }
+.journal-empty__art { width:min(26rem,80vw);overflow:hidden;border-radius:.7rem; }
+.journal-empty__art .journal-art { min-height:10rem; }
+@keyframes journal-spin { to { transform:rotate(360deg); } }
+
+@media(max-width:1100px) {
+  .journal-lead { grid-template-columns:1fr; }
+  .journal-latest { display:grid;grid-template-columns:repeat(3,1fr); }
+  .journal-latest .journal-block-title { grid-column:1/-1; }
+  .journal-latest article { border-right:1px solid var(--color-border);border-bottom:0; }
+}
+@media(max-width:760px) {
+  .journal-page { padding:1.5rem 1rem 2rem; }
+  .journal-heading { align-items:flex-start; }
+  .journal-heading h1 { font-size:1.85rem; }
+  .journal-heading p { font-size:.8rem;line-height:1.4; }
+  .journal-create { min-height:2.4rem;padding:0 .75rem;font-size:.68rem; }
+  .journal-carousel { min-height:25rem; }
+  .journal-carousel__content { padding:2rem 2.8rem; }
+  .journal-carousel h2 { font-size:1.75rem; }
+  .journal-carousel__overlay { background:linear-gradient(180deg,rgba(8,11,16,.9),rgba(8,11,16,.78)); }
+  .journal-latest { grid-template-columns:1fr; }
+  .journal-latest article { border-right:0;border-bottom:1px solid var(--color-border); }
+  .journal-sections { grid-template-columns:1fr; }
+}
+@media(max-width:440px) {
+  .journal-heading { flex-direction:column; }
+  .journal-create { width:100%; }
+}
+@media(prefers-reduced-motion:reduce) { .journal-feedback>span { animation:none; } }
