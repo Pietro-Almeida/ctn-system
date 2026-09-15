@@ -7,6 +7,7 @@ import NewsDetailPage from '../pages/journal/NewsDetailPage'
 import StudentCommunityDetailPage from '../pages/student/StudentCommunityDetailPage'
 import ProfilePage from '../pages/ProfilePage'
 import DirectorDashboard from '../pages/director/DirectorDashboard'
+import DirectorUsersPage from '../pages/director/DirectorUsersPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -58,7 +59,7 @@ export default function AppRoutes() {
           <Route path="/diretor/comunidades" element={page('Gestão de comunidades', 'Comunidades criadas e acompanhadas pela Direção.')} />
           <Route path="/diretor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
           <Route path="/diretor/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e administração da comunidade.')} />
-          <Route path="/diretor/usuarios" element={page('Gestão de usuários', 'Área exclusiva da Direção.')} />
+          <Route path="/diretor/usuarios" element={<DirectorUsersPage />} />
           <Route path="/diretor/usuarios/novo" element={page('Cadastrar usuário', 'Cadastro exclusivo da Direção.')} />
           <Route path="/diretor/usuarios/:usuarioId/editar" element={page('Editar usuário', 'Alteração de dados e acesso do usuário.')} />
           <Route path="/diretor/perfil" element={page('Meu perfil', 'Dados do diretor autenticado.')} />
