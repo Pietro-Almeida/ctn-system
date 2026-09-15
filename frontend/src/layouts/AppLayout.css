@@ -337,7 +337,7 @@
     inset: auto 0 0;
     min-height: 4.25rem;
     display: grid;
-    grid-template-columns: repeat(var(--bottom-items, 4), 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     padding: 0.35rem max(0.4rem, env(safe-area-inset-right)) max(0.35rem, env(safe-area-inset-bottom)) max(0.4rem, env(safe-area-inset-left));
     border-top: 1px solid var(--color-border);
     background: rgba(255, 255, 255, 0.97);
