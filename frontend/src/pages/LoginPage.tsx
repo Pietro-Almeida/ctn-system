@@ -1,11 +1,44 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../auth/auth-context'
 import './LoginPage.css'
 
 export default function LoginPage() {
+  const { login, status } = useAuth()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (status === 'authenticated') {
+      navigate('/', { replace: true })
+    }
+  }, [navigate, status])
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (submitting) return
+
+    const form = new FormData(event.currentTarget)
+    const email = String(form.get('email') ?? '')
+    const password = String(form.get('password') ?? '')
+
+    setSubmitting(true)
+    setErrorMessage('')
+
+    try {
+      await login(email, password)
+      navigate('/', { replace: true })
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'Não foi possível entrar. Tente novamente',
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -49,6 +82,16 @@ export default function LoginPage() {
           </p>
 
           <form onSubmit={handleSubmit}>
+            {errorMessage ? (
+              <div className="login-error" role="alert" aria-live="assertive">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 8v5M12 16h.01" />
+                </svg>
+                <span>{errorMessage}</span>
+              </div>
+            ) : null}
+
             <label className="form-field">
               <span>E-mail institucional</span>
               <div className="input-wrapper">
@@ -61,6 +104,7 @@ export default function LoginPage() {
                   name="email"
                   autoComplete="email"
                   placeholder="nome@cemtn.edu.br"
+                  disabled={submitting}
                   required
                 />
               </div>
@@ -78,6 +122,7 @@ export default function LoginPage() {
                   name="password"
                   autoComplete="current-password"
                   placeholder="Digite sua senha"
+                  disabled={submitting}
                   required
                 />
                 <button
@@ -85,6 +130,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword((current) => !current)}
                   aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  disabled={submitting}
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
@@ -95,21 +141,24 @@ export default function LoginPage() {
             </label>
 
             <div className="login-options">
-              <label className="remember-option">
-                <input type="checkbox" name="remember" />
-                <span>Lembrar de mim</span>
-              </label>
+              <span className="login-security-note">
+                Sessão protegida nesta aba
+              </span>
 
               <button className="forgot-password" type="button">
                 Esqueci minha senha
               </button>
             </div>
 
-            <button className="login-submit" type="submit">
-              Entrar
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m9 18 6-6-6-6" />
-              </svg>
+            <button className="login-submit" type="submit" disabled={submitting}>
+              {submitting ? 'Entrando...' : 'Entrar'}
+              {submitting ? (
+                <span className="login-submit__spinner" aria-hidden="true" />
+              ) : (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              )}
             </button>
           </form>
 
