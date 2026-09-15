@@ -30,6 +30,7 @@ export default function DirectorCommunityDetailPage() {
   const { comunidadeId } = useParams()
   const id = Number(comunidadeId)
   const { token, user, clearSession } = useAuth()
+  const base = user?.role === 'PROFESSOR' ? '/professor' : '/diretor'
   const [community, setCommunity] = useState<CommunitySummary | null>(null)
   const [members, setMembers] = useState<CommunityMember[]>([])
   const [posts, setPosts] = useState<CommunityPost[]>([])
@@ -120,17 +121,17 @@ export default function DirectorCommunityDetailPage() {
   }
 
   if (loading) return <main className="director-detail-feedback" aria-live="polite"><span /><p>Carregando comunidade...</p></main>
-  if (errorMessage && !community) return <main className="director-detail-feedback"><h1>Não foi possível abrir a comunidade</h1><p>{errorMessage}</p><Link to="/diretor/comunidades">Voltar</Link></main>
+  if (errorMessage && !community) return <main className="director-detail-feedback"><h1>Não foi possível abrir a comunidade</h1><p>{errorMessage}</p><Link to={`${base}/comunidades`}>Voltar</Link></main>
   if (!community) return null
   const rules = community.regras?.split(/\n+/).filter(Boolean) ?? []
 
   return (
     <main className="director-community-detail">
-      <nav><Link to="/diretor/comunidades">Comunidades</Link><span>/</span><span>{community.nome}</span></nav>
+      <nav><Link to={`${base}/comunidades`}>Comunidades</Link><span>/</span><span>{community.nome}</span></nav>
       <header>
         <span><Icon name="community" /></span>
         <div><h1>{community.nome}</h1><p>{community.descricao}</p><small>Por {community.creatorName} · {members.length} participantes · {posts.length} publicações</small></div>
-        <button type="button" onClick={() => setEditing(true)}><Icon name="edit" /> Editar comunidade</button>
+        {canManage ? <button type="button" onClick={() => setEditing(true)}><Icon name="edit" /> Editar comunidade</button> : null}
       </header>
 
       {notice ? <p className="director-detail-notice" role="status">{notice}</p> : null}
@@ -141,7 +142,7 @@ export default function DirectorCommunityDetailPage() {
           <form className="director-detail-composer" onSubmit={publish}><span>{initials(user?.nome ?? '')}</span><textarea value={newPost} onChange={(event) => setNewPost(event.target.value)} maxLength={10000} placeholder="Compartilhe uma atualização com a comunidade..." /><button type="submit" disabled={!newPost.trim() || Boolean(busy)}>{busy === 'post' ? 'Publicando...' : 'Publicar'}</button></form>
           {posts.map((post) => (
             <article className="director-detail-post" key={post.id}>
-              <header><span>{initials(post.authorName || 'CT')}</span><div><strong>{post.authorName || 'Participante'}</strong><time>{formatDate(post.createdAt)}</time></div><button type="button" onClick={() => void removePost(post)} disabled={Boolean(busy)} aria-label="Excluir publicação"><Icon name="trash" /></button></header>
+              <header><span>{initials(post.authorName || 'CT')}</span><div><strong>{post.authorName || 'Participante'}</strong><time>{formatDate(post.createdAt)}</time></div>{canManage || post.authorId === user?.id ? <button type="button" onClick={() => void removePost(post)} disabled={Boolean(busy)} aria-label="Excluir publicação"><Icon name="trash" /></button> : null}</header>
               <p>{post.conteudo}</p>
               {(comments[post.id] ?? []).length ? <div className="director-detail-comments">{(comments[post.id] ?? []).map((item) => <div key={item.id}><span>{initials(item.authorName || 'CT')}</span><p><strong>{item.authorName || 'Participante'}</strong><time>{formatDate(item.createdAt)}</time><em>{item.conteudo}</em></p></div>)}</div> : null}
               <form onSubmit={(event) => void comment(event, post.id)}><input value={commentDrafts[post.id] ?? ''} onChange={(event) => setCommentDrafts((current) => ({ ...current, [post.id]: event.target.value }))} maxLength={10000} placeholder="Escreva um comentário..." /><button type="submit" disabled={!commentDrafts[post.id]?.trim() || Boolean(busy)}>Comentar</button></form>
@@ -152,7 +153,7 @@ export default function DirectorCommunityDetailPage() {
 
         <aside>
           <section><h2>Regras de convivência</h2>{rules.length ? <ol>{rules.map((rule) => <li key={rule}>{rule}</li>)}</ol> : <p>Nenhuma regra específica cadastrada.</p>}</section>
-          <section><h2>Participantes ({members.length})</h2><div className="director-detail-members">{members.map((member) => <article key={member.id}><span>{initials(member.nome)}</span><div><strong>{member.nome}</strong><small>{member.role}</small></div>{member.id !== community.creatorId ? <button type="button" onClick={() => void removeMember(member)} disabled={Boolean(busy)} aria-label={`Remover ${member.nome}`}><Icon name="close" /></button> : <i>Criador</i>}</article>)}</div></section>
+          <section><h2>Participantes ({members.length})</h2><div className="director-detail-members">{members.map((member) => <article key={member.id}><span>{initials(member.nome)}</span><div><strong>{member.nome}</strong><small>{member.role}</small></div>{member.id === community.creatorId ? <i>Criador</i> : canManage ? <button type="button" onClick={() => void removeMember(member)} disabled={Boolean(busy)} aria-label={`Remover ${member.nome}`}><Icon name="close" /></button> : null}</article>)}</div></section>
         </aside>
       </div>
 
