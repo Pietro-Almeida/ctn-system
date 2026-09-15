@@ -220,6 +220,7 @@
   background: transparent;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .forgot-password:hover {
