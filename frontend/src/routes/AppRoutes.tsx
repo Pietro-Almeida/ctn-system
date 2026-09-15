@@ -20,6 +20,7 @@ import TeacherCommunitiesPage from '../pages/teacher/TeacherCommunitiesPage'
 import TeacherEditCommunityPage from '../pages/teacher/TeacherEditCommunityPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
+import ResetPasswordPage from '../pages/ResetPasswordPage'
 import HomeRedirect from './HomeRedirect'
 import ProtectedRoute from './ProtectedRoute'
 
@@ -28,6 +29,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<HomeRedirect />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
       <Route path="/acesso-negado" element={<AccessDeniedPage />} />
 
       <Route element={<ProtectedRoute allowedRoles={['ALUNO']} />}>
