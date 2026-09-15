@@ -184,7 +184,7 @@ export default function StudentCommunitiesPage() {
             </button>
           ))}
           <div className="active-communities__tip">
-            <Icon name="communities" />
+            <Icon name="users" />
             <p>Participe das comunidades e fortaleça sua jornada no CEMTN.</p>
           </div>
         </aside>
