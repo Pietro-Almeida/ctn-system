@@ -5,6 +5,7 @@ import StudentCommunitiesPage from '../pages/student/StudentCommunitiesPage'
 import JournalPage from '../pages/journal/JournalPage'
 import NewsDetailPage from '../pages/journal/NewsDetailPage'
 import CreateNewsPage from '../pages/journal/CreateNewsPage'
+import EditNewsPage from '../pages/journal/EditNewsPage'
 import StudentCommunityDetailPage from '../pages/student/StudentCommunityDetailPage'
 import ProfilePage from '../pages/ProfilePage'
 import DirectorDashboard from '../pages/director/DirectorDashboard'
@@ -46,6 +47,7 @@ export default function AppRoutes() {
           <Route path="/professor/jornal" element={<JournalPage />} />
           <Route path="/professor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/professor/jornal/nova" element={<CreateNewsPage />} />
+          <Route path="/professor/jornal/:noticiaId/editar" element={<EditNewsPage />} />
           <Route path="/professor/comunidades" element={<TeacherCommunitiesPage />} />
           <Route path="/professor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/professor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
@@ -60,6 +62,7 @@ export default function AppRoutes() {
           <Route path="/diretor/jornal" element={<JournalPage />} />
           <Route path="/diretor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/diretor/jornal/nova" element={<CreateNewsPage />} />
+          <Route path="/diretor/jornal/:noticiaId/editar" element={<EditNewsPage />} />
           <Route path="/diretor/comunidades" element={<DirectorCommunitiesPage />} />
           <Route path="/diretor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/diretor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
