@@ -124,6 +124,7 @@ export default function DirectorCommunityDetailPage() {
   if (errorMessage && !community) return <main className="director-detail-feedback"><h1>Não foi possível abrir a comunidade</h1><p>{errorMessage}</p><Link to={`${base}/comunidades`}>Voltar</Link></main>
   if (!community) return null
   const rules = community.regras?.split(/\n+/).filter(Boolean) ?? []
+  const canManage = user?.role === 'DIRECAO' || community.creatorId === user?.id
 
   return (
     <main className="director-community-detail">
