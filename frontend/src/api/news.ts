@@ -53,3 +53,14 @@ export async function getNews(id: number, token: string, signal?: AbortSignal) {
   if (!isNewsItem(data)) throw new Error('A notícia retornou dados inválidos')
   return data
 }
+
+export async function createNews(input: { titulo: string; conteudo: string; categoria: string }, token: string) {
+  const response = await fetch(`${API_URL}/news`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  const data = await readResponse(response, 'Não foi possível publicar a notícia')
+  if (!isNewsItem(data)) throw new Error('A notícia retornou dados inválidos')
+  return data
+}
