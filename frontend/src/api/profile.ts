@@ -18,3 +18,19 @@ export async function changePassword(token: string, senhaAtual: string, novaSenh
     throw new Error(message || 'Não foi possível alterar a senha')
   }
 }
+
+
+export async function resetPassword(token: string, novaSenha: string) {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, novaSenha }),
+  })
+  if (!response.ok) {
+    if (response.status === 400) throw new Error('Código inválido ou expirado')
+    if (response.status === 429) throw new Error('Muitas tentativas. Aguarde um minuto')
+    const data = await response.json().catch(() => null) as { message?: string | string[] } | null
+    const message = Array.isArray(data?.message) ? data.message[0] : data?.message
+    throw new Error(message || 'Não foi possível redefinir a senha')
+  }
+}
