@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from '../layouts/AppLayout'
 import StudentDashboard from '../pages/student/StudentDashboard'
+import StudentCommunitiesPage from '../pages/student/StudentCommunitiesPage'
 import JournalPage from '../pages/journal/JournalPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
@@ -24,7 +25,7 @@ export default function AppRoutes() {
           <Route path="/aluno/inicio" element={<StudentDashboard />} />
           <Route path="/aluno/jornal" element={<JournalPage />} />
           <Route path="/aluno/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
-          <Route path="/aluno/comunidades" element={page('Comunidades', 'Comunidades disponíveis para o aluno.')} />
+          <Route path="/aluno/comunidades" element={<StudentCommunitiesPage />} />
           <Route path="/aluno/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e interações da comunidade.')} />
           <Route path="/aluno/perfil" element={page('Meu perfil', 'Dados do aluno autenticado.')} />
         </Route>
