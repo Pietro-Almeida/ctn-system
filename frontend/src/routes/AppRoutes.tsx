@@ -19,13 +19,8 @@ import TeacherCommunitiesPage from '../pages/teacher/TeacherCommunitiesPage'
 import TeacherEditCommunityPage from '../pages/teacher/TeacherEditCommunityPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
-import RoutePlaceholder from '../pages/RoutePlaceholder'
 import HomeRedirect from './HomeRedirect'
 import ProtectedRoute from './ProtectedRoute'
-
-const page = (title: string, description: string) => (
-  <RoutePlaceholder title={title} description={description} />
-)
 
 export default function AppRoutes() {
   return (
