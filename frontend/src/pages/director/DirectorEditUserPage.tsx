@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getUser, updateUser, type CreateUserRole, type SystemUser } from '../../api/users'
+import { getUser, issuePasswordReset, updateUser, type CreateUserRole, type SystemUser } from '../../api/users'
 import { useAuth } from '../../auth/auth-context'
 import './DirectorEditUserPage.css'
 
@@ -38,6 +38,9 @@ export default function DirectorEditUserPage() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [resetCode, setResetCode] = useState('')
+  const [resetMessage, setResetMessage] = useState('')
+  const [generatingReset, setGeneratingReset] = useState(false)
 
   const load = useCallback(async (signal?: AbortSignal) => {
     if (!token || !Number.isInteger(id) || id <= 0) { setErrorMessage('O endereço deste usuário é inválido'); setLoading(false); return }
@@ -53,6 +56,35 @@ export default function DirectorEditUserPage() {
   }, [clearSession, id, token])
 
   useEffect(() => { const controller = new AbortController(); void load(controller.signal); return () => controller.abort() }, [load])
+
+  async function handleGenerateReset() {
+    if (!token || !original || generatingReset) return
+    if (!window.confirm(`Gerar um novo código para ${original.nome}? Qualquer código anterior deixará de funcionar.`)) return
+    setGeneratingReset(true)
+    setResetCode('')
+    setResetMessage('')
+    try {
+      const reset = await issuePasswordReset(id, token)
+      setResetCode(reset.token)
+      setResetMessage(`Código válido por ${Math.round(reset.expiresIn / 60)} minutos. Entregue-o diretamente ao usuário.`)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Não foi possível gerar o código'
+      if (message === 'Sua sessão expirou') clearSession()
+      else setResetMessage(message)
+    } finally {
+      setGeneratingReset(false)
+    }
+  }
+
+  async function handleCopyReset() {
+    if (!resetCode) return
+    try {
+      await navigator.clipboard.writeText(resetCode)
+      setResetMessage('Código copiado. Entregue-o diretamente ao usuário.')
+    } catch {
+      setResetMessage('Não foi possível copiar automaticamente. Selecione o código e copie manualmente.')
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -79,6 +111,14 @@ export default function DirectorEditUserPage() {
       <header><h1>Editar usuário</h1><p>Atualize os dados e as permissões de acesso ao CTN System.</p></header>
 
       <section className="edit-user-summary"><span>{initials(original.nome)}</span><div><strong>{original.nome}</strong><small>{original.email}</small></div><i className={original.ativo ? 'active' : ''}>{original.ativo ? 'Ativo' : 'Inativo'}</i></section>
+
+      <section className="edit-user-reset">
+        <div><h2>Recuperação de senha</h2><p>Gere um código temporário e entregue-o diretamente ao usuário.</p></div>
+        <button type="button" onClick={() => void handleGenerateReset()} disabled={generatingReset || !original.ativo}>{generatingReset ? 'Gerando...' : 'Gerar código'}</button>
+        {resetCode ? <div className="edit-user-reset__code"><label>Código de uso único<input value={resetCode} readOnly onFocus={(event) => event.currentTarget.select()} /></label><button type="button" onClick={() => void handleCopyReset()}>Copiar código</button></div> : null}
+        {resetMessage ? <p className="edit-user-reset__message" role="status">{resetMessage}</p> : null}
+        {!original.ativo ? <p className="edit-user-reset__message">Reative a conta antes de gerar um código.</p> : null}
+      </section>
 
       <form onSubmit={handleSubmit}>
         <div className="edit-user-form">
