@@ -16,6 +16,7 @@ import DirectorCreateCommunityPage from '../pages/director/DirectorCreateCommuni
 import DirectorCommunityDetailPage from '../pages/director/DirectorCommunityDetailPage'
 import TeacherDashboard from '../pages/teacher/TeacherDashboard'
 import TeacherCommunitiesPage from '../pages/teacher/TeacherCommunitiesPage'
+import TeacherEditCommunityPage from '../pages/teacher/TeacherEditCommunityPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -53,7 +54,7 @@ export default function AppRoutes() {
           <Route path="/professor/comunidades" element={<TeacherCommunitiesPage />} />
           <Route path="/professor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/professor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
-          <Route path="/professor/comunidades/:comunidadeId/editar" element={page('Editar comunidade', 'Configurações da comunidade do professor.')} />
+          <Route path="/professor/comunidades/:comunidadeId/editar" element={<TeacherEditCommunityPage />} />
           <Route path="/professor/perfil" element={page('Meu perfil', 'Dados do professor autenticado.')} />
         </Route>
       </Route>
