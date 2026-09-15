@@ -1,0 +1,20 @@
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+
+export async function changePassword(token: string, senhaAtual: string, novaSenha: string) {
+  const response = await fetch(`${API_URL}/auth/change-password`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ senhaAtual, novaSenha }),
+  })
+
+  if (!response.ok) {
+    if (response.status === 401) throw new Error('Senha atual incorreta ou sessão expirada')
+    if (response.status === 429) throw new Error('Muitas tentativas. Aguarde um pouco e tente novamente')
+    const data = await response.json().catch(() => null) as { message?: string | string[] } | null
+    const message = Array.isArray(data?.message) ? data.message[0] : data?.message
+    throw new Error(message || 'Não foi possível alterar a senha')
+  }
+}
