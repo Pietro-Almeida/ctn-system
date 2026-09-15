@@ -3,6 +3,9 @@ import AppLayout from '../layouts/AppLayout'
 import StudentDashboard from '../pages/student/StudentDashboard'
 import StudentCommunitiesPage from '../pages/student/StudentCommunitiesPage'
 import JournalPage from '../pages/journal/JournalPage'
+import NewsDetailPage from '../pages/journal/NewsDetailPage'
+import StudentCommunityDetailPage from '../pages/student/StudentCommunityDetailPage'
+import ProfilePage from '../pages/ProfilePage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -24,10 +27,10 @@ export default function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/aluno/inicio" element={<StudentDashboard />} />
           <Route path="/aluno/jornal" element={<JournalPage />} />
-          <Route path="/aluno/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
+          <Route path="/aluno/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/aluno/comunidades" element={<StudentCommunitiesPage />} />
-          <Route path="/aluno/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e interações da comunidade.')} />
-          <Route path="/aluno/perfil" element={page('Meu perfil', 'Dados do aluno autenticado.')} />
+          <Route path="/aluno/comunidades/:comunidadeId" element={<StudentCommunityDetailPage />} />
+          <Route path="/aluno/perfil" element={<ProfilePage />} />
         </Route>
       </Route>
 
@@ -35,7 +38,7 @@ export default function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/professor/inicio" element={page('Painel do Professor', 'Resumo das publicações e comunidades do professor.')} />
           <Route path="/professor/jornal" element={<JournalPage />} />
-          <Route path="/professor/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
+          <Route path="/professor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/professor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para professores.')} />
           <Route path="/professor/comunidades" element={page('Minhas comunidades', 'Comunidades criadas ou acompanhadas pelo professor.')} />
           <Route path="/professor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
@@ -49,7 +52,7 @@ export default function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/diretor/inicio" element={page('Painel da Direção', 'Visão administrativa do CTN System.')} />
           <Route path="/diretor/jornal" element={<JournalPage />} />
-          <Route path="/diretor/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
+          <Route path="/diretor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/diretor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para a Direção.')} />
           <Route path="/diretor/comunidades" element={page('Gestão de comunidades', 'Comunidades criadas e acompanhadas pela Direção.')} />
           <Route path="/diretor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
