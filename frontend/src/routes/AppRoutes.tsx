@@ -51,7 +51,7 @@ export default function AppRoutes() {
           <Route path="/professor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/professor/jornal/nova" element={<CreateNewsPage />} />
           <Route path="/professor/comunidades" element={<TeacherCommunitiesPage />} />
-          <Route path="/professor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
+          <Route path="/professor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/professor/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e administração da comunidade.')} />
           <Route path="/professor/comunidades/:comunidadeId/editar" element={page('Editar comunidade', 'Configurações da comunidade do professor.')} />
           <Route path="/professor/perfil" element={page('Meu perfil', 'Dados do professor autenticado.')} />
