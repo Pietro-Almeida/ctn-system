@@ -23,19 +23,38 @@ function isSystemUser(value: unknown): value is SystemUser {
   )
 }
 
+async function readResponse(response: Response, fallback: string) {
+  if (!response.ok) {
+    if (response.status === 401) throw new Error('Sua sessão expirou')
+    if (response.status === 403) throw new Error('Apenas a Direção pode acessar os usuários')
+    const data = await response.json().catch(() => null) as { message?: string | string[] } | null
+    const message = Array.isArray(data?.message) ? data.message[0] : data?.message
+    throw new Error(message || fallback)
+  }
+  if (response.status === 204) return null
+  return response.json() as Promise<unknown>
+}
+
 export async function listUsers(token: string, signal?: AbortSignal) {
   const response = await fetch(`${API_URL}/users?page=1&limit=100`, {
     headers: { Authorization: `Bearer ${token}` },
     signal,
   })
-
-  if (!response.ok) {
-    if (response.status === 401) throw new Error('Sua sessão expirou')
-    if (response.status === 403) throw new Error('Apenas a Direção pode acessar os usuários')
-    throw new Error('Não foi possível carregar os usuários')
-  }
-
-  const data: unknown = await response.json()
+  const data = await readResponse(response, 'Não foi possível carregar os usuários')
   if (!Array.isArray(data)) throw new Error('Os usuários retornaram dados inválidos')
   return data.filter(isSystemUser)
+}
+
+export async function updateUserStatus(id: number, ativo: boolean, token: string) {
+  const response = await fetch(`${API_URL}/users/${id}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ativo }),
+  })
+  const data = await readResponse(response, 'Não foi possível alterar a situação do usuário')
+  if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
+  return data
 }
