@@ -103,7 +103,9 @@ export default function DirectorDashboard() {
     () => communities.filter((community) => community.creatorId === user?.id).slice(0, 3),
     [communities, user?.id],
   )
-  const latestUsers = users.slice(0, 4)
+  const latestUsers = [...users]
+    .sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime())
+    .slice(0, 4)
   const latestNews = news.slice(0, 4)
 
   if (loading) {
