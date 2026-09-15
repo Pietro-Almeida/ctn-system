@@ -49,7 +49,9 @@ export class CommunitiesService {
     return (
       await this.db.query(
         `SELECT c.*, u.nome AS "creatorName",
-      EXISTS(SELECT 1 FROM public.membership m WHERE m."communityId"=c.id AND m."userId"=$3) AS participating
+      EXISTS(SELECT 1 FROM public.membership m WHERE m."communityId"=c.id AND m."userId"=$3) AS participating,
+      (SELECT COUNT(*)::int FROM public.membership m WHERE m."communityId"=c.id) AS "memberCount",
+      (SELECT COUNT(*)::int FROM public."communityPost" p WHERE p."communityId"=c.id) AS "postCount"
       FROM public.community c JOIN public."user" u ON u.id=c."creatorId"
       ORDER BY c.id DESC LIMIT $1 OFFSET $2`,
         [page.limit, offset(page), user.id],
