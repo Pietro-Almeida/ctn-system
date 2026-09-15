@@ -9,6 +9,7 @@ import ProfilePage from '../pages/ProfilePage'
 import DirectorDashboard from '../pages/director/DirectorDashboard'
 import DirectorUsersPage from '../pages/director/DirectorUsersPage'
 import DirectorCreateUserPage from '../pages/director/DirectorCreateUserPage'
+import DirectorEditUserPage from '../pages/director/DirectorEditUserPage'
 import DirectorCommunitiesPage from '../pages/director/DirectorCommunitiesPage'
 import DirectorCreateCommunityPage from '../pages/director/DirectorCreateCommunityPage'
 import DirectorCommunityDetailPage from '../pages/director/DirectorCommunityDetailPage'
@@ -65,7 +66,7 @@ export default function AppRoutes() {
           <Route path="/diretor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
           <Route path="/diretor/usuarios" element={<DirectorUsersPage />} />
           <Route path="/diretor/usuarios/novo" element={<DirectorCreateUserPage />} />
-          <Route path="/diretor/usuarios/:usuarioId/editar" element={page('Editar usuário', 'Alteração de dados e acesso do usuário.')} />
+          <Route path="/diretor/usuarios/:usuarioId/editar" element={<DirectorEditUserPage />} />
           <Route path="/diretor/perfil" element={page('Meu perfil', 'Dados do diretor autenticado.')} />
         </Route>
       </Route>
