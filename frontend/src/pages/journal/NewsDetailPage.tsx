@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getNews, type NewsItem } from '../../api/news'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { deleteNews, getNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './NewsDetailPage.css'
 
@@ -28,9 +28,12 @@ function formatDate(value: string) {
 export default function NewsDetailPage() {
   const { noticiaId } = useParams()
   const { token, user, clearSession } = useAuth()
+  const navigate = useNavigate()
   const [news, setNews] = useState<NewsItem | null>(null)
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [actionError, setActionError] = useState('')
+  const [deleting, setDeleting] = useState(false)
 
   const id = Number(noticiaId)
   const journalPath = user?.role === 'ALUNO'
@@ -77,6 +80,26 @@ export default function NewsDetailPage() {
     [news],
   )
 
+  const canManage = Boolean(news && (user?.role === 'DIRECAO' || (user?.role === 'PROFESSOR' && news.authorId === user.id)))
+  const base = user?.role === 'PROFESSOR' ? '/professor' : '/diretor'
+
+  async function handleDelete() {
+    if (!token || !news || !canManage || deleting) return
+    if (!window.confirm(`Excluir definitivamente a notícia “${news.titulo}”?`)) return
+    setDeleting(true)
+    setActionError('')
+    try {
+      await deleteNews(news.id, token)
+      navigate(journalPath, { replace: true, state: { newsDeleted: true } })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Não foi possível excluir a notícia'
+      if (message === 'Sua sessão expirou') clearSession()
+      else setActionError(message)
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   if (loading) {
     return <main className="news-detail-feedback" aria-live="polite"><span /><p>Carregando notícia...</p></main>
   }
@@ -110,6 +133,8 @@ export default function NewsDetailPage() {
             <span className="news-detail__avatar" aria-hidden="true">{news.authorName?.charAt(0).toUpperCase() || 'C'}</span>
             <p><strong>{news.authorName || 'Equipe CEMTN'}</strong><time dateTime={news.createdAt}>{formatDate(news.createdAt)}</time></p>
           </div>
+          {canManage ? <div className="news-detail__management"><Link to={`${base}/jornal/${news.id}/editar`}>Editar publicação</Link><button type="button" onClick={() => void handleDelete()} disabled={deleting}>{deleting ? 'Excluindo...' : 'Excluir publicação'}</button></div> : null}
+          {actionError ? <p className="news-detail__action-error" role="alert">{actionError}</p> : null}
         </header>
 
         <div className="news-detail__art" aria-hidden="true"><i /><b /><span /></div>

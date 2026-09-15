@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/auth-context'
 import './LoginPage.css'
 
@@ -145,9 +145,9 @@ export default function LoginPage() {
                 Sessão protegida nesta aba
               </span>
 
-              <button className="forgot-password" type="button">
+              <Link className="forgot-password" to="/redefinir-senha">
                 Esqueci minha senha
-              </button>
+              </Link>
             </div>
 
             <button className="login-submit" type="submit" disabled={submitting}>

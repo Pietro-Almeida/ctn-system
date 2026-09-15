@@ -1,42 +1,16 @@
-import { useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { listCommunities, type CommunitySummary } from '../../api/communities'
+import { listNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './StudentDashboard.css'
 
-type IconName = 'news' | 'communities' | 'bell' | 'sigma' | 'chart' | 'science' | 'chat' | 'document' | 'arrow' | 'chevron'
+type IconName = 'news' | 'communities' | 'bell' | 'sigma' | 'chart' | 'science' | 'chat' | 'document' | 'arrow' | 'chevron' | 'refresh'
+interface IconProps { name: IconName; size?: number }
+interface Activity { id: string; icon: IconName; text: string; time: string; path: string; timestamp: number }
 
-interface IconProps {
-  name: IconName
-  size?: number
-}
-
-const highlights = [
-  {
-    category: 'COMUNICADO',
-    date: '14 SET 2026',
-    title: 'Semana de avaliações começa na próxima segunda-feira',
-    description: 'Confira o cronograma, as orientações e dicas para se preparar bem.',
-  },
-  {
-    category: 'CIÊNCIAS',
-    date: '12 SET 2026',
-    title: 'Feira de Ciências será realizada em outubro',
-    description: 'Inscrições abertas para projetos individuais ou em grupo.',
-  },
-]
-
-const communities = [
-  { icon: 'sigma' as const, name: 'Matemática · 3º ano', detail: '28 publicações recentes' },
-  { icon: 'chart' as const, name: 'Preparação PAS', detail: '20 publicações recentes' },
-  { icon: 'science' as const, name: 'Feira de Ciências', detail: '15 publicações recentes' },
-]
-
-const activities = [
-  { icon: 'chat' as const, text: 'Mariana Oliveira publicou em Preparação PAS', time: 'Há 1 hora' },
-  { icon: 'chat' as const, text: 'Pedro Alves respondeu em Matemática · 3º ano', time: 'Há 3 horas' },
-  { icon: 'document' as const, text: 'Nova publicação em Feira de Ciências', time: 'Há 5 horas' },
-  { icon: 'bell' as const, text: 'Novo comunicado no Jornal', time: 'Há 1 dia' },
-]
+const IMPORTANT_CATEGORIES = new Set(['AVISO', 'COMUNICADO'])
+const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000
 
 function Icon({ name, size = 20 }: IconProps) {
   const paths: Record<IconName, ReactNode> = {
@@ -50,126 +24,161 @@ function Icon({ name, size = 20 }: IconProps) {
     document: <><path d="M6 3h9l3 3v15H6z" /><path d="M14 3v4h4M9 12h6M9 16h6" /></>,
     arrow: <path d="m9 18 6-6-6-6" />,
     chevron: <path d="m15 18-6-6 6-6" />,
+    refresh: <><path d="M20 7h-5V2" /><path d="M20 7a8 8 0 1 0 1 7" /></>,
   }
-
-  return (
-    <svg className="student-icon" width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      {paths[name]}
-    </svg>
-  )
+  return <svg className="student-icon" width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>
 }
 
 function SectionHeader({ title, to }: { title: string; to: string }) {
-  return (
-    <div className="student-section-header">
-      <h2>{title}</h2>
-      <Link to={to}>Ver todas <Icon name="arrow" size={15} /></Link>
-    </div>
-  )
+  return <div className="student-section-header"><h2>{title}</h2><Link to={to}>Ver todas <Icon name="arrow" size={15} /></Link></div>
+}
+
+function communityIcon(index: number): IconName {
+  return (['sigma', 'chart', 'science'] as IconName[])[index % 3]
+}
+
+function plainText(value: string) {
+  return value.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+}
+
+function excerpt(value: string, limit = 120) {
+  const text = plainText(value)
+  return text.length > limit ? `${text.slice(0, limit).trimEnd()}…` : text
+}
+
+function shortDate(value: string) {
+  return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+    .format(new Date(value)).replace(/\./g, '').toUpperCase()
+}
+
+function relativeDate(value: string) {
+  const timestamp = new Date(value).getTime()
+  if (!Number.isFinite(timestamp)) return 'Data indisponível'
+  const difference = Math.max(0, Date.now() - timestamp)
+  const minutes = Math.floor(difference / 60_000)
+  if (minutes < 1) return 'Agora'
+  if (minutes < 60) return `Há ${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `Há ${hours}h`
+  const days = Math.floor(hours / 24)
+  return days === 1 ? 'Há 1 dia' : `Há ${days} dias`
 }
 
 export default function StudentDashboard() {
-  const { user } = useAuth()
+  const { user, token, clearSession } = useAuth()
+  const [news, setNews] = useState<NewsItem[]>([])
+  const [communities, setCommunities] = useState<CommunitySummary[]>([])
   const [activeHighlight, setActiveHighlight] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const load = useCallback(async (signal?: AbortSignal) => {
+    if (!token) return
+    setLoading(true)
+    setErrorMessage('')
+    try {
+      const [newsData, communityData] = await Promise.all([
+        listNews(token, signal),
+        listCommunities(token, signal),
+      ])
+      setNews(newsData)
+      setCommunities(communityData)
+      setActiveHighlight(0)
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      const message = error instanceof Error ? error.message : 'Não foi possível carregar o painel'
+      if (message === 'Sua sessão expirou') clearSession()
+      else setErrorMessage(message)
+    } finally {
+      if (!signal?.aborted) setLoading(false)
+    }
+  }, [clearSession, token])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    void load(controller.signal)
+    return () => controller.abort()
+  }, [load])
+
+  const participating = useMemo(
+    () => communities.filter((community) => community.participating),
+    [communities],
+  )
+  const highlights = news.slice(0, 4)
+  const highlight = highlights[activeHighlight] ?? highlights[0]
+  const headlines = news.slice(highlights.length, highlights.length + 2)
+  const now = Date.now()
+  const recentNewsCount = news.filter((item) => now - new Date(item.createdAt).getTime() <= SEVEN_DAYS).length
+  const importantCount = news.filter((item) => IMPORTANT_CATEGORIES.has(item.categoria) && now - new Date(item.createdAt).getTime() <= SEVEN_DAYS).length
+
+  const activities = useMemo<Activity[]>(() => [
+    ...news.slice(0, 4).map((item) => ({
+      id: `news-${item.id}`,
+      icon: IMPORTANT_CATEGORIES.has(item.categoria) ? 'bell' as const : 'document' as const,
+      text: `${item.authorName || 'Equipe CEMTN'} publicou “${item.titulo}”`,
+      time: relativeDate(item.createdAt),
+      path: `/aluno/jornal/${item.id}`,
+      timestamp: new Date(item.createdAt).getTime(),
+    })),
+    ...participating.slice(0, 4).map((community) => ({
+      id: `community-${community.id}`,
+      icon: 'chat' as const,
+      text: `${community.nome} possui ${community.postCount} publicaç${community.postCount === 1 ? 'ão' : 'ões'}`,
+      time: relativeDate(community.updatedAt),
+      path: `/aluno/comunidades/${community.id}`,
+      timestamp: new Date(community.updatedAt).getTime(),
+    })),
+  ].sort((a, b) => b.timestamp - a.timestamp).slice(0, 4), [news, participating])
+
   const firstName = user?.nome.trim().split(/\s+/)[0] ?? 'Aluno'
-  const highlight = highlights[activeHighlight]
 
   function changeHighlight(direction: -1 | 1) {
-    setActiveHighlight((current) =>
-      (current + direction + highlights.length) % highlights.length,
-    )
+    if (highlights.length < 2) return
+    setActiveHighlight((current) => (current + direction + highlights.length) % highlights.length)
   }
+
+  if (loading) return <main className="student-dashboard-feedback" aria-live="polite"><span /><p>Carregando painel do aluno...</p></main>
+  if (errorMessage) return <main className="student-dashboard-feedback"><h1>Não foi possível abrir o painel</h1><p>{errorMessage}</p><button type="button" onClick={() => void load()}><Icon name="refresh" /> Tentar novamente</button></main>
 
   return (
     <main className="student-dashboard">
-      <header className="student-welcome">
-        <div>
-          <div className="student-welcome__title">
-            <h1>Olá, {firstName}.</h1>
-            <span>Aluno</span>
-          </div>
-          <p>Acompanhe as novidades e participe da comunidade CEMTN.</p>
-        </div>
-      </header>
+      <header className="student-welcome"><div><div className="student-welcome__title"><h1>Olá, {firstName}.</h1><span>Aluno</span></div><p>Acompanhe as novidades e participe da comunidade CEMTN.</p></div></header>
 
       <section className="student-stats" aria-label="Resumo do aluno">
-        <Link to="/aluno/jornal" className="student-stat student-stat--primary">
-          <span className="student-stat__icon"><Icon name="news" /></span>
-          <span><small>Publicações novas</small><strong>05</strong></span>
-          <Icon name="arrow" size={18} />
-        </Link>
-        <Link to="/aluno/comunidades" className="student-stat">
-          <span className="student-stat__icon"><Icon name="communities" /></span>
-          <span><small>Minhas comunidades</small><strong>03</strong></span>
-        </Link>
-        <Link to="/aluno/jornal" className="student-stat">
-          <span className="student-stat__icon"><Icon name="bell" /></span>
-          <span><small>Avisos importantes</small><strong>02</strong></span>
-        </Link>
+        <Link to="/aluno/jornal" className="student-stat student-stat--primary"><span className="student-stat__icon"><Icon name="news" /></span><span><small>Publicações novas</small><strong>{recentNewsCount.toString().padStart(2, '0')}</strong></span><Icon name="arrow" size={18} /></Link>
+        <Link to="/aluno/comunidades" className="student-stat"><span className="student-stat__icon"><Icon name="communities" /></span><span><small>Minhas comunidades</small><strong>{participating.length.toString().padStart(2, '0')}</strong></span></Link>
+        <Link to="/aluno/jornal" className="student-stat"><span className="student-stat__icon"><Icon name="bell" /></span><span><small>Avisos importantes</small><strong>{importantCount.toString().padStart(2, '0')}</strong></span></Link>
       </section>
 
       <div className="student-dashboard__grid">
         <section className="student-dashboard__news">
           <SectionHeader title="Destaques do Jornal" to="/aluno/jornal" />
-
-          <article className="student-highlight">
-            <div className="student-highlight__content">
-              <div className="student-highlight__meta">
-                <span>{highlight.category}</span>
-                <time>{highlight.date}</time>
-              </div>
-              <h3>{highlight.title}</h3>
-              <p>{highlight.description}</p>
-            </div>
-            <div className="student-highlight__art" aria-hidden="true"><i /><b /></div>
-            <button type="button" className="student-carousel-arrow student-carousel-arrow--previous" onClick={() => changeHighlight(-1)} aria-label="Destaque anterior">
-              <Icon name="chevron" />
-            </button>
-            <button type="button" className="student-carousel-arrow student-carousel-arrow--next" onClick={() => changeHighlight(1)} aria-label="Próximo destaque">
-              <Icon name="arrow" />
-            </button>
-            <div className="student-carousel-dots" aria-label="Posição do carrossel">
-              {highlights.map((item, index) => (
-                <button key={item.title} type="button" className={index === activeHighlight ? 'active' : ''} onClick={() => setActiveHighlight(index)} aria-label={`Mostrar destaque ${index + 1}`} />
-              ))}
-            </div>
-          </article>
-
-          <div className="student-headlines">
-            <article>
-              <div className="student-headline-art student-headline-art--education" />
-              <div><span>EDUCAÇÃO</span><time>12 SET 2026</time><h3>Novos projetos ampliam o acervo da biblioteca</h3><p>Iniciativas buscam aproximar ainda mais os alunos da leitura.</p></div>
-            </article>
-            <article>
-              <div className="student-headline-art student-headline-art--science" />
-              <div><span>CIÊNCIAS</span><time>10 SET 2026</time><h3>Feira de Ciências será realizada em outubro</h3><p>Inscrições abertas para projetos individuais ou em grupo.</p></div>
-            </article>
-          </div>
+          {highlight ? (
+            <>
+              <article className="student-highlight">
+                <Link className="student-highlight__content" to={`/aluno/jornal/${highlight.id}`}><div className="student-highlight__meta"><span>{highlight.categoria}</span><time dateTime={highlight.createdAt}>{shortDate(highlight.createdAt)}</time></div><h3>{highlight.titulo}</h3><p>{excerpt(highlight.conteudo) || 'Abra a publicação para ler todos os detalhes.'}</p></Link>
+                <div className="student-highlight__art" aria-hidden="true"><i /><b /></div>
+                {highlights.length > 1 ? <><button type="button" className="student-carousel-arrow student-carousel-arrow--previous" onClick={() => changeHighlight(-1)} aria-label="Destaque anterior"><Icon name="chevron" /></button><button type="button" className="student-carousel-arrow student-carousel-arrow--next" onClick={() => changeHighlight(1)} aria-label="Próximo destaque"><Icon name="arrow" /></button><div className="student-carousel-dots" aria-label="Posição do carrossel">{highlights.map((item, index) => <button key={item.id} type="button" className={index === activeHighlight ? 'active' : ''} onClick={() => setActiveHighlight(index)} aria-label={`Mostrar destaque ${index + 1}`} />)}</div></> : null}
+              </article>
+              {headlines.length ? <div className="student-headlines">{headlines.map((item, index) => <Link to={`/aluno/jornal/${item.id}`} key={item.id}><div className={`student-headline-art ${index % 2 ? 'student-headline-art--science' : 'student-headline-art--education'}`} aria-hidden="true" /><div><span>{item.categoria}</span><time dateTime={item.createdAt}>{shortDate(item.createdAt)}</time><h3>{item.titulo}</h3><p>{excerpt(item.conteudo, 90)}</p></div></Link>)}</div> : null}
+            </>
+          ) : <div className="student-dashboard-empty"><Icon name="news" /><h3>O Jornal ainda não possui publicações</h3><p>As novidades da escola aparecerão aqui.</p></div>}
         </section>
 
         <aside className="student-dashboard__side">
           <section className="student-panel">
             <SectionHeader title="Minhas comunidades" to="/aluno/comunidades" />
             <div className="student-community-list">
-              {communities.map((community) => (
-                <Link to="/aluno/comunidades/1" key={community.name}>
-                  <span className="student-list-icon"><Icon name={community.icon} /></span>
-                  <span><strong>{community.name}</strong><small>{community.detail}</small></span>
-                  <Icon name="arrow" size={16} />
-                </Link>
-              ))}
+              {participating.slice(0, 3).map((community, index) => <Link to={`/aluno/comunidades/${community.id}`} key={community.id}><span className="student-list-icon"><Icon name={communityIcon(index)} /></span><span><strong>{community.nome}</strong><small>{community.postCount} publicaç{community.postCount === 1 ? 'ão' : 'ões'} recentes</small></span><Icon name="arrow" size={16} /></Link>)}
+              {!participating.length ? <div className="student-list-empty"><p>Você ainda não participa de comunidades.</p><Link to="/aluno/comunidades">Explorar comunidades</Link></div> : null}
             </div>
           </section>
 
           <section className="student-panel">
             <SectionHeader title="Atividade recente" to="/aluno/comunidades" />
             <div className="student-activity-list">
-              {activities.map((activity) => (
-                <div key={activity.text}>
-                  <span className="student-list-icon"><Icon name={activity.icon} size={17} /></span>
-                  <span><strong>{activity.text}</strong><small>{activity.time}</small></span>
-                </div>
-              ))}
+              {activities.map((activity) => <Link to={activity.path} key={activity.id}><span className="student-list-icon"><Icon name={activity.icon} size={17} /></span><span><strong>{activity.text}</strong><small>{activity.time}</small></span></Link>)}
+              {!activities.length ? <div className="student-list-empty"><p>Nenhuma atividade recente.</p></div> : null}
             </div>
           </section>
         </aside>

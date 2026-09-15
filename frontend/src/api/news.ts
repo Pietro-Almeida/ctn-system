@@ -29,6 +29,7 @@ async function readResponse(response: Response, fallbackMessage: string) {
     if (response.status === 404) throw new Error('Notícia não encontrada')
     throw new Error(fallbackMessage)
   }
+  if (response.status === 204) return null
   return response.json() as Promise<unknown>
 }
 
@@ -52,4 +53,35 @@ export async function getNews(id: number, token: string, signal?: AbortSignal) {
   const data = await readResponse(response, 'Não foi possível carregar a notícia')
   if (!isNewsItem(data)) throw new Error('A notícia retornou dados inválidos')
   return data
+}
+
+export async function createNews(input: { titulo: string; conteudo: string; categoria: string }, token: string) {
+  const response = await fetch(`${API_URL}/news`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  const data = await readResponse(response, 'Não foi possível publicar a notícia')
+  if (!isNewsItem(data)) throw new Error('A notícia retornou dados inválidos')
+  return data
+}
+
+
+export async function updateNews(id: number, input: { titulo: string; conteudo: string; categoria: string }, token: string) {
+  const response = await fetch(`${API_URL}/news/${id}`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  })
+  const data = await readResponse(response, 'Não foi possível atualizar a notícia')
+  if (!isNewsItem(data)) throw new Error('A notícia retornou dados inválidos')
+  return data
+}
+
+export async function deleteNews(id: number, token: string) {
+  const response = await fetch(`${API_URL}/news/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  await readResponse(response, 'Não foi possível excluir a notícia')
 }

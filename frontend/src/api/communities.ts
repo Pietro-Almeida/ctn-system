@@ -153,3 +153,33 @@ export async function createPostComment(communityId: number, postId: number, con
 export async function joinCommunity(id: number, token: string) {
   await request(`/communities/${id}/members/me`, token, { method: 'POST' })
 }
+
+export async function deleteCommunity(id: number, token: string) {
+  await request(`/communities/${id}`, token, { method: 'DELETE' })
+}
+
+export async function createCommunity(input: { nome: string; descricao: string; regras: string }, token: string) {
+  const data = await request('/communities', token, {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+  if (!isCommunity(data)) throw new Error('A comunidade retornou dados inválidos')
+  return data
+}
+
+export async function updateCommunity(id: number, input: { nome: string; descricao: string; regras: string }, token: string) {
+  const data = await request(`/communities/${id}`, token, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  })
+  if (!isCommunity(data)) throw new Error('A comunidade retornou dados inválidos')
+  return data
+}
+
+export async function removeCommunityMember(communityId: number, userId: number, token: string) {
+  await request(`/communities/${communityId}/members/${userId}`, token, { method: 'DELETE' })
+}
+
+export async function deleteCommunityPost(communityId: number, postId: number, token: string) {
+  await request(`/communities/${communityId}/posts/${postId}`, token, { method: 'DELETE' })
+}
