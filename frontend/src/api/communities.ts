@@ -153,3 +153,7 @@ export async function createPostComment(communityId: number, postId: number, con
 export async function joinCommunity(id: number, token: string) {
   await request(`/communities/${id}/members/me`, token, { method: 'POST' })
 }
+
+export async function deleteCommunity(id: number, token: string) {
+  await request(`/communities/${id}`, token, { method: 'DELETE' })
+}
