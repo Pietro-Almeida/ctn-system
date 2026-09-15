@@ -14,6 +14,7 @@ import DirectorEditUserPage from '../pages/director/DirectorEditUserPage'
 import DirectorCommunitiesPage from '../pages/director/DirectorCommunitiesPage'
 import DirectorCreateCommunityPage from '../pages/director/DirectorCreateCommunityPage'
 import DirectorCommunityDetailPage from '../pages/director/DirectorCommunityDetailPage'
+import TeacherDashboard from '../pages/teacher/TeacherDashboard'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -44,7 +45,7 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={['PROFESSOR']} />}>
         <Route element={<AppLayout />}>
-          <Route path="/professor/inicio" element={page('Painel do Professor', 'Resumo das publicações e comunidades do professor.')} />
+          <Route path="/professor/inicio" element={<TeacherDashboard />} />
           <Route path="/professor/jornal" element={<JournalPage />} />
           <Route path="/professor/jornal/:noticiaId" element={<NewsDetailPage />} />
           <Route path="/professor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para professores.')} />
