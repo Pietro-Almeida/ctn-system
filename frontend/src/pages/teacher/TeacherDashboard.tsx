@@ -49,8 +49,7 @@ export default function TeacherDashboard() {
 
   const ownNews = useMemo(() => news.filter((item) => item.authorId === user?.id), [news, user?.id])
   const ownCommunities = useMemo(() => communities.filter((item) => item.creatorId === user?.id), [communities, user?.id])
-  const participants = ownCommunities.reduce((total, item) => total + item.memberCount, 0)
-  const communityPosts = ownCommunities.reduce((total, item) => total + item.postCount, 0)
+  const interactions = ownCommunities.reduce((total, item) => total + item.postCount, 0)
   const activities = useMemo<Activity[]>(() => [
     ...ownNews.map((item) => ({ id: `news-${item.id}`, title: 'Publicação no Jornal', description: item.titulo, date: item.createdAt, icon: 'news' as const, path: `/professor/jornal/${item.id}` })),
     ...ownCommunities.map((item) => ({ id: `community-${item.id}`, title: 'Atividade em comunidade', description: `${item.nome} · ${item.postCount} publicações`, date: item.updatedAt, icon: 'community' as const, path: `/professor/comunidades/${item.id}` })),
@@ -65,10 +64,9 @@ export default function TeacherDashboard() {
       <section className="teacher-welcome"><h2>Olá, Prof. {user?.nome.split(' ')[0]}.</h2><span>Professor</span><p>Aqui estão as atividades mais recentes dos seus espaços.</p></section>
 
       <section className="teacher-stats">
-        <Link to="/professor/jornal"><span><Icon name="news" /></span><div><small>Minhas notícias</small><strong>{ownNews.length}</strong></div><Icon name="arrow" /></Link>
-        <Link to="/professor/comunidades"><span><Icon name="community" /></span><div><small>Minhas comunidades</small><strong>{ownCommunities.length}</strong></div><Icon name="arrow" /></Link>
-        <article><span><Icon name="people" /></span><div><small>Participantes</small><strong>{participants}</strong></div></article>
-        <article><span><Icon name="post" /></span><div><small>Publicações</small><strong>{communityPosts}</strong></div></article>
+        <Link to="/professor/comunidades"><span><Icon name="community" /></span><div><small>Comunidades criadas</small><strong>{ownCommunities.length.toString().padStart(2, '0')}</strong></div><Icon name="arrow" /></Link>
+        <Link to="/professor/jornal"><span><Icon name="news" /></span><div><small>Publicações no Jornal</small><strong>{ownNews.length.toString().padStart(2, '0')}</strong></div><Icon name="arrow" /></Link>
+        <article><span><Icon name="post" /></span><div><small>Interações registradas</small><strong>{interactions.toString().padStart(2, '0')}</strong></div></article>
       </section>
 
       <div className="teacher-dashboard-grid">
