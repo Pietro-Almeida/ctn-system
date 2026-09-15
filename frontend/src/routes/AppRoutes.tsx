@@ -4,6 +4,7 @@ import StudentDashboard from '../pages/student/StudentDashboard'
 import StudentCommunitiesPage from '../pages/student/StudentCommunitiesPage'
 import JournalPage from '../pages/journal/JournalPage'
 import NewsDetailPage from '../pages/journal/NewsDetailPage'
+import CreateNewsPage from '../pages/journal/CreateNewsPage'
 import StudentCommunityDetailPage from '../pages/student/StudentCommunityDetailPage'
 import ProfilePage from '../pages/ProfilePage'
 import DirectorDashboard from '../pages/director/DirectorDashboard'
@@ -60,7 +61,7 @@ export default function AppRoutes() {
           <Route path="/diretor/inicio" element={<DirectorDashboard />} />
           <Route path="/diretor/jornal" element={<JournalPage />} />
           <Route path="/diretor/jornal/:noticiaId" element={<NewsDetailPage />} />
-          <Route path="/diretor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para a Direção.')} />
+          <Route path="/diretor/jornal/nova" element={<CreateNewsPage />} />
           <Route path="/diretor/comunidades" element={<DirectorCommunitiesPage />} />
           <Route path="/diretor/comunidades/nova" element={<DirectorCreateCommunityPage />} />
           <Route path="/diretor/comunidades/:comunidadeId" element={<DirectorCommunityDetailPage />} />
