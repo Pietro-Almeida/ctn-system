@@ -68,7 +68,7 @@ export default function AppRoutes() {
           <Route path="/diretor/usuarios" element={<DirectorUsersPage />} />
           <Route path="/diretor/usuarios/novo" element={<DirectorCreateUserPage />} />
           <Route path="/diretor/usuarios/:usuarioId/editar" element={<DirectorEditUserPage />} />
-          <Route path="/diretor/perfil" element={page('Meu perfil', 'Dados do diretor autenticado.')} />
+          <Route path="/diretor/perfil" element={<ProfilePage />} />
         </Route>
       </Route>
 
