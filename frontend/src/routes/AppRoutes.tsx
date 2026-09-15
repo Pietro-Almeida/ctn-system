@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from '../layouts/AppLayout'
 import StudentDashboard from '../pages/student/StudentDashboard'
+import JournalPage from '../pages/journal/JournalPage'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -21,7 +22,8 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['ALUNO']} />}>
         <Route element={<AppLayout />}>
           <Route path="/aluno/inicio" element={<StudentDashboard />} />
-          <Route path="/aluno/jornal" element={page('Jornal CEMTN', 'Componente compartilhado do Jornal.')} />
+          <Route path="/aluno/jornal" element={<JournalPage />} />
+          <Route path="/aluno/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
           <Route path="/aluno/comunidades" element={page('Comunidades', 'Comunidades disponíveis para o aluno.')} />
           <Route path="/aluno/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e interações da comunidade.')} />
           <Route path="/aluno/perfil" element={page('Meu perfil', 'Dados do aluno autenticado.')} />
@@ -31,7 +33,8 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['PROFESSOR']} />}>
         <Route element={<AppLayout />}>
           <Route path="/professor/inicio" element={page('Painel do Professor', 'Resumo das publicações e comunidades do professor.')} />
-          <Route path="/professor/jornal" element={page('Jornal CEMTN', 'Componente compartilhado do Jornal.')} />
+          <Route path="/professor/jornal" element={<JournalPage />} />
+          <Route path="/professor/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
           <Route path="/professor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para professores.')} />
           <Route path="/professor/comunidades" element={page('Minhas comunidades', 'Comunidades criadas ou acompanhadas pelo professor.')} />
           <Route path="/professor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
@@ -44,7 +47,8 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={['DIRECAO']} />}>
         <Route element={<AppLayout />}>
           <Route path="/diretor/inicio" element={page('Painel da Direção', 'Visão administrativa do CTN System.')} />
-          <Route path="/diretor/jornal" element={page('Jornal CEMTN', 'Componente compartilhado do Jornal.')} />
+          <Route path="/diretor/jornal" element={<JournalPage />} />
+          <Route path="/diretor/jornal/:noticiaId" element={page('Notícia', 'Leitura completa da publicação.')} />
           <Route path="/diretor/jornal/nova" element={page('Nova publicação', 'Editor de publicações autorizado para a Direção.')} />
           <Route path="/diretor/comunidades" element={page('Gestão de comunidades', 'Comunidades criadas e acompanhadas pela Direção.')} />
           <Route path="/diretor/comunidades/nova" element={page('Criar comunidade', 'Cadastro de uma nova comunidade.')} />
