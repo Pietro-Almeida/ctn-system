@@ -1,6 +1,6 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { deleteCommunity, listCommunities, type CommunitySummary } from '../../api/communities'
+import { Link, useNavigate } from 'react-router-dom'
+import { deleteCommunity, joinCommunity, listCommunities, type CommunitySummary } from '../../api/communities'
 import { useAuth } from '../../auth/auth-context'
 import './TeacherCommunitiesPage.css'
 
@@ -24,12 +24,14 @@ function formatDate(value: string) { return new Intl.DateTimeFormat('pt-BR', { d
 
 export default function TeacherCommunitiesPage() {
   const { token, user, clearSession } = useAuth()
+  const navigate = useNavigate()
   const [communities, setCommunities] = useState<CommunitySummary[]>([])
   const [tab, setTab] = useState<Tab>('MINE')
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [joiningId, setJoiningId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [notice, setNotice] = useState('')
@@ -57,6 +59,33 @@ export default function TeacherCommunitiesPage() {
 
   const recent = [...communities].filter((item) => item.participating).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 5)
 
+  async function handleOpen(item: CommunitySummary) {
+    const alreadyHasAccess = item.creatorId === user?.id || item.participating
+    if (alreadyHasAccess) {
+      navigate(`/professor/comunidades/${item.id}`)
+      return
+    }
+    if (!token || joiningId !== null) return
+
+    setJoiningId(item.id)
+    setErrorMessage('')
+    setNotice('')
+    try {
+      await joinCommunity(item.id, token)
+      setCommunities((current) => current.map((community) =>
+        community.id === item.id
+          ? { ...community, participating: true, memberCount: community.memberCount + 1 }
+          : community,
+      ))
+      navigate(`/professor/comunidades/${item.id}`)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Não foi possível participar da comunidade'
+      if (message === 'Sua sessão expirou') clearSession()
+      else setErrorMessage(message)
+    } finally {
+      setJoiningId(null)
+    }
+  }
   async function handleDelete(item: CommunitySummary) {
     if (!token || deletingId !== null || item.creatorId !== user?.id || !window.confirm(`Excluir a comunidade “${item.nome}” e todo o conteúdo relacionado?`)) return
     setDeletingId(item.id); setOpenMenuId(null); setErrorMessage(''); setNotice('')
@@ -85,7 +114,7 @@ export default function TeacherCommunitiesPage() {
               <article key={item.id}>
                 <span className="teacher-community-symbol"><Icon name="community" /></span>
                 <div className="teacher-community-copy"><h2>{item.nome}</h2><p>{item.descricao}</p><div><span><Icon name="people" /> {item.memberCount}</span><span><Icon name="post" /> {item.postCount}</span><span>Última atividade <time>{formatDate(item.updatedAt)}</time></span></div></div>
-                <Link className="teacher-community-open" to={`/professor/comunidades/${item.id}`}>Abrir</Link>
+                <button className="teacher-community-open" type="button" onClick={() => void handleOpen(item)} disabled={joiningId !== null}>{joiningId === item.id ? 'Entrando...' : item.creatorId === user?.id || item.participating ? 'Abrir' : 'Participar'}</button>
                 {item.creatorId === user?.id ? <div className="teacher-community-menu"><button type="button" onClick={() => setOpenMenuId((current) => current === item.id ? null : item.id)} aria-expanded={openMenuId === item.id} aria-label={`Ações para ${item.nome}`}><Icon name="more" /></button>{openMenuId === item.id ? <div><Link to={`/professor/comunidades/${item.id}/editar`}>Editar</Link><button type="button" onClick={() => void handleDelete(item)} disabled={deletingId !== null}><Icon name="trash" /> Excluir</button></div> : null}</div> : null}
               </article>
             )) : <div className="teacher-community-empty"><Icon name="community" /><h2>Nenhuma comunidade encontrada</h2><p>{tab === 'MINE' ? 'Crie sua primeira comunidade para começar.' : 'Tente outra busca ou selecione uma aba diferente.'}</p></div>}
