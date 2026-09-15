@@ -65,6 +65,7 @@ model News {
   titulo String
   conteudo String
   categoria String
+  capa String?
   authorId Int
   author User @relation(fields: [authorId], references: [id])
   createdAt TimestamptzString @default(now())
