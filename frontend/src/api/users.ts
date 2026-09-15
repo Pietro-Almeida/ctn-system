@@ -94,3 +94,18 @@ export async function updateUser(id: number, input: UpdateUserInput, token: stri
   if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
   return data
 }
+
+
+export async function issuePasswordReset(id: number, token: string) {
+  const response = await fetch(`${API_URL}/users/${id}/password-reset`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const data = await readResponse(response, 'Não foi possível gerar o código de recuperação')
+  if (!data || typeof data !== 'object') throw new Error('O servidor retornou um código inválido')
+  const reset = data as { token?: unknown; expires_in?: unknown }
+  if (typeof reset.token !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(reset.token) || typeof reset.expires_in !== 'number') {
+    throw new Error('O servidor retornou um código inválido')
+  }
+  return { token: reset.token, expiresIn: reset.expires_in }
+}
