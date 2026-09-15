@@ -1,0 +1,41 @@
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+
+export interface SystemUser {
+  id: number
+  nome: string
+  email: string
+  ativo: boolean
+  roleId: number
+  role: string
+  createdAt: string
+  updatedAt: string
+}
+
+function isSystemUser(value: unknown): value is SystemUser {
+  if (!value || typeof value !== 'object') return false
+  const user = value as Partial<SystemUser>
+  return (
+    typeof user.id === 'number' &&
+    typeof user.nome === 'string' &&
+    typeof user.email === 'string' &&
+    typeof user.ativo === 'boolean' &&
+    typeof user.role === 'string'
+  )
+}
+
+export async function listUsers(token: string, signal?: AbortSignal) {
+  const response = await fetch(`${API_URL}/users?page=1&limit=100`, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal,
+  })
+
+  if (!response.ok) {
+    if (response.status === 401) throw new Error('Sua sessão expirou')
+    if (response.status === 403) throw new Error('Apenas a Direção pode acessar os usuários')
+    throw new Error('Não foi possível carregar os usuários')
+  }
+
+  const data: unknown = await response.json()
+  if (!Array.isArray(data)) throw new Error('Os usuários retornaram dados inválidos')
+  return data.filter(isSystemUser)
+}
