@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from '../layouts/AppLayout'
+import StudentDashboard from '../pages/student/StudentDashboard'
 import LoginPage from '../pages/LoginPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import RoutePlaceholder from '../pages/RoutePlaceholder'
@@ -19,7 +20,7 @@ export default function AppRoutes() {
 
       <Route element={<ProtectedRoute allowedRoles={['ALUNO']} />}>
         <Route element={<AppLayout />}>
-          <Route path="/aluno/inicio" element={page('Área do Aluno', 'O painel do aluno será construído na próxima etapa.')} />
+          <Route path="/aluno/inicio" element={<StudentDashboard />} />
           <Route path="/aluno/jornal" element={page('Jornal CEMTN', 'Componente compartilhado do Jornal.')} />
           <Route path="/aluno/comunidades" element={page('Comunidades', 'Comunidades disponíveis para o aluno.')} />
           <Route path="/aluno/comunidades/:comunidadeId" element={page('Comunidade', 'Conteúdo e interações da comunidade.')} />
