@@ -1,17 +1,23 @@
-.route-feedback,
-.placeholder-page {
+.route-feedback {
   min-height: 100svh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: var(--color-muted);
+  text-align: center;
+  background: var(--color-surface);
+}
+
+.placeholder-page {
+  min-height: calc(100svh - 4.75rem);
   display: grid;
   place-content: center;
   justify-items: center;
   padding: 2rem;
   text-align: center;
   background: var(--color-surface);
-}
-
-.route-feedback {
-  gap: 0.75rem;
-  color: var(--color-muted);
 }
 
 .route-feedback__spinner {
@@ -87,8 +93,10 @@
   background: var(--color-blue);
 }
 
-@keyframes route-spin {
-  to { transform: rotate(360deg); }
+@keyframes route-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 900px) {
+  .placeholder-page { min-height: calc(100svh - 8.5rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
