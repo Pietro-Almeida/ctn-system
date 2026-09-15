@@ -17,6 +17,7 @@ function Icon({ name }: { name: IconName }) {
 export default function DirectorCreateCommunityPage() {
   const { token, user, clearSession } = useAuth()
   const navigate = useNavigate()
+  const base = user?.role === 'PROFESSOR' ? '/professor' : '/diretor'
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
   const [regras, setRegras] = useState('')
@@ -34,7 +35,7 @@ export default function DirectorCreateCommunityPage() {
     setSubmitting(true)
     try {
       await createCommunity({ nome: nome.trim(), descricao: descricao.trim(), regras: regras.trim() }, token)
-      navigate('/diretor/comunidades', { replace: true, state: { communityCreated: true } })
+      navigate(`${base}/comunidades`, { replace: true, state: { communityCreated: true } })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Não foi possível criar a comunidade'
       if (message === 'Sua sessão expirou') clearSession()
@@ -44,7 +45,7 @@ export default function DirectorCreateCommunityPage() {
 
   return (
     <main className="create-community-page">
-      <nav aria-label="Navegação estrutural"><Link to="/diretor/comunidades">Comunidades</Link><span>/</span><span>Nova comunidade</span></nav>
+      <nav aria-label="Navegação estrutural"><Link to={`${base}/comunidades`}>Comunidades</Link><span>/</span><span>Nova comunidade</span></nav>
       <header><h1>Criar nova comunidade</h1><p>Configure um espaço para compartilhar conteúdos e promover discussões escolares.</p></header>
 
       <form onSubmit={handleSubmit}>
@@ -73,7 +74,7 @@ export default function DirectorCreateCommunityPage() {
         </aside>
 
         {errorMessage ? <p className="create-community-error" role="alert">{errorMessage}</p> : null}
-        <footer><Link to="/diretor/comunidades">Cancelar</Link><button type="submit" disabled={submitting}>{submitting ? 'Criando...' : 'Criar comunidade'}</button></footer>
+        <footer><Link to={`${base}/comunidades`}>Cancelar</Link><button type="submit" disabled={submitting}>{submitting ? 'Criando...' : 'Criar comunidade'}</button></footer>
       </form>
     </main>
   )
