@@ -36,6 +36,10 @@ const categories = [
   'COMUNICADO',
   'NOTICIA',
   'ATIVIDADE',
+  'ESPORTES',
+  'CIENCIAS',
+  'CULTURA',
+  'EDUCACAO',
 ];
 export class CreateNewsDto {
   @IsString() @Trim() @IsNotEmpty() @MaxLength(200) titulo: string;

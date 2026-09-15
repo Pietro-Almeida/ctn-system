@@ -1,0 +1,104 @@
+.route-feedback {
+  min-height: 100svh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: var(--color-muted);
+  text-align: center;
+  background: var(--color-surface);
+}
+
+.placeholder-page {
+  min-height: calc(100svh - 4.75rem);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 2rem;
+  text-align: center;
+  background: var(--color-surface);
+}
+
+.route-feedback__spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-blue);
+  border-radius: 50%;
+  animation: route-spin 700ms linear infinite;
+}
+
+.placeholder-page__brand {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+  margin-bottom: 2.5rem;
+  color: var(--color-ink);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.08em;
+}
+
+.placeholder-page__brand span {
+  width: 1.4rem;
+  height: 0.32rem;
+  margin-bottom: 0.35rem;
+  border-radius: 999px;
+  background: var(--color-blue);
+}
+
+.placeholder-page__eyebrow {
+  margin: 0;
+  color: var(--color-blue);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.placeholder-page h1 {
+  margin: 0.65rem 0;
+  color: var(--color-ink);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -0.05em;
+}
+
+.placeholder-page > p:not(.placeholder-page__eyebrow) {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.placeholder-page__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.placeholder-page__actions a,
+.placeholder-page__actions button {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  color: var(--color-ink);
+  background: var(--color-white);
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.placeholder-page__actions a:first-child {
+  border-color: var(--color-blue);
+  color: var(--color-white);
+  background: var(--color-blue);
+}
+
+@keyframes route-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 900px) {
+  .placeholder-page { min-height: calc(100svh - 8.5rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-feedback__spinner { animation: none; }
+}
