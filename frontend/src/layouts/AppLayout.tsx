@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/auth-context'
 import type { UserRole } from '../auth/auth.types'
@@ -25,7 +25,7 @@ const basePaths: Partial<Record<UserRole, string>> = {
 }
 
 function Icon({ name }: { name: IconName }) {
-  const paths: Record<IconName, React.ReactNode> = {
+  const paths: Record<IconName, ReactNode> = {
     home: <><path d="m3 11 9-8 9 8" /><path d="M5 10v10h14V10M9 20v-6h6v6" /></>,
     news: <><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 7h8M8 11h8M8 15h5" /></>,
     communities: <><circle cx="9" cy="8" r="3" /><path d="M3 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2M16 5a3 3 0 0 1 0 6M17 14a4 4 0 0 1 4 4v2" /></>,
