@@ -8,6 +8,7 @@ const categories = [
   ['COMUNICADO', 'Comunicado'], ['NOTICIA', 'Notícia'], ['AVISO', 'Aviso'],
   ['EVENTO', 'Evento'], ['ESPORTES', 'Esportes'], ['CIENCIAS', 'Ciências'],
   ['CULTURA', 'Cultura'], ['EDUCACAO', 'Educação'], ['PROJETO', 'Projeto'],
+  ['INFORMACAO', 'Informação'], ['ATIVIDADE', 'Atividade'],
 ] as const
 type IconName = 'news' | 'check' | 'info'
 function Icon({ name }: { name: IconName }) {
