@@ -1,7 +1,8 @@
 :root {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #101218;
-  background: #ffffff;
+  background: #f3f5f8;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -14,7 +15,43 @@
   --color-muted: #69707d;
   --color-border: #d9dde5;
   --color-surface: #f3f5f8;
+  --color-surface-soft: #f8fafc;
+  --color-panel: #ffffff;
+  --color-input: #ffffff;
+  --color-blue-soft: #eaf4ff;
+  --color-danger-bg: #fff1f1;
+  --color-danger-text: #9b2525;
+  --color-success-bg: #eaf8f0;
+  --color-success-text: #207443;
+  --color-warning-bg: #fff7e8;
+  --color-warning-text: #8a5a00;
   --color-white: #ffffff;
+  --theme-shadow: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme='dark'] {
+  color: #f4f7fb;
+  background: #0d1117;
+  color-scheme: dark;
+
+  --color-blue: #4d9cff;
+  --color-blue-dark: #2f82ed;
+  --color-ink: #f4f7fb;
+  --color-graphite: #d8e0eb;
+  --color-muted: #a1adbd;
+  --color-border: #344050;
+  --color-surface: #0d1117;
+  --color-surface-soft: #1b2430;
+  --color-panel: #151c26;
+  --color-input: #111821;
+  --color-blue-soft: #102b4c;
+  --color-danger-bg: #3a1d24;
+  --color-danger-text: #ffabb4;
+  --color-success-bg: #163326;
+  --color-success-text: #8fe1ad;
+  --color-warning-bg: #382d16;
+  --color-warning-text: #ffd381;
+  --theme-shadow: 0 0.7rem 2rem rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -30,6 +67,79 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+input,
+select,
+textarea {
+  color: var(--color-ink);
+  background-color: var(--color-input);
+}
+
+::selection {
+  color: var(--color-white);
+  background: var(--color-blue);
+}
+
+.theme-toggle {
+  width: 2.45rem;
+  height: 2.45rem;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  color: var(--color-muted);
+  background: var(--color-panel);
+  box-shadow: var(--theme-shadow);
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.theme-toggle:hover {
+  color: var(--color-blue);
+  border-color: var(--color-blue);
+  transform: translateY(-1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid rgba(23, 105, 224, 0.32);
+  outline-offset: 2px;
+}
+
+.theme-toggle svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle--public {
+  position: absolute;
+  z-index: 5;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+@media (max-width: 520px) {
+  .theme-toggle--public {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .theme-toggle {
+    transition: none;
+  }
 }
 
 button,

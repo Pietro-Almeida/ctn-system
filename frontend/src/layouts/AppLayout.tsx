@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/auth-context'
 import type { UserRole } from '../auth/auth.types'
+import ThemeToggle from '../components/ThemeToggle'
 import './AppLayout.css'
 
 type IconName = 'home' | 'news' | 'communities' | 'users' | 'profile' | 'bell' | 'menu' | 'close' | 'logout'
@@ -140,6 +141,7 @@ export default function AppLayout() {
           </button>
           <div className="app-topbar__title"><small>CEMTN</small><strong>{currentTitle}</strong></div>
           <div className="app-topbar__actions">
+            <ThemeToggle />
             <button className="app-icon-button app-notification" type="button" aria-label="Notificações">
               <Icon name="bell" /><span />
             </button>

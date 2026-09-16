@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { resetPassword } from '../api/profile'
+import ThemeToggle from '../components/ThemeToggle'
 import './ResetPasswordPage.css'
 
 const TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/
@@ -47,6 +48,7 @@ export default function ResetPasswordPage() {
       </section>
 
       <section className="reset-access">
+        <ThemeToggle className="theme-toggle--public" />
         <div className="reset-card">
           <div className="reset-mobile-brand"><div className="reset-brand reset-brand--dark">CEMTN<span /></div><strong>CEMTN</strong></div>
           {completed ? (

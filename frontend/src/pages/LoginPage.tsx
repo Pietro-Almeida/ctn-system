@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/auth-context'
+import ThemeToggle from '../components/ThemeToggle'
 import './LoginPage.css'
 
 export default function LoginPage() {
@@ -67,6 +68,7 @@ export default function LoginPage() {
       </section>
 
       <section className="login-access" aria-labelledby="login-title">
+        <ThemeToggle className="theme-toggle--public" />
         <div className="login-card">
           <div className="login-mobile-brand">
             <div className="ctn-logo" aria-label="CEMTN">
