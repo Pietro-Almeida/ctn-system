@@ -43,9 +43,9 @@ export default function LoginPage() {
 
   return (
     <main className="login-page">
-      <section className="login-intro" aria-label="Apresentação do CTN System">
-        <div className="ctn-logo ctn-logo--light" aria-label="CTN">
-          CTN<span />
+      <section className="login-intro" aria-label="Apresentação do CEMTN">
+        <div className="ctn-logo ctn-logo--light" aria-label="CEMTN">
+          CEMTN<span />
         </div>
 
         <div className="login-intro__content">
@@ -69,10 +69,10 @@ export default function LoginPage() {
       <section className="login-access" aria-labelledby="login-title">
         <div className="login-card">
           <div className="login-mobile-brand">
-            <div className="ctn-logo" aria-label="CTN">
-              CTN<span />
+            <div className="ctn-logo" aria-label="CEMTN">
+              CEMTN<span />
             </div>
-            <strong>CTN System</strong>
+            <strong>CEMTN</strong>
           </div>
 
           <p className="login-eyebrow">BEM-VINDO DE VOLTA</p>

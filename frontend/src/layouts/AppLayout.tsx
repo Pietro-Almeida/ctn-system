@@ -80,7 +80,7 @@ export default function AppLayout() {
 
   const currentTitle =
     navigation.find((item) => location.pathname.startsWith(item.path))?.label ??
-    'CTN System'
+    'CEMTN'
 
   async function handleLogout() {
     if (loggingOut) return
@@ -93,8 +93,8 @@ export default function AppLayout() {
     <div className="app-layout">
       <aside className={menuOpen ? 'app-sidebar app-sidebar--open' : 'app-sidebar'}>
         <div className="app-sidebar__header">
-          <div className="app-brand">CTN<span /></div>
-          <div className="app-brand-name"><strong>CTN System</strong><small>CEMTN</small></div>
+          <div className="app-brand">CEMTN<span /></div>
+          <div className="app-brand-name"><strong>CEMTN</strong><small>CEMTN</small></div>
           <button className="app-icon-button app-sidebar__close" type="button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">
             <Icon name="close" />
           </button>
@@ -138,7 +138,7 @@ export default function AppLayout() {
           <button className="app-icon-button app-menu-button" type="button" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">
             <Icon name="menu" />
           </button>
-          <div className="app-topbar__title"><small>CTN SYSTEM</small><strong>{currentTitle}</strong></div>
+          <div className="app-topbar__title"><small>CEMTN</small><strong>{currentTitle}</strong></div>
           <div className="app-topbar__actions">
             <button className="app-icon-button app-notification" type="button" aria-label="Notificações">
               <Icon name="bell" /><span />

@@ -108,7 +108,7 @@ export default function DirectorEditUserPage() {
   return (
     <main className="edit-user-page">
       <nav><Link to="/diretor/usuarios">Usuários</Link><span>/</span><span>Editar usuário</span></nav>
-      <header><h1>Editar usuário</h1><p>Atualize os dados e as permissões de acesso ao CTN System.</p></header>
+      <header><h1>Editar usuário</h1><p>Atualize os dados e as permissões de acesso ao CEMTN.</p></header>
 
       <section className="edit-user-summary"><span>{initials(original.nome)}</span><div><strong>{original.nome}</strong><small>{original.email}</small></div><i className={original.ativo ? 'active' : ''}>{original.ativo ? 'Ativo' : 'Inativo'}</i></section>
 

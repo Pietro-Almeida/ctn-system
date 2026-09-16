@@ -60,7 +60,7 @@ export default function TeacherDashboard() {
 
   return (
     <main className="teacher-dashboard">
-      <header><h1>Painel do Professor</h1><p>Acompanhe suas publicações e comunidades no CTN System.</p></header>
+      <header><h1>Painel do Professor</h1><p>Acompanhe suas publicações e comunidades no CEMTN.</p></header>
       <section className="teacher-welcome"><h2>Olá, Prof. {user?.nome.split(' ')[0]}.</h2><span>Professor</span><p>Aqui estão as atividades mais recentes dos seus espaços.</p></section>
 
       <section className="teacher-stats">

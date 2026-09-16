@@ -14,7 +14,7 @@ export default function RoutePlaceholder({
 
   return (
     <main className="placeholder-page">
-      <div className="placeholder-page__brand">CTN<span /></div>
+      <div className="placeholder-page__brand">CEMTN<span /></div>
       <p className="placeholder-page__eyebrow">{user?.role}</p>
       <h1>{title}</h1>
       <p>{description}</p>
