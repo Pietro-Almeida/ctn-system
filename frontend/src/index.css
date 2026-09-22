@@ -26,6 +26,10 @@
   --color-warning-bg: #fff7e8;
   --color-warning-text: #8a5a00;
   --color-white: #ffffff;
+  --color-profile-identity-start: #eef4ff;
+  --color-profile-identity-end: #dfeeff;
+  --color-profile-identity-text: #0f172a;
+  --color-profile-badge-bg: rgba(23, 105, 224, 0.12);
   --theme-shadow: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.08);
 }
 
@@ -51,6 +55,10 @@
   --color-success-text: #8fe1ad;
   --color-warning-bg: #382d16;
   --color-warning-text: #ffd381;
+  --color-profile-identity-start: #152c3e;
+  --color-profile-identity-end: #1d3550;
+  --color-profile-identity-text: #eef7ff;
+  --color-profile-badge-bg: rgba(77, 156, 255, 0.18);
   --theme-shadow: 0 0.7rem 2rem rgba(0, 0, 0, 0.3);
 }
 
