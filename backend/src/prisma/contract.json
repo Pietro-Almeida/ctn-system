@@ -1891,7 +1891,7 @@
               "checks": [
                 {
                   "expression": "\\\"statusCadastro\\\" IN ('PENDENTE', 'ATIVO', 'RECUSADO', 'DESATIVADO')",
-                  "name": "user_statusCadastro_check",
+                  "name": "user_statusCadastro_check_01234567",
                   "prefix": "user_statusCadastro_check"
                 }
               ]
