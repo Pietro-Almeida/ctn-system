@@ -5,6 +5,7 @@ export interface NewsItem {
   titulo: string
   conteudo: string
   categoria: string
+  capa?: string | null
   authorId: number
   authorName: string
   createdAt: string
@@ -55,7 +56,7 @@ export async function getNews(id: number, token: string, signal?: AbortSignal) {
   return data
 }
 
-export async function createNews(input: { titulo: string; conteudo: string; categoria: string }, token: string) {
+export async function createNews(input: { titulo: string; conteudo: string; categoria: string; capa?: string }, token: string) {
   const response = await fetch(`${API_URL}/news`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -67,7 +68,7 @@ export async function createNews(input: { titulo: string; conteudo: string; cate
 }
 
 
-export async function updateNews(id: number, input: { titulo: string; conteudo: string; categoria: string }, token: string) {
+export async function updateNews(id: number, input: { titulo: string; conteudo: string; categoria: string; capa?: string }, token: string) {
   const response = await fetch(`${API_URL}/news/${id}`, {
     method: 'PATCH',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },

@@ -1,6 +1,6 @@
-﻿# Backend CTN System
+﻿# Backend CEMTN
 
-API da primeira fase do CTN System, independente do frontend. Implementa usuários, autenticação, Jornal e Comunidades com PostgreSQL 18 local.
+API da primeira fase do CEMTN, independente do frontend. Implementa usuários, autenticação, Jornal e Comunidades com PostgreSQL 18 local.
 
 ## Executar
 

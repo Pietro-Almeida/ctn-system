@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "CTN — Validação sem frontend",
+    "name": "CEMTN — Validação sem frontend",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": "Execute a coleção inteira, em ordem, com uma iteração. Configure director_email e director_password no ambiente local. Cria contas fictícias únicas, remove os conteúdos criados e desativa essas contas ao terminar; preserva os usuários existentes. Tokens e IDs são variáveis locais da execução."
   },

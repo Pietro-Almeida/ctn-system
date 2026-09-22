@@ -595,6 +595,13 @@
                   "codecId": "pg/timestamptz-string@1",
                   "kind": "scalar"
                 }
+              },
+              "capa": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
               }
             },
             "relations": {
@@ -636,6 +643,9 @@
                 },
                 "updatedAt": {
                   "column": "updatedAt"
+                },
+                "capa": {
+                  "column": "capa"
                 }
               },
               "namespaceId": "public",
@@ -1519,6 +1529,11 @@
                   "codecId": "pg/timestamptz-string@1",
                   "nativeType": "timestamptz",
                   "nullable": false
+                },
+                "capa": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
                 }
               },
               "foreignKeys": [

@@ -92,7 +92,7 @@ export default function DirectorDashboard() {
 
   return (
     <main className="director-dashboard">
-      <header className="director-page-title"><h1>Painel da Direção</h1><p>Visão geral do CTN System e das principais atividades da sua escola.</p></header>
+      <header className="director-page-title"><h1>Painel da Direção</h1><p>Visão geral do CEMTN e das principais atividades da sua escola.</p></header>
       <section className="director-welcome"><h2>Olá, {user?.nome.split(' ')[0]}.</h2><span>Diretor</span><p>Aqui estão os dados mais recentes da sua escola.</p></section>
 
       <section className="director-stats" aria-label="Resumo do sistema">

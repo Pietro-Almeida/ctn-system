@@ -90,7 +90,7 @@ export default function DirectorUsersPage() {
 
   return (
     <main className="director-users-page">
-      <header className="users-page-heading"><div><h1>Gestão de Usuários</h1><p>Cadastre, consulte e gerencie os acessos ao CTN System.</p></div><Link to="/diretor/usuarios/novo"><Icon name="plus" /> Cadastrar usuário</Link></header>
+      <header className="users-page-heading"><div><h1>Gestão de Usuários</h1><p>Cadastre, consulte e gerencie os acessos ao CEMTN.</p></div><Link to="/diretor/usuarios/novo"><Icon name="plus" /> Cadastrar usuário</Link></header>
 
       <section className="users-page-stats" aria-label="Resumo dos usuários">
         <article><span>▤</span><div><small>Total de usuários</small><strong>{counts.total}</strong></div></article>

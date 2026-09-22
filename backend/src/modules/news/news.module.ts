@@ -20,6 +20,7 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
+  Matches,
   ValidateIf,
 } from 'class-validator';
 import { DatabaseService } from '../../database/database.module.js';
@@ -45,6 +46,11 @@ export class CreateNewsDto {
   @IsString() @Trim() @IsNotEmpty() @MaxLength(200) titulo: string;
   @IsString() @Trim() @IsNotEmpty() @MaxLength(20000) conteudo: string;
   @IsIn(categories) categoria: string;
+  @ValidateIf((_o, v) => v !== undefined)
+  @IsString()
+  @MaxLength(1500000)
+  @Matches(/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/)
+  capa?: string;
 }
 export class UpdateNewsDto {
   @ValidateIf((_o, v) => v !== undefined)
@@ -60,6 +66,11 @@ export class UpdateNewsDto {
   @MaxLength(20000)
   conteudo?: string;
   @ValidateIf((_o, v) => v !== undefined) @IsIn(categories) categoria?: string;
+  @ValidateIf((_o, v) => v !== undefined)
+  @IsString()
+  @MaxLength(1500000)
+  @Matches(/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/)
+  capa?: string;
 }
 @Injectable()
 export class NewsService {
@@ -85,8 +96,8 @@ export class NewsService {
   async create(dto: CreateNewsDto, user: AuthUser) {
     return (
       await this.db.query(
-        'INSERT INTO public.news (titulo, conteudo, categoria, "authorId", "updatedAt") VALUES ($1,$2,$3,$4,now()) RETURNING *',
-        [dto.titulo, dto.conteudo, dto.categoria, user.id],
+        'INSERT INTO public.news (titulo, conteudo, categoria, capa, "authorId", "updatedAt") VALUES ($1,$2,$3,$4,$5,now()) RETURNING *',
+        [dto.titulo, dto.conteudo, dto.categoria, dto.capa ?? null, user.id],
       )
     ).rows[0];
   }
@@ -97,8 +108,8 @@ export class NewsService {
     const {
       rows: [updated],
     } = await this.db.query(
-      'UPDATE public.news SET titulo=COALESCE($1,titulo), conteudo=COALESCE($2,conteudo), categoria=COALESCE($3,categoria), "updatedAt"=now() WHERE id=$4 RETURNING *',
-      [dto.titulo, dto.conteudo, dto.categoria, id],
+      'UPDATE public.news SET titulo=COALESCE($1,titulo), conteudo=COALESCE($2,conteudo), categoria=COALESCE($3,categoria), capa=COALESCE($4,capa), "updatedAt"=now() WHERE id=$5 RETURNING *',
+      [dto.titulo, dto.conteudo, dto.categoria, dto.capa, id],
     );
     if (!updated) throw new NotFoundException('Publicação não encontrada');
     return updated;
