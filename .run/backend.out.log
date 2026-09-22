@@ -1,0 +1,718 @@
+
+> backend@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m13:40:51[0m] Starting compilation in watch mode...
+
+[[90m13:40:55[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [NestFactory] Starting Nest application...
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] DatabaseModule dependencies initialized +8ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] AppModule dependencies initialized +2ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] RolesModule dependencies initialized +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] NewsModule dependencies initialized +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] AppController {/}: +5ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/users/:id, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/auth/login, POST} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 7184  - 22/09/2026, 13:41:02     LOG [NestApplication] Nest application successfully started +1ms
+[2J[3J[H[[90m13:51:04[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:05[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m13:51:05[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:05[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [NestFactory] Starting Nest application...
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] DatabaseModule dependencies initialized +11ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] AppModule dependencies initialized +4ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] RolesModule dependencies initialized +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] AuthModule dependencies initialized +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] NewsModule dependencies initialized +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] CommunitiesModule dependencies initialized +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [InstanceLoader] UsersModule dependencies initialized +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] AppController {/}: +10ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/, GET} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] HealthController {/health}: +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/health, GET} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] RolesController {/roles}: +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] UsersController {/users}: +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/users, GET} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/users/:id, GET} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] AuthController {/auth}: +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/auth/login, POST} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/auth/me, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] NewsController {/news}: +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/news, GET} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/news/:id, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/news, POST} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RoutesResolver] CommunitiesController {/communities}: +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities, POST} route +3ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +2ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 15296  - 22/09/2026, 13:51:14     LOG [NestApplication] Nest application successfully started +3ms
+[2J[3J[H[[90m13:51:16[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:16[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m13:51:17[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:18[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m13:51:18[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:18[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m13:51:19[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:19[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [NestFactory] Starting Nest application...
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] DatabaseModule dependencies initialized +10ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] AppModule dependencies initialized +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] RolesModule dependencies initialized +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] AuthModule dependencies initialized +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] HealthController {/health}: +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/health, GET} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] RolesController {/roles}: +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] UsersController {/users}: +3ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/users/:id, GET} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +3ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/news, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +2ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 7188  - 22/09/2026, 13:51:20     LOG [NestApplication] Nest application successfully started +2ms
+[2J[3J[H[[90m13:51:28[0m] File change detected. Starting incremental compilation...
+
+[[90m13:51:28[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [NestFactory] Starting Nest application...
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] DatabaseModule dependencies initialized +8ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] NewsModule dependencies initialized +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] AppController {/}: +5ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/, GET} route +3ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] HealthController {/health}: +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/health, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/users, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] NewsController {/news}: +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities, POST} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +2ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +1ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 17300  - 22/09/2026, 13:51:30     LOG [NestApplication] Nest application successfully started +1ms
+[2J[3J[H[[90m14:55:52[0m] File change detected. Starting incremental compilation...
+
+[[90m14:55:53[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:55:55[0m] File change detected. Starting incremental compilation...
+
+[[90m14:55:56[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:55:56[0m] File change detected. Starting incremental compilation...
+
+[[90m14:55:56[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:55:58[0m] File change detected. Starting incremental compilation...
+
+[[90m14:55:59[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [NestFactory] Starting Nest application...
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] DatabaseModule dependencies initialized +8ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] PrismaModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/users/:id, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/auth/me, GET} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/news, GET} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 16020  - 22/09/2026, 14:56:00     LOG [NestApplication] Nest application successfully started +1ms
+[2J[3J[H[[90m14:57:02[0m] File change detected. Starting incremental compilation...
+
+[2J[3J[H[[90m14:59:07[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:07[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:08[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:09[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [NestFactory] Starting Nest application...
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] DatabaseModule dependencies initialized +11ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] AppModule dependencies initialized +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] RolesModule dependencies initialized +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] CommunitiesModule dependencies initialized +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] AppController {/}: +7ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] AuthController {/auth}: +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] NewsController {/news}: +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/news/:id, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 8096  - 22/09/2026, 14:59:11     LOG [NestApplication] Nest application successfully started +1ms
+[2J[3J[H[[90m14:59:18[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:18[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:19[0m] File change detected. Starting incremental compilation...
+
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [NestFactory] Starting Nest application...
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] DatabaseModule dependencies initialized +11ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] PrismaModule dependencies initialized +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] AppController {/}: +8ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] RolesController {/roles}: +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] UsersController {/users}: +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/users, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] AuthController {/auth}: +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/auth/login, POST} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/news/:id, GET} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 19960  - 22/09/2026, 14:59:21     LOG [NestApplication] Nest application successfully started +2ms
+[[90m14:59:21[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:22[0m] File change detected. Starting incremental compilation...
+
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [NestFactory] Starting Nest application...
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] DatabaseModule dependencies initialized +14ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] CommunitiesModule dependencies initialized +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/, GET} route +3ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/health, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/users, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/auth/login, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/news, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/news, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +0ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +1ms
+[Nest] 9980  - 22/09/2026, 14:59:22     LOG [NestApplication] Nest application successfully started +1ms
+[[90m14:59:23[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:23[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:23[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [NestFactory] Starting Nest application...
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] DatabaseModule dependencies initialized +9ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] PrismaModule dependencies initialized +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [InstanceLoader] UsersModule dependencies initialized +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] HealthController {/health}: +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/health, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] RolesController {/roles}: +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] UsersController {/users}: +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/users, POST} route +2ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/auth/login, POST} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/news, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/news, POST} route +2ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +3ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities, POST} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +1ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 2728  - 22/09/2026, 14:59:25     LOG [NestApplication] Nest application successfully started +2ms
+[2J[3J[H[[90m14:59:30[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:31[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:32[0m] File change detected. Starting incremental compilation...
+
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [NestFactory] Starting Nest application...
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] DatabaseModule dependencies initialized +13ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/, GET} route +3ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/roles, GET} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/users/:id, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] AuthController {/auth}: +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/auth/me, GET} route +2ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] NewsController {/news}: +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities, GET} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +3ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +1ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +0ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +2ms
+[Nest] 6116  - 22/09/2026, 14:59:32     LOG [NestApplication] Nest application successfully started +1ms
+[[90m14:59:33[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m14:59:33[0m] File change detected. Starting incremental compilation...
+
+[[90m14:59:34[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [NestFactory] Starting Nest application...
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] DatabaseModule dependencies initialized +7ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] PrismaModule dependencies initialized +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] AppModule dependencies initialized +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] RolesModule dependencies initialized +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] CommunitiesModule dependencies initialized +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] AppController {/}: +6ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] UsersController {/users}: +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/users, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/users/:id, GET} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/users, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] AuthController {/auth}: +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/auth/login, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/news, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities, POST} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 14724  - 22/09/2026, 14:59:35     LOG [NestApplication] Nest application successfully started +7ms
+[2J[3J[H[[90m15:00:03[0m] File change detected. Starting incremental compilation...
+
+[[90m15:00:03[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [NestFactory] Starting Nest application...
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] DatabaseModule dependencies initialized +8ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] PrismaModule dependencies initialized +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] RolesModule dependencies initialized +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] AuthModule dependencies initialized +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] NewsModule dependencies initialized +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] CommunitiesModule dependencies initialized +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] AppController {/}: +5ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/, GET} route +2ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] HealthController {/health}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/health, GET} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] RolesController {/roles}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/roles, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] UsersController {/users}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/users, GET} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/users/:id, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/users, POST} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/users/:id, PATCH} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/users/:id/password-reset, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] AuthController {/auth}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/auth/login, POST} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/auth/me, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/auth/logout, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/auth/change-password, POST} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/auth/reset-password, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] NewsController {/news}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/news, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/news/:id, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/news, POST} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/news/:id, PATCH} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/news/:id, DELETE} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RoutesResolver] CommunitiesController {/communities}: +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id, GET} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id, PATCH} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id, DELETE} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/members/me, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/members/me, DELETE} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/members/:userId, DELETE} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/members, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, PATCH} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId, DELETE} route +1ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, GET} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments, POST} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, PATCH} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [RouterExplorer] Mapped {/communities/:id/posts/:postId/comments/:commentId, DELETE} route +0ms
+[Nest] 13132  - 22/09/2026, 15:00:05     LOG [NestApplication] Nest application successfully started +2ms

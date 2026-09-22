@@ -1,5 +1,7 @@
-﻿import {
+import {
   BadRequestException,
+  ConflictException,
+  ForbiddenException,
   HttpException,
   Injectable,
   NotFoundException,
@@ -8,18 +10,21 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { DatabaseService } from '../../database/database.module.js';
 import { hashPassword, verifyPassword } from './password.js';
+import { isValidCpf, normalizeCpf } from '../../common/cpf.js';
 
 const digest = (token: string) =>
   createHash('sha256').update(token).digest('hex');
 const identity = (u: {
   id: number;
   nome: string;
-  email: string;
+  email: string | null;
   role: string;
 }) => ({ id: u.id, nome: u.nome, email: u.email, role: u.role });
+
 @Injectable()
 export class AuthService {
   constructor(private readonly db: DatabaseService) {}
+
   async limit(key: string, maximum = 10) {
     const { rows } = await this.db.query(
       `INSERT INTO public."loginAttempt" (key, count, "expiresAt") VALUES ($1, 1, now() + interval '1 minute')
@@ -30,28 +35,77 @@ export class AuthService {
     if (rows[0].count > maximum)
       throw new HttpException('Muitas tentativas. Aguarde um minuto', 429);
   }
-  async login(email: string, senha: string, ip: string) {
+
+  async registerStudent(
+    dto: { nome: string; cpf: string; senha: string },
+    ip: string,
+  ) {
+    await this.limit('register:' + ip, 5);
+    const cpf = normalizeCpf(dto.cpf);
+    if (!isValidCpf(cpf)) throw new BadRequestException('CPF inválido');
+
+    const hash = await hashPassword(dto.senha);
+    try {
+      const {
+        rows: [user],
+      } = await this.db.query(
+        `INSERT INTO public."user"
+          (nome, email, cpf, "senhaHash", ativo, "statusCadastro", "roleId", "updatedAt")
+         SELECT $1, NULL, $2, $3, false, 'PENDENTE', id, now()
+         FROM public.role WHERE name = 'ALUNO'
+         RETURNING id`,
+        [dto.nome.trim(), cpf, hash],
+      );
+      if (!user) throw new BadRequestException('Perfil de aluno não encontrado');
+      return {
+        message:
+          'Cadastro enviado para aprovação da Direção. Você poderá entrar após a liberação.',
+      };
+    } catch (error) {
+      if ((error as { code?: string }).code === '23505')
+        throw new ConflictException('Este CPF já possui cadastro');
+      throw error;
+    }
+  }
+
+  async login(identifier: string, senha: string, ip: string) {
     await this.limit('login:' + ip);
+    const normalizedCpf = normalizeCpf(identifier);
+    const normalizedEmail = identifier.trim().toLowerCase();
     const {
       rows: [user],
     } = await this.db.query(
-      'SELECT u.*, r.name AS role FROM public."user" u JOIN public.role r ON r.id = u."roleId" WHERE u.email = $1',
-      [email.trim().toLowerCase()],
+      `SELECT u.*, r.name AS role FROM public."user" u
+       JOIN public.role r ON r.id = u."roleId"
+       WHERE (u.cpf IS NOT NULL AND u.cpf = $1)
+          OR (u.email IS NOT NULL AND u.email = $2)
+       LIMIT 1`,
+      [normalizedCpf, normalizedEmail],
     );
+
     const valid = await verifyPassword(senha, user?.senhaHash ?? '');
-    if (!valid || !user?.ativo)
-      throw new UnauthorizedException('E-mail ou senha inválidos');
+    if (!valid) throw new UnauthorizedException('CPF ou senha inválidos');
+    if (user.statusCadastro === 'PENDENTE')
+      throw new ForbiddenException('Seu cadastro ainda está aguardando aprovação da Direção');
+    if (user.statusCadastro === 'RECUSADO')
+      throw new ForbiddenException('Seu cadastro não foi aprovado. Procure a Direção');
+    if (!user.ativo || user.statusCadastro === 'DESATIVADO')
+      throw new UnauthorizedException('CPF ou senha inválidos');
+
     const token = randomBytes(32).toString('base64url');
-    // Lock the account so a concurrent password change/deactivation revokes this session too.
     await this.db.transaction(async (c) => {
       const {
         rows: [current],
       } = await c.query(
-        'SELECT ativo, "senhaHash" FROM public."user" WHERE id = $1 FOR UPDATE',
+        'SELECT ativo, "statusCadastro", "senhaHash" FROM public."user" WHERE id = $1 FOR UPDATE',
         [user.id],
       );
-      if (!current?.ativo || current.senhaHash !== user.senhaHash)
-        throw new UnauthorizedException('E-mail ou senha inválidos');
+      if (
+        !current?.ativo ||
+        current.statusCadastro !== 'ATIVO' ||
+        current.senhaHash !== user.senhaHash
+      )
+        throw new UnauthorizedException('CPF ou senha inválidos');
       await c.query(
         'INSERT INTO public.session ("tokenHash", "userId", "expiresAt") VALUES ($1, $2, now() + interval \'1 hour\')',
         [digest(token), user.id],
@@ -64,23 +118,27 @@ export class AuthService {
       user: identity(user),
     };
   }
+
   async authenticate(token: string) {
     const {
       rows: [user],
     } = await this.db.query(
       `SELECT u.id, u.nome, u.email, r.name AS role FROM public.session s
        JOIN public."user" u ON u.id = s."userId" JOIN public.role r ON r.id = u."roleId"
-       WHERE s."tokenHash" = $1 AND s."expiresAt" > now() AND u.ativo = true`,
+       WHERE s."tokenHash" = $1 AND s."expiresAt" > now()
+         AND u.ativo = true AND u."statusCadastro" = 'ATIVO'`,
       [digest(token)],
     );
     if (!user) throw new UnauthorizedException('Sessão inválida ou expirada');
     return identity(user);
   }
+
   async logout(token: string) {
     await this.db.query('DELETE FROM public.session WHERE "tokenHash" = $1', [
       digest(token),
     ]);
   }
+
   async changePassword(id: number, atual: string, nova: string) {
     const {
       rows: [user],
@@ -93,7 +151,8 @@ export class AuthService {
     const hash = await hashPassword(nova);
     await this.db.transaction(async (c) => {
       const { rowCount } = await c.query(
-        'UPDATE public."user" SET "senhaHash" = $1, "updatedAt" = now() WHERE id = $2 AND "senhaHash" = $3 AND ativo = true',
+        `UPDATE public."user" SET "senhaHash" = $1, "updatedAt" = now()
+         WHERE id = $2 AND "senhaHash" = $3 AND ativo = true AND "statusCadastro" = 'ATIVO'`,
         [hash, id, user.senhaHash],
       );
       if (!rowCount)
@@ -101,28 +160,23 @@ export class AuthService {
           'Conta ou senha alterada. Faça login novamente',
         );
       await c.query('DELETE FROM public.session WHERE "userId" = $1', [id]);
-      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [
-        id,
-      ]);
+      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [id]);
     });
   }
+
   async issueReset(id: number) {
     const token = randomBytes(32).toString('base64url');
     await this.db.transaction(async (c) => {
       const {
         rows: [user],
       } = await c.query(
-        'SELECT ativo FROM public."user" WHERE id = $1 FOR UPDATE',
+        'SELECT ativo, "statusCadastro" FROM public."user" WHERE id = $1 FOR UPDATE',
         [id],
       );
       if (!user) throw new NotFoundException('Usuário não encontrado');
-      if (!user.ativo)
-        throw new BadRequestException(
-          'Reative a conta antes de recuperar a senha',
-        );
-      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [
-        id,
-      ]);
+      if (!user.ativo || user.statusCadastro !== 'ATIVO')
+        throw new BadRequestException('A conta precisa estar ativa para recuperar a senha');
+      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [id]);
       await c.query(
         'INSERT INTO public."passwordReset" ("tokenHash", "userId", "expiresAt") VALUES ($1, $2, now() + interval \'15 minutes\')',
         [digest(token), id],
@@ -130,6 +184,7 @@ export class AuthService {
     });
     return { token, expires_in: 900 };
   }
+
   async resetPassword(token: string, senha: string, ip: string) {
     await this.limit('reset:' + ip);
     const hash = await hashPassword(senha);
@@ -144,27 +199,22 @@ export class AuthService {
       const {
         rows: [user],
       } = await c.query(
-        'SELECT ativo FROM public."user" WHERE id = $1 FOR UPDATE',
+        'SELECT ativo, "statusCadastro" FROM public."user" WHERE id = $1 FOR UPDATE',
         [reset.userId],
       );
-      if (!user?.ativo)
+      if (!user?.ativo || user.statusCadastro !== 'ATIVO')
         throw new BadRequestException('Código inválido ou expirado');
       const { rowCount } = await c.query(
         'DELETE FROM public."passwordReset" WHERE "tokenHash" = $1 AND "expiresAt" > now()',
         [digest(token)],
       );
-      if (!rowCount)
-        throw new BadRequestException('Código inválido ou expirado');
+      if (!rowCount) throw new BadRequestException('Código inválido ou expirado');
       await c.query(
         'UPDATE public."user" SET "senhaHash" = $1, "updatedAt" = now() WHERE id = $2',
         [hash, reset.userId],
       );
-      await c.query('DELETE FROM public.session WHERE "userId" = $1', [
-        reset.userId,
-      ]);
-      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [
-        reset.userId,
-      ]);
+      await c.query('DELETE FROM public.session WHERE "userId" = $1', [reset.userId]);
+      await c.query('DELETE FROM public."passwordReset" WHERE "userId" = $1', [reset.userId]);
     });
   }
 }

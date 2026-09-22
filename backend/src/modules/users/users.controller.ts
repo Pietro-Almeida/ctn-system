@@ -9,12 +9,12 @@ import {
   Query,
   Header,
 } from '@nestjs/common';
-
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { RequireRoles } from '../auth/auth.metadata.js';
 import { Role } from '../roles/role.enum.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
+import { UpdateUserStatusDto } from './dto/update-user-status.dto.js';
 import { PageDto } from '../../common/api.js';
 import { AuthService } from '../auth/auth.service.js';
 
@@ -44,6 +44,14 @@ export class UsersController {
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserDto) {
     return this.usersService.update(id, dto);
+  }
+
+  @Patch(':id/status')
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateUserStatusDto,
+  ) {
+    return this.usersService.updateStatus(id, dto.acao);
   }
 
   @Post(':id/password-reset')
