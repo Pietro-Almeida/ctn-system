@@ -36,7 +36,6 @@ export default function DirectorEditUserPage() {
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
   const [role, setRole] = useState<ManagedUserRole>('ALUNO')
-  const [ativo, setAtivo] = useState(true)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -49,7 +48,7 @@ export default function DirectorEditUserPage() {
     setLoading(true)
     try {
       const data = await getUser(id, token, signal)
-      setOriginal(data); setNome(data.nome); setEmail(data.email ?? ''); setRole(data.role as ManagedUserRole); setAtivo(data.ativo); setErrorMessage('')
+      setOriginal(data); setNome(data.nome); setEmail(data.email ?? ''); setRole(data.role as ManagedUserRole); setErrorMessage('')
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
       const message = error instanceof Error ? error.message : 'Não foi possível carregar o usuário'
