@@ -1,0 +1,80 @@
+C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41
+	if (parsed === void 0 || parsed.prefix !== prefix) throw new ContractValidationError(`"${name}": prefix "${prefix}" does not match the wire name (expected "${formatWireName(prefix, "<8hex>")}").`, "storage");
+	                                                         ^
+
+ContractValidationError: "user_statusCadastro_check": prefix "user_statusCadastro_check" does not match the wire name (expected "user_statusCadastro_check_<8hex>").
+    at parseNaming (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41:59)
+    at checkConstraintInputFromSerialized (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\serialized-index-nBTwanKy.mjs:45:11)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:86)
+    at Array.map (<anonymous>)
+    at Object.construct (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:40)
+    at hydrateNamespaceEntities (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\1-framework\1-core\framework-components\dist\ir.mjs:136:81)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:101:25)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\3-targets\3-targets\postgres\dist\postgres-contract-view-CzWRnkxb.mjs:91:43)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:81:35)
+    at Array.map (<anonymous>) {
+  code: 'CONTRACT.VALIDATION_FAILED',
+  phase: 'storage'
+}
+
+Node.js v24.20.0
+C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41
+	if (parsed === void 0 || parsed.prefix !== prefix) throw new ContractValidationError(`"${name}": prefix "${prefix}" does not match the wire name (expected "${formatWireName(prefix, "<8hex>")}").`, "storage");
+	                                                         ^
+
+ContractValidationError: "user_statusCadastro_check": prefix "user_statusCadastro_check" does not match the wire name (expected "user_statusCadastro_check_<8hex>").
+    at parseNaming (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41:59)
+    at checkConstraintInputFromSerialized (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\serialized-index-nBTwanKy.mjs:45:11)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:86)
+    at Array.map (<anonymous>)
+    at Object.construct (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:40)
+    at hydrateNamespaceEntities (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\1-framework\1-core\framework-components\dist\ir.mjs:136:81)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:101:25)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\3-targets\3-targets\postgres\dist\postgres-contract-view-CzWRnkxb.mjs:91:43)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:81:35)
+    at Array.map (<anonymous>) {
+  code: 'CONTRACT.VALIDATION_FAILED',
+  phase: 'storage'
+}
+
+Node.js v24.20.0
+C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41
+	if (parsed === void 0 || parsed.prefix !== prefix) throw new ContractValidationError(`"${name}": prefix "${prefix}" does not match the wire name (expected "${formatWireName(prefix, "<8hex>")}").`, "storage");
+	                                                         ^
+
+ContractValidationError: "user_statusCadastro_check": prefix "user_statusCadastro_check" does not match the wire name (expected "user_statusCadastro_check_<8hex>").
+    at parseNaming (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41:59)
+    at checkConstraintInputFromSerialized (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\serialized-index-nBTwanKy.mjs:45:11)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:86)
+    at Array.map (<anonymous>)
+    at Object.construct (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:40)
+    at hydrateNamespaceEntities (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\1-framework\1-core\framework-components\dist\ir.mjs:136:81)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:101:25)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\3-targets\3-targets\postgres\dist\postgres-contract-view-CzWRnkxb.mjs:91:43)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:81:35)
+    at Array.map (<anonymous>) {
+  code: 'CONTRACT.VALIDATION_FAILED',
+  phase: 'storage'
+}
+
+Node.js v24.20.0
+C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41
+	if (parsed === void 0 || parsed.prefix !== prefix) throw new ContractValidationError(`"${name}": prefix "${prefix}" does not match the wire name (expected "${formatWireName(prefix, "<8hex>")}").`, "storage");
+	                                                         ^
+
+ContractValidationError: "user_statusCadastro_check": prefix "user_statusCadastro_check" does not match the wire name (expected "user_statusCadastro_check_<8hex>").
+    at parseNaming (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\schema-ir\dist\naming-DKr4TJd7.mjs:41:59)
+    at checkConstraintInputFromSerialized (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\serialized-index-nBTwanKy.mjs:45:11)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:86)
+    at Array.map (<anonymous>)
+    at Object.construct (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\1-core\contract\dist\entity-kinds-D7vwoN_T.mjs:121:40)
+    at hydrateNamespaceEntities (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\1-framework\1-core\framework-components\dist\ir.mjs:136:81)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:101:25)
+    at PostgresContractSerializer.hydrateSqlNamespaceEntry (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\3-targets\3-targets\postgres\dist\postgres-contract-view-CzWRnkxb.mjs:91:43)
+    at <anonymous> (C:\Users\mikae\OneDrive\Documentos\GitHub\ctn-system\backend\2-sql\9-family\dist\sql-contract-serializer-2oBWuxTe.mjs:81:35)
+    at Array.map (<anonymous>) {
+  code: 'CONTRACT.VALIDATION_FAILED',
+  phase: 'storage'
+}
+
+Node.js v24.20.0

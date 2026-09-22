@@ -49,3 +49,34 @@
 14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherDashboard.tsx
 14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherEditCommunityPage.css
 14:55:52 [vite] (client) hmr update /src/routes/routes.css
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorCreateUserPage.tsx, /src/pages/director/DirectorDashboard.tsx, /src/pages/director/DirectorEditUserPage.tsx, /src/pages/director/DirectorUsersPage.tsx
+16:01:54 [vite] (client) hmr update /src/auth/AuthProvider.tsx
+16:01:54 [vite] (client) hmr update /src/pages/LoginPage.css
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorCreateUserPage.css
+16:01:54 [vite] (client) hmr update /src/routes/AppRoutes.tsx
+16:01:54 [vite] (client) hmr update /src/auth/AuthProvider.tsx, /src/pages/student/StudentDashboard.tsx, /src/layouts/AppLayout.tsx, /src/pages/student/StudentCommunitiesPage.tsx, /src/pages/journal/EditNewsPage.tsx, /src/pages/journal/CreateNewsPage.tsx, /src/pages/journal/NewsDetailPage.tsx, /src/pages/journal/JournalPage.tsx, /src/pages/student/StudentCommunityDetailPage.tsx, /src/pages/ProfilePage.tsx, /src/pages/director/DirectorCreateUserPage.tsx, /src/pages/director/DirectorDashboard.tsx and 11 more
+16:01:54 [vite] (client) hmr update /src/pages/LoginPage.tsx
+16:01:54 [vite] (client) hmr update /src/pages/ProfilePage.tsx
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorCreateUserPage.tsx
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorEditUserPage.tsx
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorUsersPage.css
+16:01:54 [vite] (client) hmr update /src/pages/director/DirectorUsersPage.tsx
+16:26:17 [vite] (client) hmr update /src/layouts/AppLayout.css
+16:26:17 [vite] (client) hmr update /src/pages/journal/CreateNewsPage.css
+16:26:17 [vite] (client) hmr update /src/layouts/AppLayout.tsx
+16:26:17 [vite] (client) hmr update /src/pages/student/StudentDashboard.tsx, /src/pages/journal/EditNewsPage.tsx, /src/pages/journal/CreateNewsPage.tsx, /src/pages/journal/NewsDetailPage.tsx, /src/pages/journal/JournalPage.tsx, /src/pages/director/DirectorDashboard.tsx, /src/pages/teacher/TeacherDashboard.tsx
+16:26:17 [vite] (client) hmr update /src/pages/journal/CreateNewsPage.tsx
+16:26:17 [vite] (client) hmr update /src/pages/journal/JournalPage.css
+16:26:17 [vite] (client) hmr update /src/pages/journal/JournalPage.tsx
+16:39:34 [vite] (client) hmr update /src/pages/LoginPage.css
+16:40:31 [vite] (client) hmr update /src/pages/LoginPage.css
+16:40:42 [vite] (client) hmr update /src/pages/LoginPage.css
+16:41:01 [vite] (client) hmr update /src/pages/LoginPage.css
+16:41:17 [vite] (client) hmr update /src/pages/LoginPage.css
+16:41:24 [vite] (client) hmr update /src/pages/LoginPage.css
+16:42:59 [vite] (client) hmr update /src/pages/LoginPage.css
+16:43:11 [vite] (client) hmr update /src/pages/LoginPage.css
+16:45:55 [vite] (client) page reload src/main.tsx
+16:46:09 [vite] (client) page reload src/main.tsx
+16:48:32 [vite] (client) hmr update /src/pages/RegisterStudentPage.css
+16:48:35 [vite] (client) hmr update /src/pages/RegisterStudentPage.css
