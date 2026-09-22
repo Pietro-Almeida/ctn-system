@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getUser, issuePasswordReset, updateUser, type CreateUserRole, type SystemUser } from '../../api/users'
+import { getUser, issuePasswordReset, updateUser, type ManagedUserRole, type SystemUser } from '../../api/users'
 import { useAuth } from '../../auth/auth-context'
 import './DirectorEditUserPage.css'
 
 type IconName = 'user' | 'shield' | 'check' | 'info' | 'refresh'
-const profiles: { value: CreateUserRole; label: string }[] = [
+const profiles: { value: ManagedUserRole; label: string }[] = [
   { value: 'DIRECAO', label: 'Diretor' }, { value: 'PROFESSOR', label: 'Professor' }, { value: 'ALUNO', label: 'Aluno' },
 ]
-const permissions: Record<CreateUserRole, string[]> = {
+const permissions: Record<ManagedUserRole, string[]> = {
   DIRECAO: ['Gerenciar usuários', 'Criar e gerenciar publicações', 'Criar e moderar comunidades', 'Acessar todas as áreas administrativas'],
   PROFESSOR: ['Criar publicações no Jornal', 'Criar e administrar comunidades', 'Interagir com estudantes'],
   ALUNO: ['Visualizar o Jornal', 'Participar de comunidades', 'Publicar e comentar nas comunidades'],
@@ -33,7 +33,7 @@ export default function DirectorEditUserPage() {
   const [original, setOriginal] = useState<SystemUser | null>(null)
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState<CreateUserRole>('ALUNO')
+  const [role, setRole] = useState<ManagedUserRole>('ALUNO')
   const [ativo, setAtivo] = useState(true)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -47,7 +47,7 @@ export default function DirectorEditUserPage() {
     setLoading(true)
     try {
       const data = await getUser(id, token, signal)
-      setOriginal(data); setNome(data.nome); setEmail(data.email); setRole(data.role as CreateUserRole); setAtivo(data.ativo); setErrorMessage('')
+      setOriginal(data); setNome(data.nome); setEmail(data.email ?? ''); setRole(data.role as ManagedUserRole); setAtivo(data.ativo); setErrorMessage('')
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
       const message = error instanceof Error ? error.message : 'Não foi possível carregar o usuário'
