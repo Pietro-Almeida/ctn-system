@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getUser, issuePasswordReset, updateUser, type ManagedUserRole, type SystemUser } from '../../api/users'
 import { useAuth } from '../../auth/auth-context'
+import { formatCpf, isValidCpf, normalizeCpf } from '../../utils/cpf'
 import './DirectorEditUserPage.css'
 
 type IconName = 'user' | 'shield' | 'check' | 'info' | 'refresh'
@@ -33,6 +34,7 @@ export default function DirectorEditUserPage() {
   const [original, setOriginal] = useState<SystemUser | null>(null)
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
+  const [cpf, setCpf] = useState('')
   const [role, setRole] = useState<ManagedUserRole>('ALUNO')
   const [ativo, setAtivo] = useState(true)
   const [loading, setLoading] = useState(true)
@@ -90,9 +92,10 @@ export default function DirectorEditUserPage() {
     event.preventDefault()
     if (!token || !original || submitting) return
     if (nome.trim().length < 2) return setErrorMessage('Informe o nome completo')
+    if (cpf && !isValidCpf(cpf)) return setErrorMessage('Informe um CPF válido')
     setSubmitting(true); setErrorMessage('')
     try {
-      await updateUser(id, { nome: nome.trim(), email: email.trim(), role, ativo }, token)
+      await updateUser(id, { nome: nome.trim(), email: email.trim(), ...(cpf ? { cpf: normalizeCpf(cpf) } : {}), role, ativo }, token)
       if (id === authenticatedUser?.id) clearSession()
       else navigate('/diretor/usuarios', { replace: true, state: { userUpdated: true } })
     } catch (error) {
@@ -110,7 +113,7 @@ export default function DirectorEditUserPage() {
       <nav><Link to="/diretor/usuarios">Usuários</Link><span>/</span><span>Editar usuário</span></nav>
       <header><h1>Editar usuário</h1><p>Atualize os dados e as permissões de acesso ao CEMTN.</p></header>
 
-      <section className="edit-user-summary"><span>{initials(original.nome)}</span><div><strong>{original.nome}</strong><small>{original.email}</small></div><i className={original.ativo ? 'active' : ''}>{original.ativo ? 'Ativo' : 'Inativo'}</i></section>
+      <section className="edit-user-summary"><span>{initials(original.nome)}</span><div><strong>{original.nome}</strong><small>{original.email ?? original.cpfMascarado ?? 'Sem e-mail institucional'}</small></div><i className={original.ativo ? 'active' : ''}>{original.ativo ? 'Ativo' : 'Inativo'}</i></section>
 
       <section className="edit-user-reset">
         <div><h2>Recuperação de senha</h2><p>Gere um código temporário e entregue-o diretamente ao usuário.</p></div>
@@ -122,7 +125,9 @@ export default function DirectorEditUserPage() {
 
       <form onSubmit={handleSubmit}>
         <div className="edit-user-form">
-          <section><h2>Dados do usuário</h2><label>Nome completo <b>*</b><input value={nome} onChange={(event) => setNome(event.target.value)} maxLength={120} required /></label><label>E-mail institucional <b>*</b><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} maxLength={254} required /></label></section>
+          <section><h2>Dados do usuário</h2><label>Nome completo <b>*</b><input value={nome} onChange={(event) => setNome(event.target.value)} maxLength={120} required /></label><label>CPF atual<input value={original.cpfMascarado ?? 'Não cadastrado'} disabled /></label>
+              <label>Novo CPF <small>Preencha apenas para cadastrar ou substituir o CPF.</small><input value={cpf} onChange={(event) => setCpf(formatCpf(event.target.value))} inputMode="numeric" placeholder="000.000.000-00" /></label>
+              <label>E-mail institucional <b>*</b><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} maxLength={254} required /></label></section>
           <section>
             <h2>Acesso ao sistema</h2>
             <fieldset disabled={isSelf}><legend>Perfil de acesso <b>*</b></legend>{profiles.map((profile) => <label key={profile.value}><input type="radio" name="role" checked={role === profile.value} onChange={() => setRole(profile.value)} /><span />{profile.label}</label>)}</fieldset>
