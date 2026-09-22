@@ -1,5 +1,4 @@
 ﻿import {
-  IsBoolean,
   IsEmail,
   IsIn,
   IsNotEmpty,
@@ -36,5 +35,4 @@ export class UpdateUserDto {
   @ValidateIf((_o, v) => v !== undefined)
   @IsIn(['ALUNO', 'PROFESSOR', 'DIRECAO'])
   role?: string;
-  @ValidateIf((_o, v) => v !== undefined) @IsBoolean() ativo?: boolean;
 }
