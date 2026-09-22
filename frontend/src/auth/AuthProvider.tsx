@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AuthContext } from './auth-context'
 import type { AuthStatus, AuthUser, UserRole } from './auth.types'
+import { normalizeCpf } from '../utils/cpf'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 const TOKEN_KEY = 'ctn:access-token'
@@ -21,7 +22,7 @@ function isAuthUser(value: unknown): value is AuthUser {
   const user = value as Partial<AuthUser>
   return typeof user.id === 'number' &&
     typeof user.nome === 'string' &&
-    typeof user.email === 'string' &&
+    (typeof user.email === 'string' || user.email === null) &&
     typeof user.role === 'string' &&
     KNOWN_ROLES.includes(user.role as UserRole)
 }
@@ -41,10 +42,8 @@ async function getErrorMessage(response: Response) {
     const body = (await response.json()) as ApiError
     if (Array.isArray(body.message)) return body.message.join('. ')
     if (body.message) return body.message
-  } catch {
-    // A resposta pode não possuir um corpo JSON.
-  }
-  if (response.status === 401) return 'E-mail ou senha inválidos'
+  } catch {}
+  if (response.status === 401) return 'CPF ou senha inválidos'
   if (response.status === 429) return 'Muitas tentativas. Aguarde um minuto'
   return 'Não foi possível entrar. Tente novamente'
 }
@@ -68,13 +67,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setStatus('authenticated')
   }, [])
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (identifier: string, password: string) => {
+    const trimmed = identifier.trim()
+    const body = trimmed.includes('@')
+      ? { email: trimmed.toLowerCase(), senha: password }
+      : { cpf: normalizeCpf(trimmed), senha: password }
+
     let response: Response
     try {
       response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim().toLowerCase(), senha: password }),
+        body: JSON.stringify(body),
       })
     } catch {
       throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão')
@@ -90,15 +94,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const currentToken = token
     clearSession()
     if (!currentToken) return
-
     try {
       await fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${currentToken}` },
       })
-    } catch {
-      // A sessão local já foi encerrada mesmo se o servidor estiver indisponível.
-    }
+    } catch {}
   }, [clearSession, token])
 
   useEffect(() => {
@@ -113,15 +114,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           headers: { Authorization: `Bearer ${token}` },
           signal: controller.signal,
         })
-        if (!response.ok) {
-          clearSession()
-          return
-        }
+        if (!response.ok) return clearSession()
         const authenticatedUser: unknown = await response.json()
-        if (!isAuthUser(authenticatedUser)) {
-          clearSession()
-          return
-        }
+        if (!isAuthUser(authenticatedUser)) return clearSession()
         setUser(authenticatedUser)
         setStatus('authenticated')
       } catch (error) {

@@ -8,7 +8,7 @@ export const RequireRoles = (...roles: Role[]) =>
 export interface AuthUser {
   id: number;
   nome: string;
-  email: string;
+  email: string | null;
   role: string;
 }
 export interface AuthRequest extends Request {

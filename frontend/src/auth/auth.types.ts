@@ -8,7 +8,7 @@ export type UserRole =
 export interface AuthUser {
   id: number
   nome: string
-  email: string
+  email: string | null
   role: UserRole
 }
 
