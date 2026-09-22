@@ -123,3 +123,16 @@ Os testes cobrem persistência após reinício, autenticação, expiração, log
 ## Limites do escopo
 
 Esta entrega cobre a primeira fase descrita no README principal. O frontend, envio automático de e-mail, uploads de imagens/anexos e os módulos futuros (estoque, notas, horários, requerimentos e dashboards) não fazem parte desta fase.
+
+
+## Migração de autenticação por CPF
+
+Antes de iniciar esta versão sobre um banco já existente, execute:
+
+```bash
+npm run db:migrate:cpf
+```
+
+A migração adiciona CPF único e o status de cadastro (`PENDENTE`, `ATIVO`, `RECUSADO`, `DESATIVADO`) sem bloquear contas antigas. Durante a transição, contas administrativas antigas sem CPF ainda podem entrar com e-mail; depois o CPF pode ser cadastrado pela Direção na edição do usuário.
+
+Novos alunos usam `POST /auth/register/student`, sempre entram como `ALUNO` e `PENDENTE`, e só podem autenticar após aprovação da Direção.
