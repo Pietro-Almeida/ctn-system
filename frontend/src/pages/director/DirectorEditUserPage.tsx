@@ -95,7 +95,7 @@ export default function DirectorEditUserPage() {
     if (cpf && !isValidCpf(cpf)) return setErrorMessage('Informe um CPF válido')
     setSubmitting(true); setErrorMessage('')
     try {
-      await updateUser(id, { nome: nome.trim(), email: email.trim(), ...(cpf ? { cpf: normalizeCpf(cpf) } : {}), role, ativo }, token)
+      await updateUser(id, { nome: nome.trim(), ...(email.trim() ? { email: email.trim() } : {}), ...(cpf ? { cpf: normalizeCpf(cpf) } : {}), role }, token)
       if (id === authenticatedUser?.id) clearSession()
       else navigate('/diretor/usuarios', { replace: true, state: { userUpdated: true } })
     } catch (error) {
@@ -127,11 +127,11 @@ export default function DirectorEditUserPage() {
         <div className="edit-user-form">
           <section><h2>Dados do usuário</h2><label>Nome completo <b>*</b><input value={nome} onChange={(event) => setNome(event.target.value)} maxLength={120} required /></label><label>CPF atual<input value={original.cpfMascarado ?? 'Não cadastrado'} disabled /></label>
               <label>Novo CPF <small>Preencha apenas para cadastrar ou substituir o CPF.</small><input value={cpf} onChange={(event) => setCpf(formatCpf(event.target.value))} inputMode="numeric" placeholder="000.000.000-00" /></label>
-              <label>E-mail institucional <b>*</b><input type="email" value={email} onChange={(event) => setEmail(event.target.value)} maxLength={254} required /></label></section>
+              <label>E-mail institucional {role !== 'ALUNO' ? <b>*</b> : null}<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} maxLength={254} required={role !== 'ALUNO'} /></label></section>
           <section>
             <h2>Acesso ao sistema</h2>
             <fieldset disabled={isSelf}><legend>Perfil de acesso <b>*</b></legend>{profiles.map((profile) => <label key={profile.value}><input type="radio" name="role" checked={role === profile.value} onChange={() => setRole(profile.value)} /><span />{profile.label}</label>)}</fieldset>
-            <label className="edit-user-status">Situação<select value={ativo ? 'ACTIVE' : 'INACTIVE'} onChange={(event) => setAtivo(event.target.value === 'ACTIVE')} disabled={isSelf}><option value="ACTIVE">Ativo</option><option value="INACTIVE">Inativo</option></select></label>
+            <div className="edit-user-warning"><Icon name="info" /><p>Status atual: <strong>{original.statusCadastro}</strong>. Aprovação, recusa, desativação e reativação são feitas na tela de Gestão de Usuários.</p></div>
             {isSelf ? <div className="edit-user-warning"><Icon name="info" /><p>Seu perfil e sua situação não podem ser alterados nesta tela. Mudanças nos seus próprios dados encerrarão a sessão para uma nova autenticação.</p></div> : null}
           </section>
         </div>
