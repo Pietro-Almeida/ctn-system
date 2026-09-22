@@ -70,9 +70,11 @@ export default function CreateNewsPage() {
         <div className="create-news-form">
           <section>
             <h2>Informações da publicação</h2>
-            <label>Título <b>*</b><input value={titulo} onChange={(event) => setTitulo(event.target.value)} maxLength={200} placeholder="Digite um título claro e objetivo" required /><small>{titulo.length}/200 caracteres</small></label>
-            <label>Categoria <b>*</b><select value={categoria} onChange={(event) => setCategoria(event.target.value)}>{categories.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-            <label>Capa da publicação <b>*</b><input className="create-news-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void handleCover(event.target.files?.[0])} required={!capa} disabled={processingCover} /><small>{processingCover ? 'Preparando imagem...' : capa ? 'Capa pronta para publicação' : 'JPEG, PNG ou WebP · máximo 8 MB'}</small></label>
+            <div className="create-news-fields">
+              <label><span>Título <b>*</b></span><input value={titulo} onChange={(event) => setTitulo(event.target.value)} maxLength={200} placeholder="Digite um título claro e objetivo" required /><small>{titulo.length}/200 caracteres</small></label>
+              <label><span>Categoria <b>*</b></span><select value={categoria} onChange={(event) => setCategoria(event.target.value)}>{categories.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            </div>
+            <label><span>Capa da publicação <b>*</b></span><input className="create-news-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => void handleCover(event.target.files?.[0])} required={!capa} disabled={processingCover} /><small>{processingCover ? 'Preparando imagem...' : capa ? 'Capa pronta para publicação' : 'JPEG, PNG ou WebP · máximo 8 MB'}</small></label>
           </section>
           <section>
             <h2>Conteúdo</h2>
@@ -80,6 +82,7 @@ export default function CreateNewsPage() {
           </section>
         </div>
 
+        <div className="create-news-sidebar">
         <aside className="create-news-preview">
           <h2>Prévia no Jornal</h2>
           <div className="create-news-art">{capa ? <img src={capa} alt="Prévia da capa selecionada" /> : <><i /><span /></>}</div>
@@ -88,11 +91,12 @@ export default function CreateNewsPage() {
           <p>{previewText(conteudo).slice(0, 220)}{conteudo.trim().length > 220 ? '…' : ''}</p>
           <div className="create-news-author"><span>{user?.nome.slice(0, 1).toUpperCase()}</span><div><strong>{user?.nome}</strong><small>Direção CEMTN · Publicação nova</small></div></div>
           <ul><li><Icon name="check" /> Visível para todos os perfis</li><li><Icon name="check" /> Organizada pela categoria escolhida</li></ul>
-          <div className="create-news-tip"><Icon name="info" /><p>O Jornal não utiliza fotos genéricas de escolas. A identidade visual abstrata será aplicada automaticamente.</p></div>
+          <div className="create-news-tip"><Icon name="info" /><p>Confira o título, o texto e a capa antes de publicar. A notícia ficará disponível no Jornal.</p></div>
         </aside>
 
         {errorMessage ? <p className="create-news-error" role="alert">{errorMessage}</p> : null}
         <footer><Link to={`${base}/jornal`}>Cancelar</Link><button type="submit" disabled={submitting || processingCover || !capa}>{submitting ? 'Publicando...' : 'Publicar no Jornal'}</button></footer>
+        </div>
       </form>
     </main>
   )

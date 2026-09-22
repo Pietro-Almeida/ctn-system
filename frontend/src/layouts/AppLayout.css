@@ -1,4 +1,6 @@
 .app-layout {
+  --app-header-height: 4.75rem;
+  --app-sidebar-width: 16.25rem;
   min-height: 100svh;
   background: var(--color-surface);
 }
@@ -17,21 +19,28 @@
   position: fixed;
   z-index: 40;
   inset: 0 auto 0 0;
-  width: 16.25rem;
+  width: var(--app-sidebar-width);
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1.1rem 1.1rem;
+  padding: 0 1.1rem 1.1rem;
   color: var(--color-white);
   background: #101318;
 }
 
 .app-sidebar__header {
-  min-height: 3.8rem;
+  height: var(--app-header-height);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0 0.55rem 1.3rem;
+  margin-inline: -1.1rem;
+  padding: 0 1.65rem;
   border-bottom: 1px solid #292d35;
+}
+
+:root[data-theme='dark'] .app-sidebar__header {
+  background: var(--color-panel);
+  border-bottom-color: var(--color-border);
 }
 
 .app-brand {
@@ -218,14 +227,14 @@
 
 .app-main {
   min-height: 100svh;
-  margin-left: 16.25rem;
+  margin-left: var(--app-sidebar-width);
 }
 
 .app-topbar {
   position: sticky;
   z-index: 20;
   top: 0;
-  height: 4.75rem;
+  height: var(--app-header-height);
   display: flex;
   align-items: center;
   padding: 0 clamp(1.5rem, 4vw, 3.5rem);
@@ -283,7 +292,40 @@
   display: none;
 }
 
+.app-sidebar-toggle {
+  margin-right: .75rem;
+  color: var(--color-muted);
+}
+
+@media (min-width: 901px) {
+  .app-layout--collapsed { --app-sidebar-width: 5rem; }
+  .app-layout--collapsed .app-sidebar { padding-inline: .65rem; }
+  .app-layout--collapsed .app-sidebar__header {
+    justify-content: center;
+    margin-inline: -.65rem;
+    padding-inline: .4rem;
+  }
+  .app-layout--collapsed .app-brand { font-size: .95rem; }
+  .app-layout--collapsed .app-brand span,
+  .app-layout--collapsed .app-brand-name,
+  .app-layout--collapsed .app-navigation > p,
+  .app-layout--collapsed .app-navigation__link > span,
+  .app-layout--collapsed .app-sidebar__message,
+  .app-layout--collapsed .app-sidebar__profile > div:nth-child(2) { display: none; }
+  .app-layout--collapsed .app-navigation__link { justify-content: center; padding-inline: 0; }
+  .app-layout--collapsed .app-sidebar__profile {
+    margin-top: auto;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding-inline: 0;
+  }
+}
+
 @media (max-width: 900px) {
+  .app-sidebar-toggle { display: none; }
+  .app-layout {
+    --app-header-height: 4.25rem;
+  }
   .app-sidebar {
     transform: translateX(-100%);
     transition: transform 180ms ease;
@@ -315,7 +357,7 @@
   }
 
   .app-topbar {
-    height: 4.25rem;
+    height: var(--app-header-height);
     padding: 0 1rem;
   }
 

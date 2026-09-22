@@ -35,14 +35,17 @@ async function readResponse(response: Response, fallbackMessage: string) {
 }
 
 export async function listNews(token: string, signal?: AbortSignal) {
-  const response = await fetch(`${API_URL}/news?page=1&limit=100`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal,
-  })
-
-  const data = await readResponse(response, 'Não foi possível carregar o Jornal')
-  if (!Array.isArray(data)) throw new Error('O Jornal retornou dados inválidos')
-  return data.filter(isNewsItem)
+  const items = new Map<number, NewsItem>()
+  for (let page = 1; ; page += 1) {
+    const response = await fetch(`${API_URL}/news?page=${page}&limit=100`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal,
+    })
+    const data = await readResponse(response, 'Não foi possível carregar o Jornal')
+    if (!Array.isArray(data)) throw new Error('O Jornal retornou dados inválidos')
+    for (const item of data.filter(isNewsItem)) items.set(item.id, item)
+    if (data.length < 100) return [...items.values()]
+  }
 }
 
 export async function getNews(id: number, token: string, signal?: AbortSignal) {

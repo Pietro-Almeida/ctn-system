@@ -56,6 +56,10 @@ export default function AppLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem('cemtn-sidebar-collapsed') === 'true' }
+    catch { return false }
+  })
   const [loggingOut, setLoggingOut] = useState(false)
 
   const navigation = useMemo<NavigationItem[]>(() => {
@@ -91,8 +95,8 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="app-layout">
-      <aside className={menuOpen ? 'app-sidebar app-sidebar--open' : 'app-sidebar'}>
+    <div className={`app-layout${sidebarCollapsed ? ' app-layout--collapsed' : ''}`}>
+      <aside id="app-sidebar" className={menuOpen ? 'app-sidebar app-sidebar--open' : 'app-sidebar'}>
         <div className="app-sidebar__header">
           <div className="app-brand">CEMTN<span /></div>
           <div className="app-brand-name"><strong>CEMTN</strong><small>CEMTN</small></div>
@@ -107,6 +111,8 @@ export default function AppLayout() {
             <NavLink
               key={item.path}
               to={item.path}
+              title={item.label}
+              aria-label={item.label}
               onClick={() => setMenuOpen(false)}
               className={({ isActive }) => isActive ? 'app-navigation__link app-navigation__link--active' : 'app-navigation__link'}
             >
@@ -136,6 +142,22 @@ export default function AppLayout() {
 
       <div className="app-main">
         <header className="app-topbar">
+          <button
+            className="app-icon-button app-sidebar-toggle"
+            type="button"
+            aria-controls="app-sidebar"
+            aria-expanded={!sidebarCollapsed}
+            aria-label={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            title={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            onClick={() => {
+              const collapsed = !sidebarCollapsed
+              setSidebarCollapsed(collapsed)
+              try { localStorage.setItem('cemtn-sidebar-collapsed', String(collapsed)) }
+              catch { /* Keep the toggle usable when storage is unavailable. */ }
+            }}
+          >
+            <Icon name="menu" />
+          </button>
           <button className="app-icon-button app-menu-button" type="button" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">
             <Icon name="menu" />
           </button>

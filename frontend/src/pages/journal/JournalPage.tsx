@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { listNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './JournalPage.css'
@@ -72,6 +72,8 @@ export default function JournalPage() {
   const [news, setNews] = useState<NewsItem[]>([])
   const [selectedFilter, setSelectedFilter] = useState('ALL')
   const [activeSlide, setActiveSlide] = useState(0)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const collection = searchParams.get('lista')
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -109,9 +111,14 @@ export default function JournalPage() {
 
   const featured = filteredNews.slice(0, 3)
   const currentFeature = featured[activeSlide % Math.max(featured.length, 1)]
-  const latest = news.filter((item) => item.id !== currentFeature?.id).slice(0, 3)
+  const latest = news.slice(0, 3)
+  const collectionSection = sectionCategories.find((section) => section.title === collection)
+  const collectionNews = collectionSection
+    ? news.filter((item) => collectionSection.categories.includes(item.categoria))
+    : news
 
   function selectFilter(filter: string) {
+    setSearchParams({})
     setSelectedFilter(filter)
     setActiveSlide(0)
   }
@@ -153,7 +160,29 @@ export default function JournalPage() {
         ))}
       </nav>
 
-      {currentFeature ? (
+      {collection ? (
+        <section className="journal-collection" aria-labelledby="journal-collection-title">
+          <header>
+            <div><h2 id="journal-collection-title">{collectionSection?.title ?? 'Todas as notícias'}</h2><p>{collectionNews.length} publicações · Mais recentes primeiro</p></div>
+            <Link to="?" className="journal-back"><Icon name="chevron" /> Voltar aos destaques</Link>
+          </header>
+          <div className="journal-collection__grid">
+            {collectionNews.map((item, index) => (
+              <article key={item.id}>
+                <ArticleArt variant={index} cover={item.capa} />
+                <div className="journal-collection__body">
+                  <div className="journal-collection__meta"><span>{categoryLabels[item.categoria] ?? item.categoria}</span><time>{formatDate(item.createdAt)}</time></div>
+                  <h3>{item.titulo}</h3>
+                  <p>{excerpt(item.conteudo, 150)}</p>
+                  <span className="journal-collection__read">Ler notícia <Icon name="arrow" /></span>
+                </div>
+                <NewsLink item={item} className="journal-card-link" />
+              </article>
+            ))}
+          </div>
+          {!collectionNews.length && <p>Nenhuma publicação nesta editoria.</p>}
+        </section>
+      ) : currentFeature ? (
         <>
           <section className="journal-lead">
             <article className="journal-carousel">
@@ -174,7 +203,7 @@ export default function JournalPage() {
             </article>
 
             <aside className="journal-latest">
-              <div className="journal-block-title"><h2>Últimas notícias</h2><span>Ver todas <Icon name="arrow" /></span></div>
+              <div className="journal-block-title"><h2>Últimas notícias</h2><Link to="?lista=todas" aria-label="Ver todas as últimas notícias">Ver todas <Icon name="arrow" /></Link></div>
               {latest.map((item, index) => (
                 <article key={item.id}>
                   <ArticleArt variant={index + 1} cover={item.capa} />
@@ -187,10 +216,11 @@ export default function JournalPage() {
 
           <section className="journal-sections">
             {sectionCategories.map((section) => {
-              const items = news.filter((item) => section.categories.includes(item.categoria)).slice(0, 3)
+              const sectionNews = news.filter((item) => section.categories.includes(item.categoria))
+              const items = sectionNews.slice(0, 3)
               return (
                 <div className="journal-section" key={section.title}>
-                  <div className="journal-block-title"><h2>{section.title}</h2><span>Ver todas <Icon name="arrow" /></span></div>
+                  <div className="journal-block-title"><h2>{section.title}</h2><Link to={`?lista=${encodeURIComponent(section.title)}`} aria-label={`Ver todas as notícias de ${section.title}`}>Ver todas <Icon name="arrow" /></Link></div>
                   {items.length ? items.map((item, index) => (
                     <article className={index === 0 ? 'journal-section__main' : ''} key={item.id}>
                       {index === 0 ? <ArticleArt variant={section.title.length} cover={item.capa} /> : null}
