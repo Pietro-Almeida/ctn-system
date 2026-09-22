@@ -155,16 +155,27 @@ export class UsersService {
       ]);
       if (!role) throw new BadRequestException('Perfil não encontrado');
 
-      await c.query(
-        'UPDATE public."user" SET nome=$1, email=$2, ativo=$3, "roleId"=$4, "updatedAt"=now() WHERE id=$5',
-        [
-          dto.nome ?? user.nome,
-          dto.email ?? user.email,
-          dto.ativo ?? user.ativo,
-          role.id,
-          id,
-        ],
-      );
+      const nextCpf = dto.cpf !== undefined ? normalizeCpf(dto.cpf) : user.cpf;
+      if (dto.cpf !== undefined && !isValidCpf(nextCpf))
+        throw new BadRequestException('CPF inválido');
+
+      try {
+        await c.query(
+          'UPDATE public."user" SET nome=$1, email=$2, cpf=$3, ativo=$4, "roleId"=$5, "updatedAt"=now() WHERE id=$6',
+          [
+            dto.nome ?? user.nome,
+            dto.email ?? user.email,
+            nextCpf,
+            dto.ativo ?? user.ativo,
+            role.id,
+            id,
+          ],
+        );
+      } catch (error) {
+        if ((error as { code?: string }).code === '23505')
+          throw new ConflictException('CPF ou e-mail já cadastrado');
+        throw error;
+      }
       if (
         dto.ativo === false ||
         (dto.role !== undefined && dto.role !== user.role) ||
