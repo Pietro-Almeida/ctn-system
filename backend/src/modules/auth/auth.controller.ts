@@ -9,22 +9,62 @@ import {
 } from '@nestjs/common';
 import {
   IsEmail,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { AuthService } from './auth.service.js';
 import { Public } from './auth.metadata.js';
 import type { AuthRequest } from './auth.metadata.js';
+import { isValidCpf, normalizeCpf } from '../../common/cpf.js';
 
 export class LoginDto {
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? normalizeCpf(value) : value,
+  )
+  @ValidateIf((dto: LoginDto) => !dto.email)
+  @Matches(/^\d{11}$/)
+  cpf?: string;
+
+  @IsOptional()
   @IsEmail()
   @MaxLength(254)
-  email: string;
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim().toLowerCase() : value,
+  )
+  @ValidateIf((dto: LoginDto) => !dto.cpf)
+  email?: string;
 
   @IsString()
   @MinLength(1)
+  @MaxLength(128)
+  senha: string;
+}
+
+export class RegisterStudentDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(120)
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
+  nome: string;
+
+  @IsString()
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? normalizeCpf(value) : value,
+  )
+  @Matches(/^\d{11}$/, { message: 'CPF inválido' })
+  cpf: string;
+
+  @IsString()
+  @MinLength(12)
   @MaxLength(128)
   senha: string;
 }
@@ -41,12 +81,23 @@ export class ResetPasswordDto {
 @Controller('auth')
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
+
+  @Public()
+  @Post('register/student')
+  @HttpCode(201)
+  registerStudent(@Body() dto: RegisterStudentDto, @Req() req: AuthRequest) {
+    if (!isValidCpf(dto.cpf)) {
+      throw new (require('@nestjs/common').BadRequestException)('CPF inválido');
+    }
+    return this.auth.registerStudent(dto, req.ip ?? 'unknown');
+  }
+
   @Public()
   @Post('login')
   @HttpCode(200)
   @Header('Cache-Control', 'no-store')
   login(@Body() dto: LoginDto, @Req() req: AuthRequest) {
-    return this.auth.login(dto.email, dto.senha, req.ip ?? 'unknown');
+    return this.auth.login(dto.cpf ?? dto.email ?? '', dto.senha, req.ip ?? 'unknown');
   }
 
   @Get('me')
