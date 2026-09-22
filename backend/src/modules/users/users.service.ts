@@ -133,8 +133,7 @@ export class UsersService {
       if (
         user.ativo &&
         user.role === 'DIRECAO' &&
-        (dto.ativo === false ||
-          (dto.role !== undefined && dto.role !== 'DIRECAO'))
+        (dto.role !== undefined && dto.role !== 'DIRECAO')
       ) {
         const {
           rows: [count],
@@ -166,7 +165,7 @@ export class UsersService {
             dto.nome ?? user.nome,
             dto.email ?? user.email,
             nextCpf,
-            dto.ativo ?? user.ativo,
+            user.ativo,
             role.id,
             id,
           ],
@@ -177,7 +176,6 @@ export class UsersService {
         throw error;
       }
       if (
-        dto.ativo === false ||
         (dto.role !== undefined && dto.role !== user.role) ||
         (dto.email !== undefined && dto.email !== user.email)
       ) {
