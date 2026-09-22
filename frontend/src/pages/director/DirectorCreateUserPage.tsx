@@ -71,7 +71,7 @@ export default function DirectorCreateUserPage() {
   return (
     <main className="create-user-page">
       <nav aria-label="Navegação estrutural"><Link to="/diretor/usuarios">Usuários</Link><span>/</span><span>Novo usuário</span></nav>
-      <header><h1>Cadastrar novo usuário</h1><p>Preencha os dados abaixo para criar um novo acesso ao CTN System.</p></header>
+      <header><h1>Cadastrar novo usuário</h1><p>Preencha os dados abaixo para criar um novo acesso ao CEMTN.</p></header>
 
       <form onSubmit={handleSubmit}>
         <div className="create-user-form">
