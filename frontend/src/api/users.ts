@@ -74,6 +74,7 @@ export async function updateUserStatus(id: number, ativo: boolean, token: string
 export interface UpdateUserInput {
   nome?: string
   email?: string
+  cpf?: string
   role?: ManagedUserRole
   ativo?: boolean
 }
