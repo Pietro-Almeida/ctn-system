@@ -76,7 +76,6 @@ export interface UpdateUserInput {
   email?: string
   cpf?: string
   role?: ManagedUserRole
-  ativo?: boolean
 }
 
 export async function getUser(id: number, token: string, signal?: AbortSignal) {
