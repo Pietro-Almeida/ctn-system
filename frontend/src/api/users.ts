@@ -1,12 +1,14 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
-export type CreateUserRole = 'ALUNO' | 'PROFESSOR' | 'DIRECAO'
+export type CreateUserRole = 'PROFESSOR' | 'DIRECAO'
 
 export interface SystemUser {
   id: number
   nome: string
-  email: string
+  email: string | null
+  cpfMascarado: string | null
   ativo: boolean
+  statusCadastro: 'PENDENTE' | 'ATIVO' | 'RECUSADO' | 'DESATIVADO'
   roleId: number
   role: string
   createdAt: string
@@ -16,6 +18,7 @@ export interface SystemUser {
 export interface CreateUserInput {
   nome: string
   email: string
+  cpf: string
   senha: string
   role: CreateUserRole
 }
@@ -23,7 +26,7 @@ export interface CreateUserInput {
 function isSystemUser(value: unknown): value is SystemUser {
   if (!value || typeof value !== 'object') return false
   const user = value as Partial<SystemUser>
-  return typeof user.id === 'number' && typeof user.nome === 'string' && typeof user.email === 'string' && typeof user.ativo === 'boolean' && typeof user.role === 'string'
+  return typeof user.id === 'number' && typeof user.nome === 'string' && (typeof user.email === 'string' || user.email === null) && typeof user.ativo === 'boolean' && typeof user.statusCadastro === 'string' && typeof user.role === 'string'
 }
 
 async function readResponse(response: Response, fallback: string) {
@@ -108,4 +111,20 @@ export async function issuePasswordReset(id: number, token: string) {
     throw new Error('O servidor retornou um código inválido')
   }
   return { token: reset.token, expiresIn: reset.expires_in }
+}
+
+
+export async function updateUserRegistrationStatus(
+  id: number,
+  acao: 'APROVAR' | 'RECUSAR' | 'DESATIVAR' | 'REATIVAR',
+  token: string,
+) {
+  const response = await fetch(`${API_URL}/users/${id}/status`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ acao }),
+  })
+  const data = await readResponse(response, 'Não foi possível alterar o status do usuário')
+  if (!isSystemUser(data)) throw new Error('O usuário retornou dados inválidos')
+  return data
 }
