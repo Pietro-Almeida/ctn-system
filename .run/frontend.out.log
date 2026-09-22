@@ -6,3 +6,46 @@
   VITE v8.2.2  ready in 401 ms
 
   ➜  Local:   http://127.0.0.1:5173/
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentDashboard.tsx, /src/pages/journal/EditNewsPage.tsx, /src/pages/journal/CreateNewsPage.tsx, /src/pages/journal/NewsDetailPage.tsx, /src/pages/journal/JournalPage.tsx, /src/pages/director/DirectorDashboard.tsx, /src/pages/teacher/TeacherDashboard.tsx
+14:55:52 [vite] (client) hmr update /src/layouts/AppLayout.css
+14:55:52 [vite] (client) hmr update /src/index.css
+14:55:52 [vite] (client) hmr update /src/pages/LoginPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/pages/journal/CreateNewsPage.css
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/routes/routes.css
+14:55:52 [vite] (client) hmr update /src/layouts/AppLayout.css
+14:55:52 [vite] (client) hmr update /src/layouts/AppLayout.tsx
+14:55:52 [vite] (client) hmr update /src/pages/LoginPage.css
+14:55:52 [vite] (client) hmr update /src/pages/ProfilePage.css
+14:55:52 [vite] (client) hmr update /src/pages/ResetPasswordPage.css
+14:55:52 [vite] (client) hmr update /src/pages/ResetPasswordPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/LoginPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCommunityDetailPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCreateUserPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCreateCommunityPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorDashboard.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorDashboard.tsx
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorEditUserPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorCreateUserPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorEditUserPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorUsersPage.css
+14:55:52 [vite] (client) hmr update /src/pages/director/DirectorUsersPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/journal/CreateNewsPage.css
+14:55:52 [vite] (client) hmr update /src/pages/journal/CreateNewsPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/journal/EditNewsPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/journal/JournalPage.css
+14:55:52 [vite] (client) hmr update /src/pages/journal/JournalPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/journal/NewsDetailPage.css
+14:55:52 [vite] (client) hmr update /src/pages/journal/NewsDetailPage.tsx
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentCommunityDetailPage.css
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentDashboard.css
+14:55:52 [vite] (client) hmr update /src/pages/student/StudentDashboard.tsx
+14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherCommunitiesPage.css
+14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherDashboard.css
+14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherDashboard.tsx
+14:55:52 [vite] (client) hmr update /src/pages/teacher/TeacherEditCommunityPage.css
+14:55:52 [vite] (client) hmr update /src/routes/routes.css
