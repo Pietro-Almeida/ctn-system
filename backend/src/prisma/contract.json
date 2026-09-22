@@ -876,7 +876,7 @@
                 }
               },
               "email": {
-                "nullable": false,
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -914,6 +914,20 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "cpf": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "statusCadastro": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
                   "kind": "scalar"
                 }
               }
@@ -1065,6 +1079,12 @@
                 },
                 "updatedAt": {
                   "column": "updatedAt"
+                },
+                "cpf": {
+                  "column": "cpf"
+                },
+                "statusCadastro": {
+                  "column": "statusCadastro"
                 }
               },
               "namespaceId": "public",
@@ -1777,7 +1797,7 @@
                 "email": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
-                  "nullable": false
+                  "nullable": true
                 },
                 "id": {
                   "codecId": "pg/int4@1",
@@ -1807,6 +1827,20 @@
                   "codecId": "pg/timestamptz-string@1",
                   "nativeType": "timestamptz",
                   "nullable": false
+                },
+                "cpf": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "statusCadastro": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false,
+                  "default": {
+                    "kind": "literal",
+                    "value": "ATIVO"
+                  }
                 }
               },
               "foreignKeys": [
@@ -1847,6 +1881,18 @@
                   "columns": [
                     "email"
                   ]
+                },
+                {
+                  "columns": [
+                    "cpf"
+                  ]
+                }
+              ],
+              "checks": [
+                {
+                  "expression": "\\\"statusCadastro\\\" IN ('PENDENTE', 'ATIVO', 'RECUSADO', 'DESATIVADO')",
+                  "name": "user_statusCadastro_check",
+                  "prefix": "user_statusCadastro_check"
                 }
               ]
             }

@@ -19,6 +19,7 @@ import TeacherDashboard from '../pages/teacher/TeacherDashboard'
 import TeacherCommunitiesPage from '../pages/teacher/TeacherCommunitiesPage'
 import TeacherEditCommunityPage from '../pages/teacher/TeacherEditCommunityPage'
 import LoginPage from '../pages/LoginPage'
+import RegisterStudentPage from '../pages/RegisterStudentPage'
 import AccessDeniedPage from '../pages/AccessDeniedPage'
 import ResetPasswordPage from '../pages/ResetPasswordPage'
 import HomeRedirect from './HomeRedirect'
@@ -29,6 +30,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<HomeRedirect />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/cadastro" element={<RegisterStudentPage />} />
       <Route path="/redefinir-senha" element={<ResetPasswordPage />} />
       <Route path="/acesso-negado" element={<AccessDeniedPage />} />
 

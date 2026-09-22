@@ -19,9 +19,11 @@ model Role {
 model User {
   id        Int      @id @default(autoincrement())
   nome      String
-  email     String   @unique
+  email     String?  @unique
+  cpf       String?  @unique
   senhaHash String
   ativo     Boolean  @default(true)
+  statusCadastro String @default("ATIVO")
 
   roleId    Int
   role      Role     @relation(fields: [roleId], references: [id])
