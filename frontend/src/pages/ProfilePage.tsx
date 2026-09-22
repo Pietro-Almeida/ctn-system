@@ -71,7 +71,7 @@ export default function ProfilePage() {
           <header><div className="profile-card__icon" aria-hidden="true">♙</div><div><h2>Informações da conta</h2><p>Dados fornecidos pelo cadastro institucional.</p></div></header>
           <dl>
             <div><dt>Nome completo</dt><dd>{user.nome}</dd></div>
-            <div><dt>E-mail institucional</dt><dd>{user.email}</dd></div>
+            <div><dt>E-mail institucional</dt><dd>{user.email ?? 'Não utilizado nesta conta'}</dd></div>
             <div><dt>Tipo de acesso</dt><dd>{roleLabels[user.role] ?? user.role}</dd></div>
             <div><dt>Identificador</dt><dd>#{user.id}</dd></div>
           </dl>
