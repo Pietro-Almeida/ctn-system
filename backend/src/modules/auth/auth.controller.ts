@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -87,7 +88,7 @@ export class AuthController {
   @HttpCode(201)
   registerStudent(@Body() dto: RegisterStudentDto, @Req() req: AuthRequest) {
     if (!isValidCpf(dto.cpf)) {
-      throw new (require('@nestjs/common').BadRequestException)('CPF inválido');
+      throw new BadRequestException('CPF inválido');
     }
     return this.auth.registerStudent(dto, req.ip ?? 'unknown');
   }
