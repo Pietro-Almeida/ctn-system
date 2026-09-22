@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
 export type CreateUserRole = 'PROFESSOR' | 'DIRECAO'
+export type ManagedUserRole = 'ALUNO' | CreateUserRole
 
 export interface SystemUser {
   id: number
@@ -73,7 +74,7 @@ export async function updateUserStatus(id: number, ativo: boolean, token: string
 export interface UpdateUserInput {
   nome?: string
   email?: string
-  role?: CreateUserRole
+  role?: ManagedUserRole
   ativo?: boolean
 }
 
