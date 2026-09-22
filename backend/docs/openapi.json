@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "CTN System API",
+    "title": "CEMTN API",
     "version": "0.1.0",
     "description": "API da primeira fase. Conteúdos são texto, sem interpretação de HTML. Recuperação de senha assistida pela direção. Sessões persistem no PostgreSQL por uma hora."
   },

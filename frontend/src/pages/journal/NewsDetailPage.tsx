@@ -137,7 +137,7 @@ export default function NewsDetailPage() {
           {actionError ? <p className="news-detail__action-error" role="alert">{actionError}</p> : null}
         </header>
 
-        <div className="news-detail__art" aria-hidden="true"><i /><b /><span /></div>
+        <div className="news-detail__art">{news.capa ? <img src={news.capa} alt={`Capa da notícia: ${news.titulo}`} /> : <><i /><b /><span /></>}</div>
 
         <div className="news-detail__content">
           {paragraphs.length

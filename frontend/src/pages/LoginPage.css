@@ -2,7 +2,7 @@
   min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(420px, 1.08fr) minmax(440px, 0.92fr);
-  background: var(--color-white);
+  background: var(--color-panel);
 }
 
 .login-intro {
@@ -98,6 +98,7 @@
 }
 
 .login-access {
+  position: relative;
   display: grid;
   place-items: center;
   padding: 3rem;
@@ -144,7 +145,7 @@
   padding: 0 0.9rem;
   border: 1px solid var(--color-border);
   border-radius: 0.65rem;
-  background: var(--color-white);
+  background: var(--color-panel);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -327,8 +328,8 @@
   padding: 0.85rem 0.9rem;
   border: 1px solid #f0b8b8;
   border-radius: 0.65rem;
-  color: #8f1d1d;
-  background: #fff4f4;
+  color: var(--color-danger-text);
+  background: var(--color-danger-bg);
   font-size: 0.8rem;
   line-height: 1.45;
 }

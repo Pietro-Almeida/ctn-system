@@ -1,4 +1,4 @@
-# CTN System
+# CEMTN
 
 Sistema de gestão desenvolvido para a **CEMTN**, com o objetivo de centralizar informações, melhorar a comunicação interna e facilitar processos administrativos e escolares.
 
@@ -8,7 +8,7 @@ Sistema de gestão desenvolvido para a **CEMTN**, com o objetivo de centralizar 
 
 ## 📋 Sobre o projeto
 
-O **CTN System** é uma aplicação web full-stack desenvolvida para auxiliar a escola CEMTN na organização de suas atividades.
+O **CEMTN** é uma aplicação web full-stack desenvolvida para auxiliar a escola CEMTN na organização de suas atividades.
 
 Nesta primeira fase, o sistema será focado em três tipos de usuários:
 
@@ -32,7 +32,7 @@ O projeto será desenvolvido de forma modular, permitindo a implementação de n
 
 ## 🎯 Objetivos
 
-O CTN System tem como principais objetivos:
+O CEMTN tem como principais objetivos:
 
 - Centralizar informações da escola em um único sistema
 - Melhorar a comunicação entre direção, professores e alunos

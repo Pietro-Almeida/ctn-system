@@ -57,8 +57,8 @@ function excerpt(content: string, size = 120) {
   return plainText.length > size ? `${plainText.slice(0, size).trim()}…` : plainText
 }
 
-function ArticleArt({ variant = 0 }: { variant?: number }) {
-  return <div className={`journal-art journal-art--${variant % 4}`} aria-hidden="true"><i /><b /></div>
+function ArticleArt({ variant = 0, cover }: { variant?: number; cover?: string | null }) {
+  return <div className={`journal-art journal-art--${variant % 4}`}>{cover ? <img src={cover} alt="" /> : <><i /><b /></>}</div>
 }
 
 function NewsLink({ item, className }: { item: NewsItem; className?: string }) {
@@ -157,7 +157,7 @@ export default function JournalPage() {
         <>
           <section className="journal-lead">
             <article className="journal-carousel">
-              <ArticleArt variant={activeSlide} />
+              <ArticleArt variant={activeSlide} cover={currentFeature.capa} />
               <div className="journal-carousel__overlay" />
               <div className="journal-carousel__content">
                 <div><span>{categoryLabels[currentFeature.categoria] ?? currentFeature.categoria}</span><time>{formatDate(currentFeature.createdAt)}</time></div>
@@ -177,7 +177,7 @@ export default function JournalPage() {
               <div className="journal-block-title"><h2>Últimas notícias</h2><span>Ver todas <Icon name="arrow" /></span></div>
               {latest.map((item, index) => (
                 <article key={item.id}>
-                  <ArticleArt variant={index + 1} />
+                  <ArticleArt variant={index + 1} cover={item.capa} />
                   <div><span>{categoryLabels[item.categoria] ?? item.categoria}</span><time>{formatDate(item.createdAt)}</time><h3>{item.titulo}</h3></div>
                   <NewsLink item={item} className="journal-card-link" />
                 </article>
@@ -193,7 +193,7 @@ export default function JournalPage() {
                   <div className="journal-block-title"><h2>{section.title}</h2><span>Ver todas <Icon name="arrow" /></span></div>
                   {items.length ? items.map((item, index) => (
                     <article className={index === 0 ? 'journal-section__main' : ''} key={item.id}>
-                      {index === 0 ? <ArticleArt variant={section.title.length} /> : null}
+                      {index === 0 ? <ArticleArt variant={section.title.length} cover={item.capa} /> : null}
                       <div><span>{categoryLabels[item.categoria] ?? item.categoria}</span><time>{formatDate(item.createdAt)}</time><h3>{item.titulo}</h3>{index === 0 ? <p>{excerpt(item.conteudo, 90)}</p> : null}</div>
                       <NewsLink item={item} className="journal-card-link" />
                     </article>
