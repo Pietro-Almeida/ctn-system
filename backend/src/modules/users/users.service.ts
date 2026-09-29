@@ -43,10 +43,10 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto) {
-    if (!['PROFESSOR', 'DIRECAO'].includes(dto.role))
-      throw new BadRequestException('A Direção só pode criar professores e diretores');
-    const cpf = normalizeCpf(dto.cpf);
-    if (!isValidCpf(cpf)) throw new BadRequestException('CPF inválido');
+    if (!['ALUNO', 'PROFESSOR', 'DIRECAO'].includes(dto.role))
+      throw new BadRequestException('Perfil de acesso inválido');
+    const cpf = dto.cpf == null || dto.cpf.trim() === '' ? null : normalizeCpf(dto.cpf);
+    if (cpf !== null && !isValidCpf(cpf)) throw new BadRequestException('CPF inválido');
     const hash = await hashPassword(dto.senha);
 
     try {

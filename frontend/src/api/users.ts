@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 
-export type CreateUserRole = 'PROFESSOR' | 'DIRECAO'
+export type CreateUserRole = 'ALUNO' | 'PROFESSOR' | 'DIRECAO'
 export type ManagedUserRole = 'ALUNO' | CreateUserRole
 
 export interface SystemUser {
@@ -19,7 +19,7 @@ export interface SystemUser {
 export interface CreateUserInput {
   nome: string
   email: string
-  cpf: string
+  cpf?: string
   senha: string
   role: CreateUserRole
 }
@@ -43,10 +43,14 @@ async function readResponse(response: Response, fallback: string) {
 }
 
 export async function listUsers(token: string, signal?: AbortSignal) {
-  const response = await fetch(`${API_URL}/users?page=1&limit=100`, { headers: { Authorization: `Bearer ${token}` }, signal })
-  const data = await readResponse(response, 'Não foi possível carregar os usuários')
-  if (!Array.isArray(data)) throw new Error('Os usuários retornaram dados inválidos')
-  return data.filter(isSystemUser)
+  const users = new Map<number, SystemUser>()
+  for (let page = 1; ; page += 1) {
+    const response = await fetch(`${API_URL}/users?page=${page}&limit=100`, { headers: { Authorization: `Bearer ${token}` }, signal })
+    const data = await readResponse(response, 'Não foi possível carregar os usuários')
+    if (!Array.isArray(data)) throw new Error('Os usuários retornaram dados inválidos')
+    for (const user of data.filter(isSystemUser)) users.set(user.id, user)
+    if (data.length < 100) return [...users.values()]
+  }
 }
 
 export async function createUser(input: CreateUserInput, token: string) {

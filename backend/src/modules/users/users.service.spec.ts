@@ -15,6 +15,7 @@ describe('UsersService', () => {
     await expect(
       service.create({
         nome: 'Ana',
+        cpf: '52998224725',
         email: 'ana@example.com',
         senha: 'uma-senha-longa',
         role: Role.ALUNO,

@@ -35,6 +35,7 @@ export default function StudentCommunityDetailPage() {
   const id = Number(comunidadeId)
   const [community, setCommunity] = useState<CommunitySummary | null>(null)
   const [members, setMembers] = useState<CommunityMember[]>([])
+  const [visibleMemberCount, setVisibleMemberCount] = useState(8)
   const [posts, setPosts] = useState<CommunityPost[]>([])
   const [comments, setComments] = useState<Record<number, CommunityComment[]>>({})
   const [newPost, setNewPost] = useState('')
@@ -65,6 +66,7 @@ export default function StudentCommunityDetailPage() {
       )
       setCommunity(communityData)
       setMembers(memberData)
+      setVisibleMemberCount(8)
       setPosts(postData)
       setComments(Object.fromEntries(commentEntries))
     } catch (error) {
@@ -205,7 +207,7 @@ export default function StudentCommunityDetailPage() {
         <aside className="community-detail__aside">
           <section><h2>Sobre a comunidade</h2><p>{community.descricao}</p><dl><div><dt>Área</dt><dd>{community.nome}</dd></div><div><dt>Responsável</dt><dd>Prof. {community.creatorName}</dd></div></dl></section>
           <section><h2>Regras de convivência</h2>{rules.length ? <ol>{rules.map((rule) => <li key={rule}>{rule}</li>)}</ol> : <p>Respeite todos os membros, mantenha o foco no tema e evite conteúdos fora do assunto.</p>}</section>
-          <section><div className="community-aside-title"><h2>Participantes ({members.length})</h2></div><div className="community-members">{members.slice(0, 8).map((member) => <span key={member.id} title={member.nome}>{initials(member.nome)}</span>)}{members.length > 8 ? <span>+{members.length - 8}</span> : null}</div></section>
+          <section><div className="community-aside-title"><h2>Participantes ({members.length})</h2></div><ul className="community-member-list">{members.slice(0, visibleMemberCount).map((member) => <li key={member.id}><span aria-hidden="true">{initials(member.nome)}</span>{member.nome}</li>)}</ul>{members.length > visibleMemberCount ? <button className="community-members-more" type="button" onClick={() => setVisibleMemberCount((count) => count + 20)}>Mostrar mais participantes ({members.length - visibleMemberCount} restantes)</button> : null}</section>
         </aside>
       </div>
     </main>

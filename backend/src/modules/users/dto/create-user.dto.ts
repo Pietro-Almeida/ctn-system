@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsIn,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MinLength,
@@ -27,18 +28,19 @@ export class CreateUserDto {
   )
   email: string;
 
+  @IsOptional()
   @IsString()
   @Transform(({ value }: { value: unknown }) =>
-    typeof value === 'string' ? normalizeCpf(value) : value,
+    typeof value === 'string' ? (value.trim() ? normalizeCpf(value) : undefined) : value,
   )
   @Matches(/^\d{11}$/, { message: 'CPF inválido' })
-  cpf: string;
+  cpf?: string;
 
   @IsString()
   @MinLength(12)
   @MaxLength(128)
   senha: string;
 
-  @IsIn([Role.PROFESSOR, Role.DIRECAO])
+  @IsIn([Role.ALUNO, Role.PROFESSOR, Role.DIRECAO])
   role: Role;
 }

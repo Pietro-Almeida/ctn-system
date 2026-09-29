@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { AuthContext } from './auth-context'
 import type { AuthStatus, AuthUser, UserRole } from './auth.types'
 import { normalizeCpf } from '../utils/cpf'
+import { validateSessionResponse } from './validate-session'
+import './SessionUnavailable.css'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
 const TOKEN_KEY = 'ctn:access-token'
@@ -42,22 +44,25 @@ async function getErrorMessage(response: Response) {
     const body = (await response.json()) as ApiError
     if (Array.isArray(body.message)) return body.message.join('. ')
     if (body.message) return body.message
-  } catch {}
+  } catch { /* Use the fallback message when the response is not JSON. */ }
   if (response.status === 401) return 'CPF ou senha inválidos'
   if (response.status === 429) return 'Muitas tentativas. Aguarde um minuto'
   return 'Não foi possível entrar. Tente novamente'
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [status, setStatus] = useState<AuthStatus>('loading')
   const [user, setUser] = useState<AuthUser | null>(null)
   const [token, setToken] = useState<string | null>(() => sessionStorage.getItem(TOKEN_KEY))
+  const [status, setStatus] = useState<AuthStatus>(() => token ? 'loading' : 'unauthenticated')
+  const [sessionError, setSessionError] = useState(false)
+  const [validationAttempt, setValidationAttempt] = useState(0)
 
   const clearSession = useCallback(() => {
     sessionStorage.removeItem(TOKEN_KEY)
     setToken(null)
     setUser(null)
     setStatus('unauthenticated')
+    setSessionError(false)
   }, [])
 
   const establishSession = useCallback((newToken: string, authenticatedUser: AuthUser) => {
@@ -65,6 +70,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setToken(newToken)
     setUser(authenticatedUser)
     setStatus('authenticated')
+    setSessionError(false)
   }, [])
 
   const login = useCallback(async (identifier: string, password: string) => {
@@ -99,39 +105,41 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         method: 'POST',
         headers: { Authorization: `Bearer ${currentToken}` },
       })
-    } catch {}
+    } catch { /* Local logout remains effective when the server is unavailable. */ }
   }, [clearSession, token])
 
   useEffect(() => {
-    if (!token) {
-      setStatus('unauthenticated')
-      return
-    }
+    if (!token) return
     const controller = new AbortController()
+    const timeout = AbortSignal.timeout(15000)
+    const signal = AbortSignal.any([controller.signal, timeout])
     async function validateSession() {
       try {
-        const response = await fetch(`${API_URL}/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-          signal: controller.signal,
-        })
-        if (!response.ok) return clearSession()
-        const authenticatedUser: unknown = await response.json()
-        if (!isAuthUser(authenticatedUser)) return clearSession()
+        const authenticatedUser = await validateSessionResponse(`${API_URL}/auth/me`, token!, signal, isAuthUser)
+        if (controller.signal.aborted) return
+        if (!authenticatedUser) return clearSession()
         setUser(authenticatedUser)
         setStatus('authenticated')
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') return
-        clearSession()
+        setSessionError(false)
+      } catch {
+        if (controller.signal.aborted) return
+        setSessionError(true)
       }
     }
     void validateSession()
     return () => controller.abort()
-  }, [clearSession, token])
+  }, [clearSession, token, validationAttempt])
 
   const value = useMemo(
     () => ({ status, user, token, login, logout, clearSession }),
     [clearSession, login, logout, status, token, user],
   )
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{sessionError ? (
+    <main className="session-unavailable">
+      <div role="alert"><h1>Não foi possível verificar sua sessão</h1><p>O servidor pode estar indisponível ou sua conexão foi interrompida. Seu acesso foi preservado; tente novamente.</p></div>
+      <button type="button" onClick={() => { setSessionError(false); setStatus('loading'); setValidationAttempt((attempt) => attempt + 1) }}>Tentar novamente</button>
+      <button type="button" className="session-unavailable__logout" onClick={() => void logout()}>Sair da conta</button>
+    </main>
+  ) : children}</AuthContext.Provider>
 }

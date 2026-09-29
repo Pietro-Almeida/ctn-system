@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { listCommunities, type CommunitySummary } from '../../api/communities'
-import { listNews, type NewsItem } from '../../api/news'
+import { searchNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './TeacherDashboard.css'
 
@@ -27,6 +27,7 @@ function formatDate(value: string) {
 
 export default function TeacherDashboard() {
   const { token, user, clearSession } = useAuth()
+  const [newsTotal, setNewsTotal] = useState(0)
   const [news, setNews] = useState<NewsItem[]>([])
   const [communities, setCommunities] = useState<CommunitySummary[]>([])
   const [loading, setLoading] = useState(true)
@@ -36,14 +37,14 @@ export default function TeacherDashboard() {
     if (!token) return
     setLoading(true); setErrorMessage('')
     try {
-      const [newsData, communityData] = await Promise.all([listNews(token, signal), listCommunities(token, signal)])
-      setNews(newsData); setCommunities(communityData)
+      const [newsData, communityData] = await Promise.all([searchNews(token, { authorId: user?.id, limit: 4 }, signal), listCommunities(token, signal)])
+      setNews(newsData.items); setNewsTotal(newsData.total); setCommunities(communityData)
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
       const message = error instanceof Error ? error.message : 'Não foi possível carregar o painel'
       if (message === 'Sua sessão expirou') clearSession(); else setErrorMessage(message)
     } finally { if (!signal?.aborted) setLoading(false) }
-  }, [clearSession, token])
+  }, [clearSession, token, user?.id])
 
   useEffect(() => { const controller = new AbortController(); void load(controller.signal); return () => controller.abort() }, [load])
 
@@ -65,7 +66,7 @@ export default function TeacherDashboard() {
 
       <section className="teacher-stats">
         <Link to="/professor/comunidades"><span><Icon name="community" /></span><div><small>Comunidades criadas</small><strong>{ownCommunities.length.toString().padStart(2, '0')}</strong></div><Icon name="arrow" /></Link>
-        <Link to="/professor/jornal"><span><Icon name="news" /></span><div><small>Publicações no Jornal</small><strong>{ownNews.length.toString().padStart(2, '0')}</strong></div><Icon name="arrow" /></Link>
+        <Link to="/professor/jornal"><span><Icon name="news" /></span><div><small>Publicações no Jornal</small><strong>{newsTotal.toString().padStart(2, '0')}</strong></div><Icon name="arrow" /></Link>
         <article><span><Icon name="post" /></span><div><small>Interações registradas</small><strong>{interactions.toString().padStart(2, '0')}</strong></div></article>
       </section>
 

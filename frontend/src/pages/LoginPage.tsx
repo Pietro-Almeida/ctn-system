@@ -60,18 +60,18 @@ export default function LoginPage() {
           </div>
           <p className="login-eyebrow">BEM-VINDO DE VOLTA</p>
           <h2 id="login-title">Acesse sua conta</h2>
-          <p className="login-card__subtitle">Entre com seu CPF e senha.</p>
+          <p className="login-card__subtitle">Entre com seu CPF ou e-mail e sua senha.</p>
 
           <form onSubmit={handleSubmit}>
             {errorMessage ? <div className="login-error" role="alert"><span>{errorMessage}</span></div> : null}
 
             <label className="form-field">
-              <span>CPF</span>
+              <span>CPF ou e-mail</span>
               <div className="input-wrapper">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3" /><path d="M8 8h8M8 12h5M8 16h4" /></svg>
-                <input type="text" value={identifier} onChange={(e) => handleIdentifier(e.target.value)} autoComplete="username" placeholder="000.000.000-00" disabled={submitting} required />
+                <input type="text" value={identifier} onChange={(e) => handleIdentifier(e.target.value)} autoComplete="username" placeholder="Digite seu CPF ou e-mail" aria-describedby="login-identifier-help" disabled={submitting} required />
               </div>
-              <small className="login-migration-note">Conta administrativa antiga? Durante a migração, o e-mail continua aceito.</small>
+              <small id="login-identifier-help" className="login-migration-note">Se você não cadastrou um CPF, use o e-mail da sua conta.</small>
             </label>
 
             <label className="form-field">

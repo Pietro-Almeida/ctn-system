@@ -35,17 +35,25 @@ async function readResponse(response: Response, fallbackMessage: string) {
 }
 
 export async function listNews(token: string, signal?: AbortSignal) {
-  const items = new Map<number, NewsItem>()
-  for (let page = 1; ; page += 1) {
-    const response = await fetch(`${API_URL}/news?page=${page}&limit=100`, {
-      headers: { Authorization: `Bearer ${token}` },
-      signal,
-    })
-    const data = await readResponse(response, 'Não foi possível carregar o Jornal')
-    if (!Array.isArray(data)) throw new Error('O Jornal retornou dados inválidos')
-    for (const item of data.filter(isNewsItem)) items.set(item.id, item)
-    if (data.length < 100) return [...items.values()]
-  }
+  return (await searchNews(token, {}, signal)).items
+}
+
+export interface NewsPage { items: NewsItem[]; total: number; page: number; limit: number }
+export async function getNewsStats(token: string, signal?: AbortSignal): Promise<{ recent: number; important: number }> {
+  const response = await fetch(`${API_URL}/news/stats`, { headers: { Authorization: `Bearer ${token}` }, signal })
+  const data = await readResponse(response, 'Não foi possível carregar os totais do Jornal') as { recent: number; important: number } | null
+  if (!data || typeof data.recent !== 'number' || typeof data.important !== 'number') throw new Error('Totais inválidos')
+  return data
+}
+export async function searchNews(token: string, options: { page?: number; limit?: number; q?: string; categories?: string; authorId?: number } = {}, signal?: AbortSignal): Promise<NewsPage> {
+  const params = new URLSearchParams({ page: String(options.page ?? 1), limit: String(options.limit ?? 12) })
+  if (options.q) params.set('q', options.q)
+  if (options.categories) params.set('categories', options.categories)
+  if (options.authorId) params.set('authorId', String(options.authorId))
+  const response = await fetch(`${API_URL}/news/search?${params}`, { headers: { Authorization: `Bearer ${token}` }, signal })
+  const data = await readResponse(response, 'Não foi possível carregar o Jornal') as NewsPage | null
+  if (!data || !Array.isArray(data.items) || !data.items.every(isNewsItem) || typeof data.total !== 'number') throw new Error('O Jornal retornou dados inválidos')
+  return data
 }
 
 export async function getNews(id: number, token: string, signal?: AbortSignal) {

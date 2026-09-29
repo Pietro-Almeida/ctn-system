@@ -59,12 +59,16 @@
 
 .users-page-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
   margin: 0 0 16px;
 }
 
-.users-page-stats article {
+.users-page-stats > button {
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -75,7 +79,8 @@
   box-shadow: 0 8px 22px rgba(15, 23, 42, 0.03);
 }
 
-.users-page-stats article > span {
+.users-page-stats > button > span:first-child {
+  flex-shrink: 0;
   display: grid;
   width: 42px;
   height: 42px;
@@ -87,7 +92,7 @@
   font-size: 0.95rem;
 }
 
-.users-page-stats article > div {
+.users-stat-copy {
   display: grid;
   gap: 2px;
   min-width: 0;
@@ -95,7 +100,7 @@
 
 .users-page-stats small {
   color: var(--color-muted);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
 }
 
 .users-page-stats strong {
@@ -104,9 +109,18 @@
 }
 
 .users-stat-pending {
-  border-color: rgba(59, 130, 246, 0.35) !important;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), var(--color-panel)) !important;
+  border-color: #d99716 !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), var(--color-panel)) !important;
 }
+
+.users-page-stats > button:hover { border-color: var(--color-blue); }
+.users-page-stats > button[aria-pressed='true'] { box-shadow: inset 0 0 0 2px var(--color-blue); }
+.users-page-stats > button:focus-visible,
+.users-page-toolbar button:focus-visible,
+.users-page-toolbar select:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
+.users-page-toolbar > .users-status-filter { gap: 10px; color: var(--color-muted); font-size: .8rem; }
+.users-status-filter select { min-width: 0; padding: 10px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-input); color: var(--color-ink); font: inherit; }
+.users-page-toolbar > .users-filter-summary { align-items: center; color: var(--color-muted); font-size: .8rem; }
 
 .pending-count {
   display: inline-grid;
@@ -128,6 +142,25 @@
   border-radius: 18px;
   background: var(--color-panel);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.03);
+}
+
+.users-approvals { margin-bottom: 18px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-panel); overflow: hidden; }
+.users-approvals > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px; border-bottom: 1px solid var(--color-border); }
+.users-approvals h2 { margin: 0; font-size: 1.05rem; }
+.users-approvals h2 > span { display: inline-block; margin-left: 6px; padding: 3px 9px; border-radius: 999px; background: var(--color-blue-soft); color: var(--color-blue); font-size: .8rem; }
+.users-approvals p { margin: 6px 0 0; color: var(--color-muted); font-size: .82rem; line-height: 1.6; }
+.users-approvals > header > button { flex-shrink: 0; padding: 10px 14px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-panel); color: var(--color-blue); font: inherit; font-size: .8rem; font-weight: 700; cursor: pointer; }
+.users-approvals button:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 3px; }
+.users-approvals button:disabled { opacity: .6; cursor: wait; }
+.users-approvals-empty { padding: 22px 18px; }
+.users-approvals-empty > strong { font-size: .9rem; }
+.users-approvals-list { margin: 0; padding: 0; list-style: none; }
+.users-approvals-list > li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px; border-bottom: 1px solid var(--color-border); }
+.users-approvals-list > li:last-child { border-bottom: 0; }
+.users-approvals-list > li > div:first-child { display: grid; gap: 6px; overflow-wrap: anywhere; }
+.users-approvals-list small { color: var(--color-muted); font-size: .8rem; }
+@media (max-width: 680px) {
+  .users-approvals > header, .users-approvals-list > li { flex-direction: column; align-items: flex-start; }
 }
 
 .users-page-toolbar {
@@ -400,6 +433,11 @@
   padding: 14px 16px 18px;
   color: var(--color-muted);
   font-size: 0.78rem;
+}
+
+@media (max-width: 1200px) {
+  .users-page-toolbar { grid-template-columns: 1fr; }
+  .users-page-toolbar > div { justify-content: flex-start; }
 }
 
 @media (max-width: 980px) {

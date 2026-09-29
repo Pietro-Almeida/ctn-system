@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test:communities": "node --test tests/communities-pagination.test.mjs",
+    "test:session": "node --test tests/session-validation.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+const API_URL = import.meta.env?.VITE_API_URL ?? 'http://localhost:3000'
 
 export interface CommunitySummary {
   id: number
@@ -86,10 +86,28 @@ async function request(path: string, token: string, init?: RequestInit) {
   return response.json() as Promise<unknown>
 }
 
+async function listAllPages<T extends { id: number }>(
+  path: string,
+  token: string,
+  isItem: (value: unknown) => value is T,
+  invalidMessage: string,
+  signal?: AbortSignal,
+): Promise<T[]> {
+  const items = new Map<number, T>()
+  const limit = 100
+  for (let page = 1; ; page += 1) {
+    signal?.throwIfAborted()
+    const data = await request(`${path}?page=${page}&limit=${limit}`, token, { signal })
+    signal?.throwIfAborted()
+    if (!Array.isArray(data) || !data.every(isItem)) throw new Error(invalidMessage)
+    for (const item of data) items.set(item.id, item)
+    if (data.length < limit) return [...items.values()]
+  }
+}
+
 export async function listCommunities(token: string, signal?: AbortSignal) {
-  const data = await request('/communities?page=1&limit=100', token, { signal })
-  if (!Array.isArray(data)) throw new Error('As comunidades retornaram dados inválidos')
-  return data.filter(isCommunity).map((item) => ({
+  const data = await listAllPages('/communities', token, isCommunity, 'As comunidades retornaram dados inválidos', signal)
+  return data.map((item) => ({
     ...item,
     creatorName: item.creatorName || 'Equipe CEMTN',
     participating: Boolean(item.participating),
@@ -111,25 +129,19 @@ export async function getCommunity(id: number, token: string, signal?: AbortSign
 }
 
 export async function listCommunityMembers(id: number, token: string, signal?: AbortSignal) {
-  const data = await request(`/communities/${id}/members?page=1&limit=100`, token, { signal })
-  if (!Array.isArray(data)) throw new Error('Os participantes retornaram dados inválidos')
-  return data.filter((item): item is CommunityMember => {
+  return listAllPages(`/communities/${id}/members`, token, (item): item is CommunityMember => {
     if (!item || typeof item !== 'object') return false
     const member = item as Partial<CommunityMember>
     return typeof member.id === 'number' && typeof member.nome === 'string'
-  })
+  }, 'Os participantes retornaram dados inválidos', signal)
 }
 
 export async function listCommunityPosts(id: number, token: string, signal?: AbortSignal) {
-  const data = await request(`/communities/${id}/posts?page=1&limit=100`, token, { signal })
-  if (!Array.isArray(data)) throw new Error('As publicações retornaram dados inválidos')
-  return data.filter(isPost)
+  return listAllPages(`/communities/${id}/posts`, token, isPost, 'As publicações retornaram dados inválidos', signal)
 }
 
 export async function listPostComments(communityId: number, postId: number, token: string, signal?: AbortSignal) {
-  const data = await request(`/communities/${communityId}/posts/${postId}/comments?page=1&limit=100`, token, { signal })
-  if (!Array.isArray(data)) throw new Error('Os comentários retornaram dados inválidos')
-  return data.filter(isComment)
+  return listAllPages(`/communities/${communityId}/posts/${postId}/comments`, token, isComment, 'Os comentários retornaram dados inválidos', signal)
 }
 
 export async function createCommunityPost(communityId: number, conteudo: string, token: string) {

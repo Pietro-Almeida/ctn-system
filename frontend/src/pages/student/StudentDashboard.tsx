@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { listCommunities, type CommunitySummary } from '../../api/communities'
-import { listNews, type NewsItem } from '../../api/news'
+import { getNewsStats, listNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './StudentDashboard.css'
 
@@ -10,7 +10,7 @@ interface IconProps { name: IconName; size?: number }
 interface Activity { id: string; icon: IconName; text: string; time: string; path: string; timestamp: number }
 
 const IMPORTANT_CATEGORIES = new Set(['AVISO', 'COMUNICADO'])
-const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000
+
 
 function Icon({ name, size = 20 }: IconProps) {
   const paths: Record<IconName, ReactNode> = {
@@ -66,6 +66,7 @@ function relativeDate(value: string) {
 
 export default function StudentDashboard() {
   const { user, token, clearSession } = useAuth()
+  const [newsStats, setNewsStats] = useState({ recent: 0, important: 0 })
   const [news, setNews] = useState<NewsItem[]>([])
   const [communities, setCommunities] = useState<CommunitySummary[]>([])
   const [activeHighlight, setActiveHighlight] = useState(0)
@@ -77,11 +78,13 @@ export default function StudentDashboard() {
     setLoading(true)
     setErrorMessage('')
     try {
-      const [newsData, communityData] = await Promise.all([
+      const [newsData, communityData, stats] = await Promise.all([
         listNews(token, signal),
         listCommunities(token, signal),
+        getNewsStats(token, signal),
       ])
       setNews(newsData)
+      setNewsStats(stats)
       setCommunities(communityData)
       setActiveHighlight(0)
     } catch (error) {
@@ -107,9 +110,8 @@ export default function StudentDashboard() {
   const highlights = news.slice(0, 4)
   const highlight = highlights[activeHighlight] ?? highlights[0]
   const headlines = news.slice(highlights.length, highlights.length + 2)
-  const now = Date.now()
-  const recentNewsCount = news.filter((item) => now - new Date(item.createdAt).getTime() <= SEVEN_DAYS).length
-  const importantCount = news.filter((item) => IMPORTANT_CATEGORIES.has(item.categoria) && now - new Date(item.createdAt).getTime() <= SEVEN_DAYS).length
+  const recentNewsCount = newsStats.recent
+  const importantCount = newsStats.important
 
   const activities = useMemo<Activity[]>(() => [
     ...news.slice(0, 4).map((item) => ({

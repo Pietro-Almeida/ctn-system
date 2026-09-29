@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import NewsCover from '../../components/NewsCover'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { listNews, type NewsItem } from '../../api/news'
+import { searchNews, type NewsItem } from '../../api/news'
 import { useAuth } from '../../auth/auth-context'
 import './JournalPage.css'
 
@@ -57,8 +58,12 @@ function excerpt(content: string, size = 120) {
   return plainText.length > size ? `${plainText.slice(0, size).trim()}…` : plainText
 }
 
+function normalizeSearch(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').trim()
+}
+
 function ArticleArt({ variant = 0, cover }: { variant?: number; cover?: string | null }) {
-  return <div className={`journal-art journal-art--${variant % 4}`}>{cover ? <img src={cover} alt="" /> : <><i /><b /></>}</div>
+  return <div className={`journal-art journal-art--${variant % 4}`}>{cover ? <NewsCover src={cover} alt="" /> : <><i /><b /></>}</div>
 }
 
 function NewsLink({ item, className }: { item: NewsItem; className?: string }) {
@@ -71,11 +76,24 @@ export default function JournalPage() {
   const { token, user, clearSession } = useAuth()
   const [news, setNews] = useState<NewsItem[]>([])
   const [selectedFilter, setSelectedFilter] = useState('ALL')
+  const [search, setSearch] = useState('')
+  const searchTerm = normalizeSearch(search)
   const [activeSlide, setActiveSlide] = useState(0)
   const [searchParams, setSearchParams] = useSearchParams()
   const collection = searchParams.get('lista')
   const [loading, setLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [retry, setRetry] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [sectionNews, setSectionNews] = useState<Record<string, NewsItem[]>>({})
+  const requestedPage = Number(searchParams.get('pagina'))
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1
+  const collectionSection = sectionCategories.find((section) => section.title === collection)
+  const categories = selectedFilter !== 'ALL' ? selectedFilter : collectionSection?.categories.join(',')
+  const showCollection = Boolean(collection || searchTerm || selectedFilter !== 'ALL')
+  function resetPage() {
+    setSearchParams((current) => { const next = new URLSearchParams(current); next.delete('pagina'); return next }, { replace: true })
+  }
 
   const canPublish = user?.role === 'PROFESSOR' || user?.role === 'DIRECAO'
   const base = user?.role === 'PROFESSOR' ? '/professor' : '/diretor'
@@ -85,7 +103,14 @@ export default function JournalPage() {
     setLoading(true)
     setErrorMessage('')
     try {
-      setNews(await listNews(token, signal))
+      const [result, sections] = await Promise.all([
+        searchNews(token, { page, limit: showCollection ? 12 : 3, q: searchTerm, categories }, signal),
+        showCollection ? Promise.resolve([]) : Promise.all(sectionCategories.map(async (section) => [section.title, (await searchNews(token, { limit: 3, categories: section.categories.join(',') }, signal)).items] as const)),
+      ])
+      if (signal?.aborted) return
+      setNews(result.items)
+      setTotal(result.total)
+      setSectionNews(Object.fromEntries(sections))
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
       const message = error instanceof Error ? error.message : 'Não foi possível carregar o Jornal'
@@ -94,28 +119,18 @@ export default function JournalPage() {
     } finally {
       if (!signal?.aborted) setLoading(false)
     }
-  }, [clearSession, token])
+  }, [clearSession, token, page, searchTerm, categories, showCollection])
 
   useEffect(() => {
     const controller = new AbortController()
-    void loadNews(controller.signal)
-    return () => controller.abort()
-  }, [loadNews])
+    const timer = window.setTimeout(() => void loadNews(controller.signal), 300)
+    return () => { window.clearTimeout(timer); controller.abort() }
+  }, [loadNews, retry])
 
-  const filteredNews = useMemo(
-    () => selectedFilter === 'ALL'
-      ? news
-      : news.filter((item) => item.categoria === selectedFilter),
-    [news, selectedFilter],
-  )
-
-  const featured = filteredNews.slice(0, 3)
+  const featured = news.slice(0, 3)
   const currentFeature = featured[activeSlide % Math.max(featured.length, 1)]
   const latest = news.slice(0, 3)
-  const collectionSection = sectionCategories.find((section) => section.title === collection)
-  const collectionNews = collectionSection
-    ? news.filter((item) => collectionSection.categories.includes(item.categoria))
-    : news
+  const collectionNews = news
 
   function selectFilter(filter: string) {
     setSearchParams({})
@@ -128,19 +143,6 @@ export default function JournalPage() {
     setActiveSlide((current) => (current + direction + featured.length) % featured.length)
   }
 
-  if (loading) {
-    return <main className="journal-feedback" aria-live="polite"><span /><p>Carregando Jornal...</p></main>
-  }
-
-  if (errorMessage) {
-    return (
-      <main className="journal-feedback">
-        <h1>Não foi possível abrir o Jornal</h1>
-        <p>{errorMessage}</p>
-        <button type="button" onClick={() => void loadNews()}><Icon name="refresh" /> Tentar novamente</button>
-      </main>
-    )
-  }
 
   return (
     <main className="journal-page">
@@ -160,11 +162,20 @@ export default function JournalPage() {
         ))}
       </nav>
 
-      {collection ? (
+      <div className="journal-search" role="search" aria-label="Busca de notícias">
+        <label htmlFor="journal-search-input">Buscar notícias</label>
+        <div className="journal-search__field">
+          <input id="journal-search-input" type="search" maxLength={200} placeholder="Buscar por título ou conteúdo..." value={search} onChange={(event) => { setSearch(event.target.value); resetPage(); setActiveSlide(0) }} />
+          {search && <button type="button" onClick={() => { setSearch(''); resetPage() }}>Limpar busca</button>}
+        </div>
+      </div>
+      {loading && <p role="status">Carregando notícias...</p>}
+      {errorMessage && <div role="alert"><p>{errorMessage}</p><button type="button" onClick={() => setRetry((value) => value + 1)}>Tentar novamente</button></div>}
+      {showCollection ? (
         <section className="journal-collection" aria-labelledby="journal-collection-title">
           <header>
-            <div><h2 id="journal-collection-title">{collectionSection?.title ?? 'Todas as notícias'}</h2><p>{collectionNews.length} publicações · Mais recentes primeiro</p></div>
-            <Link to="?" className="journal-back"><Icon name="chevron" /> Voltar aos destaques</Link>
+            <div><h2 id="journal-collection-title">{searchTerm ? 'Resultados da busca' : collectionSection?.title ?? filters.find((filter) => filter.value === selectedFilter && selectedFilter !== 'ALL')?.label ?? 'Todas as notícias'}</h2><p role="status">{total} publicações · Mais recentes primeiro</p></div>
+            <Link to="?" className="journal-back" onClick={() => { setSearch(''); setSelectedFilter('ALL'); setActiveSlide(0) }}><Icon name="chevron" /> Voltar aos destaques</Link>
           </header>
           <div className="journal-collection__grid">
             {collectionNews.map((item, index) => (
@@ -180,7 +191,12 @@ export default function JournalPage() {
               </article>
             ))}
           </div>
-          {!collectionNews.length && <p>Nenhuma publicação nesta editoria.</p>}
+          <nav className="journal-pagination" aria-label="Páginas do Jornal">
+            <button type="button" disabled={loading || page <= 1} onClick={() => setSearchParams((current) => { const next = new URLSearchParams(current); next.set('pagina', String(page - 1)); return next })}>Anterior</button>
+            <span>{page} / {Math.max(1, Math.ceil(total / 12))}</span>
+            <button type="button" disabled={loading || page * 12 >= total} onClick={() => setSearchParams((current) => { const next = new URLSearchParams(current); next.set('pagina', String(page + 1)); return next })}>Próxima</button>
+          </nav>
+          {!loading && !errorMessage && !collectionNews.length && <p>{searchTerm ? 'Nenhuma notícia encontrada. Tente outro termo ou categoria.' : 'Nenhuma publicação nesta editoria.'}</p>}
         </section>
       ) : currentFeature ? (
         <>
@@ -216,8 +232,7 @@ export default function JournalPage() {
 
           <section className="journal-sections">
             {sectionCategories.map((section) => {
-              const sectionNews = news.filter((item) => section.categories.includes(item.categoria))
-              const items = sectionNews.slice(0, 3)
+              const items = sectionNews[section.title] ?? []
               return (
                 <div className="journal-section" key={section.title}>
                   <div className="journal-block-title"><h2>{section.title}</h2><Link to={`?lista=${encodeURIComponent(section.title)}`} aria-label={`Ver todas as notícias de ${section.title}`}>Ver todas <Icon name="arrow" /></Link></div>
