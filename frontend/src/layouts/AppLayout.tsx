@@ -5,7 +5,7 @@ import type { UserRole } from '../auth/auth.types'
 import ThemeToggle from '../components/ThemeToggle'
 import './AppLayout.css'
 
-type IconName = 'home' | 'news' | 'communities' | 'users' | 'profile' | 'bell' | 'menu' | 'close' | 'logout'
+type IconName = 'home' | 'news' | 'communities' | 'users' | 'profile' | 'bell' | 'menu' | 'logout'
 
 interface NavigationItem {
   label: string
@@ -34,7 +34,6 @@ function Icon({ name }: { name: IconName }) {
     profile: <><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>,
     bell: <><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></>,
     menu: <path d="M4 6h16M4 12h16M4 18h16" />,
-    close: <path d="m6 6 12 12M18 6 6 18" />,
     logout: <><path d="m10 17 5-5-5-5M15 12H3" /><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /></>,
   }
 
@@ -55,7 +54,6 @@ export default function AppLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const [menuOpen, setMenuOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     try { return localStorage.getItem('cemtn-sidebar-collapsed') === 'true' }
     catch { return false }
@@ -96,13 +94,10 @@ export default function AppLayout() {
 
   return (
     <div className={`app-layout${sidebarCollapsed ? ' app-layout--collapsed' : ''}`}>
-      <aside id="app-sidebar" className={menuOpen ? 'app-sidebar app-sidebar--open' : 'app-sidebar'}>
+      <aside id="app-sidebar" className="app-sidebar">
         <div className="app-sidebar__header">
           <div className="app-brand">CEMTN<span /></div>
           <div className="app-brand-name"><strong>CEMTN</strong><small>CEMTN</small></div>
-          <button className="app-icon-button app-sidebar__close" type="button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu">
-            <Icon name="close" />
-          </button>
         </div>
 
         <nav className="app-navigation" aria-label="Navegação principal">
@@ -113,7 +108,6 @@ export default function AppLayout() {
               to={item.path}
               title={item.label}
               aria-label={item.label}
-              onClick={() => setMenuOpen(false)}
               className={({ isActive }) => isActive ? 'app-navigation__link app-navigation__link--active' : 'app-navigation__link'}
             >
               <Icon name={item.icon} />
@@ -136,10 +130,6 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      {menuOpen ? (
-        <button className="app-backdrop" type="button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu" />
-      ) : null}
-
       <div className="app-main">
         <header className="app-topbar">
           <button
@@ -158,12 +148,10 @@ export default function AppLayout() {
           >
             <Icon name="menu" />
           </button>
-          <button className="app-icon-button app-menu-button" type="button" onClick={() => setMenuOpen(true)} aria-label="Abrir menu">
-            <Icon name="menu" />
-          </button>
           <div className="app-topbar__title"><small>CEMTN</small><strong>{currentTitle}</strong></div>
           <div className="app-topbar__actions">
             <ThemeToggle />
+            <button className="app-icon-button app-mobile-logout" type="button" onClick={handleLogout} disabled={loggingOut} aria-label="Sair do sistema"><Icon name="logout" /></button>
             <button className="app-icon-button app-notification" type="button" aria-label="Notificações">
               <Icon name="bell" /><span />
             </button>
