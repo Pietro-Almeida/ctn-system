@@ -1,3 +1,11 @@
+## Desenvolvimento local
+
+Instale as depend?ncias com `npm.cmd ci` nesta pasta e na pasta `backend`. Configure `backend/.env` com uma `DATABASE_URL` v?lida para seu PostgreSQL. Os valores de `backend/.env.example` s?o apenas exemplos.
+
+Se a porta 3000 estiver ocupada, defina `PORT=3001` em `backend/.env` e `VITE_API_URL=http://localhost:3001` em `frontend/.env.local`. Mantenha `CORS_ORIGINS=http://localhost:5173` no backend e abra o frontend por esse endere?o. Reinicie o Vite ap?s alterar as vari?veis.
+
+Execute `npm.cmd run start:dev` no backend e `npm.cmd run dev` no frontend. A rota `http://localhost:3001/health` deve retornar 200 antes de testar o login e o painel (use 3000 se essa for a porta configurada).
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
