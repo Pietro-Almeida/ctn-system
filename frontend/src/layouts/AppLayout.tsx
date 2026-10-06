@@ -1,5 +1,5 @@
 import { useMemo, useState, type ReactNode } from 'react'
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/auth-context'
 import type { UserRole } from '../auth/auth.types'
 import ThemeToggle from '../components/ThemeToggle'
@@ -155,8 +155,10 @@ export default function AppLayout() {
             <button className="app-icon-button app-notification" type="button" aria-label="Notificações">
               <Icon name="bell" /><span />
             </button>
-            <div className="app-avatar app-avatar--small">{getInitials(user.nome)}</div>
-            <div className="app-topbar__user"><strong>{user.nome}</strong><small>{roleLabels[user.role] ?? user.role}</small></div>
+            <Link className="app-topbar__profile" to={`${basePaths[user.role]}/perfil`} aria-label="Meu perfil" title="Meu perfil">
+              <div className="app-avatar app-avatar--small">{getInitials(user.nome)}</div>
+              <div className="app-topbar__user"><strong>{user.nome}</strong><small>{roleLabels[user.role] ?? user.role}</small></div>
+            </Link>
           </div>
         </header>
 
